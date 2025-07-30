@@ -1,188 +1,179 @@
 'use client';
 
-import { Search, Star, Users, MapPin, Calendar, Home, Shield, Heart } from 'lucide-react';
-import { Button } from '../ui/Button';
+import React from 'react';
+import { Hero } from '../components/layout/Hero';
+import Link from 'next/link';
 
 export default function HomePage() {
+  const features = [
+    {
+      icon: '🏠',
+      title: 'Propriétés uniques',
+      description: 'Découvrez des logements exceptionnels sélectionnés avec soin pour vous offrir une expérience inoubliable.'
+    },
+    {
+      icon: '🔒',
+      title: 'Réservations sécurisées',
+      description: 'Paiements sécurisés et système de réservation fiable pour une tranquillité d\'esprit totale.'
+    },
+    {
+      icon: '⭐',
+      title: 'Avis vérifiés',
+      description: 'Profitez de commentaires authentiques de voyageurs pour faire les meilleurs choix.'
+    },
+    {
+      icon: '📱',
+      title: 'Application mobile',
+      description: 'Gérez vos réservations et découvrez de nouvelles propriétés depuis votre smartphone.'
+    }
+  ];
+
+  const testimonials = [
+    {
+      name: 'Marie Dubois',
+      role: 'Voyageuse',
+      content: 'Pioloop m\'a permis de trouver un appartement parfait pour mes vacances à Paris. L\'expérience était fluide et le logement était exactement comme décrit.',
+      avatar: 'M'
+    },
+    {
+      name: 'Thomas Martin',
+      role: 'Propriétaire',
+      content: 'En tant que propriétaire, Pioloop m\'a aidé à louer ma propriété facilement. Le support client est excellent et les paiements sont sécurisés.',
+      avatar: 'T'
+    },
+    {
+      name: 'Sophie Laurent',
+      role: 'Locataire régulière',
+      content: 'J\'utilise Pioloop depuis plus d\'un an et je n\'ai jamais été déçue. Les propriétés sont de qualité et les prix sont justes.',
+      avatar: 'S'
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 text-white overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-black/10">
-          <div className="absolute inset-0 opacity-20" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-          }}></div>
-        </div>
+      <Hero />
 
-        {/* Floating Elements */}
-        <div className="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-32 h-32 bg-white/5 rounded-full blur-xl animate-pulse delay-1000"></div>
-        <div className="absolute bottom-20 left-1/4 w-16 h-16 bg-white/10 rounded-full blur-xl animate-pulse delay-2000"></div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <div className="text-center">
-            {/* Badge */}
-            <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium mb-8 border border-white/20">
-              <Star className="w-4 h-4 mr-2 text-yellow-300" />
-              Plateforme de confiance pour plus de 10,000 utilisateurs
-            </div>
-
-            {/* Main Title */}
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              <span className="block">Trouvez Votre</span>
-              <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                Logement Parfait
-              </span>
-            </h1>
-
-            {/* Subtitle */}
-            <p className="text-xl md:text-2xl mb-12 max-w-4xl mx-auto text-gray-100 leading-relaxed">
-              Découvrez des propriétés exceptionnelles, réservez en toute confiance et créez des souvenirs inoubliables avec Pioloop.
+      {/* Features Section */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl lg:text-4xl font-display font-bold text-secondary-900 mb-4">
+              Pourquoi choisir Pioloop ?
+            </h2>
+            <p className="text-xl text-secondary-600 max-w-3xl mx-auto">
+              Une plateforme moderne qui simplifie la location immobilière pour tous
             </p>
+          </div>
 
-            {/* Stats */}
-            <div className="flex justify-center items-center space-x-8 mb-12 text-sm">
-              <div className="flex items-center space-x-2">
-                <Home className="w-5 h-5 text-yellow-300" />
-                <span>+5,000 propriétés</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="bg-secondary-50 rounded-2xl p-8 text-center hover:shadow-medium transition-all duration-200 transform hover:-translate-y-1"
+              >
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-semibold text-secondary-900 mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-secondary-600 leading-relaxed">
+                  {feature.description}
+                </p>
               </div>
-              <div className="w-px h-6 bg-white/20"></div>
-              <div className="flex items-center space-x-2">
-                <Shield className="w-5 h-5 text-green-300" />
-                <span>100% sécurisé</span>
-              </div>
-              <div className="w-px h-6 bg-white/20"></div>
-              <div className="flex items-center space-x-2">
-                <Heart className="w-5 h-5 text-red-300" />
-                <span>+10,000 avis</span>
-              </div>
-            </div>
-            
-            {/* Search Form */}
-            <div className="max-w-4xl mx-auto">
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 shadow-2xl">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="relative">
-                    <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                    <input
-                      type="text"
-                      placeholder="Où allez-vous ?"
-                      className="w-full pl-12 pr-4 py-4 bg-white rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900 placeholder-gray-500"
-                    />
-                  </div>
-                  <div className="relative">
-                    <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                    <input
-                      type="date"
-                      className="w-full pl-12 pr-4 py-4 bg-white rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
-                    />
-                  </div>
-                  <div className="relative">
-                    <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                    <input
-                      type="date"
-                      className="w-full pl-12 pr-4 py-4 bg-white rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
-                    />
-                  </div>
-                  <Button className="w-full px-8 py-4 text-lg font-semibold bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 transform hover:scale-105 transition-all duration-200 shadow-lg border-0 text-white">
-                    <Search className="mr-2" size={20} />
-                    Rechercher
-                  </Button>
-                </div>
-              </div>
-            </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-            {/* Trust Indicators */}
-            <div className="mt-12 flex justify-center items-center space-x-8 text-sm text-gray-200">
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                <span>Paiement sécurisé</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                <span>Support 24/7</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                <span>Propriétés vérifiées</span>
-              </div>
+      {/* Stats Section */}
+      <section className="py-16 bg-gradient-to-r from-primary-600 to-primary-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+              <div className="text-3xl font-bold text-white mb-2">500+</div>
+              <div className="text-primary-100">Propriétés</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-white mb-2">10k+</div>
+              <div className="text-primary-100">Utilisateurs</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-white mb-2">98%</div>
+              <div className="text-primary-100">Satisfaction</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-white mb-2">24/7</div>
+              <div className="text-primary-100">Support</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-white">
+      {/* Testimonials Section */}
+      <section className="py-24 bg-secondary-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Pourquoi Choisir Pioloop ?
+            <h2 className="text-3xl lg:text-4xl font-display font-bold text-secondary-900 mb-4">
+              Ce que disent nos utilisateurs
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Nous rendons la location de propriétés simple, sécurisée et agréable pour tout le monde.
+            <p className="text-xl text-secondary-600 max-w-3xl mx-auto">
+              Découvrez les expériences de nos utilisateurs satisfaits
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Easy Search */}
-            <div className="text-center p-6 group hover:transform hover:scale-105 transition-all duration-300">
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-200 transition-colors">
-                <Search className="text-primary-600" size={32} />
+            {testimonials.map((testimonial, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-2xl p-8 shadow-soft hover:shadow-medium transition-all duration-200"
+              >
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center text-white font-semibold mr-4">
+                    {testimonial.avatar}
+                  </div>
+                  <div>
+                    <div className="font-semibold text-secondary-900">{testimonial.name}</div>
+                    <div className="text-sm text-secondary-600">{testimonial.role}</div>
+                  </div>
+                </div>
+                <p className="text-secondary-700 leading-relaxed">
+                  "{testimonial.content}"
+                </p>
+                <div className="flex text-accent-500 mt-4">
+                  {[...Array(5)].map((_, i) => (
+                    <svg key={i} className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Recherche Facile
-              </h3>
-              <p className="text-gray-600">
-                Trouvez la propriété parfaite avec nos filtres de recherche avancés et nos annonces détaillées.
-              </p>
-            </div>
-
-            {/* Verified Properties */}
-            <div className="text-center p-6 group hover:transform hover:scale-105 transition-all duration-300">
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-200 transition-colors">
-                <Star className="text-primary-600" size={32} />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Propriétés Vérifiées
-              </h3>
-              <p className="text-gray-600">
-                Toutes les propriétés sont vérifiées et évaluées pour assurer qualité et sécurité.
-              </p>
-            </div>
-
-            {/* 24/7 Support */}
-            <div className="text-center p-6 group hover:transform hover:scale-105 transition-all duration-300">
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-200 transition-colors">
-                <Users className="text-primary-600" size={32} />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Support 24/7
-              </h3>
-              <p className="text-gray-600">
-                Obtenez de l'aide à tout moment avec notre équipe de support client dédiée.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Prêt à Trouver Votre Location Parfaite ?
+      <section className="py-24 bg-gradient-to-br from-secondary-900 to-secondary-800">
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl lg:text-4xl font-display font-bold text-white mb-6">
+            Prêt à commencer votre aventure ?
           </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Rejoignez des milliers de locataires et propriétaires satisfaits sur Pioloop.
+          <p className="text-xl text-secondary-300 mb-8">
+            Rejoignez des milliers d'utilisateurs qui font confiance à Pioloop pour leurs locations
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="px-8 py-3">
-              Commencer
-            </Button>
-            <Button variant="outline" size="lg" className="px-8 py-3">
-              Parcourir les Propriétés
-            </Button>
+            <Link
+              href="/register"
+              className="inline-flex items-center justify-center px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-soft hover:shadow-medium transition-all duration-200 transform hover:-translate-y-1"
+            >
+              Commencer maintenant
+            </Link>
+            <Link
+              href="/properties"
+              className="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white hover:bg-white hover:text-secondary-900 font-semibold rounded-xl transition-all duration-200"
+            >
+              Explorer les propriétés
+            </Link>
           </div>
         </div>
       </section>
