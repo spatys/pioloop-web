@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 interface HeroProps {
@@ -8,19 +8,44 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ className = '' }) => {
+  const [currentRole, setCurrentRole] = useState(0);
+  const roles = ['locataire', 'propriétaire'];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentRole((prev) => (prev + 1) % roles.length);
+    }, 3000); // Change toutes les 3 secondes
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <section className={`bg-gray-50 ${className}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+    <section className={`relative bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 overflow-hidden ${className}`}>
+      {/* Background Pattern */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-100/20 via-transparent to-blue-100/20"></div>
+        <div className="absolute top-0 left-0 w-full h-full">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+          <div className="absolute top-40 right-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+        </div>
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <div className="space-y-8">
             <div className="space-y-6">
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                Des logements d'aujourd'hui qui ont de l'avenir
+              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+                <span className="inline text-gray-700">Votre expérience </span>
+                <span className="inline text-purple-600 transition-all duration-500 ease-in-out">
+                  {roles[currentRole]}
+                </span>
+                <span className="inline text-gray-700"> simplifiée</span>
               </h1>
               
               <p className="text-xl text-gray-600 leading-relaxed max-w-2xl">
-                Notre différence ? Une plateforme 100% en ligne et un modèle de location unique qui seront les clés de votre réussite.
+                Une plateforme 100% en ligne et un modèle de location unique qui seront les clés de votre réussite.
               </p>
             </div>
 
@@ -36,7 +61,7 @@ export const Hero: React.FC<HeroProps> = ({ className = '' }) => {
                 href="/properties"
                 className="inline-flex items-center justify-center px-8 py-4 border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold rounded-lg transition-colors duration-200"
               >
-                Découvrir les propriétés
+                Découvrir les logements
               </Link>
             </div>
           </div>
@@ -74,10 +99,10 @@ export const Hero: React.FC<HeroProps> = ({ className = '' }) => {
                         </div>
                         <div className="flex-1">
                           <div className="font-semibold text-gray-900">Appartement moderne</div>
-                          <div className="text-sm text-gray-600">Paris, France</div>
+                          <div className="text-sm text-gray-600">Ekounou, Yaoundé</div>
                         </div>
                         <div className="text-right">
-                          <div className="font-bold text-purple-600">€120</div>
+                          <div className="font-bold text-purple-600">28000 FCFA</div>
                           <div className="text-xs text-gray-500">par nuit</div>
                         </div>
                       </div>
@@ -92,10 +117,10 @@ export const Hero: React.FC<HeroProps> = ({ className = '' }) => {
                         </div>
                         <div className="flex-1">
                           <div className="font-semibold text-gray-900">Maison de campagne</div>
-                          <div className="text-sm text-gray-600">Lyon, France</div>
+                          <div className="text-sm text-gray-600">Mboamanga, Kribi</div>
                         </div>
                         <div className="text-right">
-                          <div className="font-bold text-blue-600">€200</div>
+                          <div className="font-bold text-blue-600">55000 FCFA</div>
                           <div className="text-xs text-gray-500">par nuit</div>
                         </div>
                       </div>

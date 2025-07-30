@@ -18,7 +18,7 @@ export default function HomePage() {
             <div className="bg-yellow-50 rounded-lg p-8 border-t-4 border-yellow-400">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Locataires</h2>
               <p className="text-gray-600 mb-6">
-                Faites un grand pas vers votre nouveau logement en découvrant l'une de nos propriétés uniques.
+                Faites un grand pas vers votre nouveau logement en découvrant l'un de nos logements uniques.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
@@ -31,7 +31,7 @@ export default function HomePage() {
                   href="/properties"
                   className="inline-flex items-center justify-center px-6 py-3 border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold rounded-lg transition-colors duration-200"
                 >
-                  Découvrir les propriétés
+                  Découvrir les logements
                 </Link>
               </div>
             </div>
@@ -40,20 +40,20 @@ export default function HomePage() {
             <div className="bg-blue-50 rounded-lg p-8 border-t-4 border-blue-400">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Propriétaires</h2>
               <p className="text-gray-600 mb-6">
-                Louez vos propriétés rapidement et formez votre portefeuille immobilier avec des locataires de qualité.
+                Louez vos logements rapidement et formez votre portefeuille immobilier avec des locataires de qualité.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/register"
                   className="inline-flex items-center justify-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors duration-200"
                 >
-                  Explorer l'espace propriétaire
+                  Je proposer mon bien
                 </Link>
                 <Link
                   href="/about"
                   className="inline-flex items-center justify-center px-6 py-3 border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold rounded-lg transition-colors duration-200"
                 >
-                  Découvrir nos solutions
+                  Mon espace propriétaire
                 </Link>
               </div>
             </div>
@@ -83,7 +83,7 @@ export default function HomePage() {
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Location de Logements</h3>
               <p className="text-lg text-gray-600 leading-relaxed">
-                Trouvez votre logement idéal en quelques clics parmi des milliers de propriétés vérifiées.
+                Trouvez votre logement idéal en quelques clics parmi des milliers de logements vérifiées.
               </p>
             </div>
 
