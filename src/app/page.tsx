@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Hero } from '../components/layout/Hero';
-import Link from 'next/link';
+import { BoutonLink } from '@/components/ui/BoutonLink';
 
 export default function HomePage() {
   return (
@@ -21,18 +21,20 @@ export default function HomePage() {
                 Faites un grand pas vers votre nouveau logement en découvrant l'un de nos logements uniques.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link
+                <BoutonLink
                   href="/register"
-                  className="inline-flex items-center justify-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors duration-200"
+                  variant="default"
+                  size="md"
                 >
                   Démarrer mon inscription
-                </Link>
-                <Link
+                </BoutonLink>
+                <BoutonLink
                   href="/properties"
-                  className="inline-flex items-center justify-center px-6 py-3 border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold rounded-lg transition-colors duration-200"
+                  variant="outline"
+                  size="md"
                 >
                   Découvrir les logements
-                </Link>
+                </BoutonLink>
               </div>
             </div>
             
@@ -43,18 +45,20 @@ export default function HomePage() {
                 Louez vos logements rapidement et formez votre portefeuille immobilier avec des locataires de qualité.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link
+                <BoutonLink
                   href="/register"
-                  className="inline-flex items-center justify-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors duration-200"
+                  variant="default"
+                  size="md"
                 >
                   Je proposer mon bien
-                </Link>
-                <Link
+                </BoutonLink>
+                <BoutonLink
                   href="/about"
-                  className="inline-flex items-center justify-center px-6 py-3 border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold rounded-lg transition-colors duration-200"
+                  variant="outline"
+                  size="md"
                 >
                   Mon espace propriétaire
-                </Link>
+                </BoutonLink>
               </div>
             </div>
           </div>

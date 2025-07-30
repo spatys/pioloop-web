@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { BoutonLink } from '@/components/ui/BoutonLink';
 
 interface HeroProps {
   className?: string;
@@ -50,19 +50,21 @@ export const Hero: React.FC<HeroProps> = ({ className = '' }) => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link
+              <BoutonLink
                 href="/register"
-                className="inline-flex items-center justify-center px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors duration-200"
+                variant="default"
+                size="lg"
               >
                 Démarrer mon inscription
-              </Link>
+              </BoutonLink>
               
-              <Link
+              <BoutonLink
                 href="/properties"
-                className="inline-flex items-center justify-center px-8 py-4 border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold rounded-lg transition-colors duration-200"
+                variant="outline"
+                size="lg"
               >
                 Découvrir les logements
-              </Link>
+              </BoutonLink>
             </div>
           </div>
 
