@@ -54,13 +54,13 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
           {/* Navigation Desktop */}
           <nav className="hidden md:flex space-x-8">
             {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
+                <Link
+                  key={item.name}
+                  href={item.href}
                 className="text-gray-700 hover:text-purple-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
-              >
-                {item.name}
-              </Link>
+                >
+                  {item.name}
+                </Link>
             ))}
           </nav>
 
@@ -97,26 +97,26 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                 {/* User Dropdown Menu */}
                 {isUserMenuOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                    <Link
-                      href="/profile"
+                  <Link
+                    href="/profile"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
-                    >
+                  >
                       Mon Profil
-                    </Link>
-                    <Link
+                  </Link>
+                  <Link
                       href="/dashboard"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
-                    >
+                  >
                       Tableau de bord
-                    </Link>
+                  </Link>
                     <hr className="my-2 border-gray-200" />
-                    <button
+                  <button
                       onClick={logout}
                       className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200"
-                    >
+                  >
                       Se déconnecter
-                    </button>
-                  </div>
+                  </button>
+                </div>
                 )}
               </div>
             ) : (
@@ -136,7 +136,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
               </>
             )}
 
-            {/* Mobile menu button */}
+          {/* Mobile menu button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200"
@@ -146,12 +146,12 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
-              >
-                {isMenuOpen ? (
+            >
+              {isMenuOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
+              ) : (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
+              )}
               </svg>
             </button>
           </div>
@@ -162,14 +162,14 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
               {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
+                  <Link
+                    key={item.name}
+                    href={item.href}
                   className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
               ))}
             </div>
           </div>
