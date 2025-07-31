@@ -10,15 +10,15 @@ import * as yup from 'yup';
 const schema = yup.object({
   email: yup
     .string()
+    .required('L\'email est requis')
     .matches(
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      'Format d\'email invalide'
-    )
-    .required('L\'email est requis'),
+      'L\'email invalide'
+    ),
   password: yup
     .string()
-    .min(6, 'Le mot de passe doit contenir au moins 6 caractères')
     .required('Le mot de passe est requis')
+    .min(8, 'Le mot de passe doit contenir au moins 6 caractères')
 });
 
 type LoginFormData = {

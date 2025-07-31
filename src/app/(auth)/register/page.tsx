@@ -10,33 +10,18 @@ import * as yup from 'yup';
 const schema = yup.object({
   email: yup
     .string()
+    .required('L\'email est requis')
     .matches(
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       'L\'email invalide'
     )
-    .required('L\'email est requis'),
-  password: yup
-    .string()
-    .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
-    .matches(/[A-Z]/, 'Le mot de passe doit contenir au moins une majuscule')
-    .matches(/[a-z]/, 'Le mot de passe doit contenir au moins une minuscule')
-    .matches(/[0-9]/, 'Le mot de passe doit contenir au moins un chiffre')
-    .required('Le mot de passe est requis'),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('password')], 'Les mots de passe doivent être identiques')
-    .required('Confirmez votre mot de passe')
 });
 
 type RegisterFormData = {
   email: string;
-  password: string;
-  confirmPassword: string;
 };
 
 export default function RegisterPage() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -53,7 +38,6 @@ export default function RegisterPage() {
     try {
       // Logique de soumission du formulaire
       console.log('Email:', data.email);
-      console.log('Password:', data.password);
       
       // Simulation d'un appel API
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -114,79 +98,7 @@ export default function RegisterPage() {
                   )}
                 </div>
 
-                {/* Password Input */}
-                <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                    Mot de passe
-                  </label>
-                  <div className="relative">
-                                      <input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="off"
-                    {...register("password")}
-                    className={`w-full px-4 py-3 pr-12 border rounded-lg transition-colors outline-none ${
-                      errors.password ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-gray-400 focus:border-purple-500'
-                    }`}
-                  />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                      {showPassword ? (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
-                        </svg>
-                      ) : (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                      )}
-                    </button>
-                  </div>
-                  {errors.password && (
-                    <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
-                  )}
-                </div>
 
-                {/* Confirm Password Input */}
-                <div>
-                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-                    Confirmer le mot de passe
-                  </label>
-                  <div className="relative">
-                                      <input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    autoComplete="off"
-                    {...register("confirmPassword")}
-                    className={`w-full px-4 py-3 pr-12 border rounded-lg transition-colors outline-none ${
-                      errors.confirmPassword ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-gray-400 focus:border-purple-500'
-                    }`}
-                  />
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                      {showConfirmPassword ? (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
-                        </svg>
-                      ) : (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                      )}
-                    </button>
-                  </div>
-                  {errors.confirmPassword && (
-                    <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
-                  )}
-                </div>
 
                 {/* Continue Button */}
                 <button
