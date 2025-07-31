@@ -118,7 +118,7 @@ export const Hero: React.FC<HeroProps> = ({ className = '' }) => {
                            <div className="text-xs text-gray-500">par nuit</div>
                          </div>
                        </div>
-                                          </div>
+                      </div>
                    </div>
                  </div>
                </div>
