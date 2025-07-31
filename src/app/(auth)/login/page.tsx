@@ -64,7 +64,7 @@ export default function LoginPage() {
         <div className="w-full pt-4">
           {/* Logo */}
           <div className="text-center mb-4">
-            <Logo showSubtitle={false} className="justify-center" />
+            <Logo className="justify-center" />
           </div>
 
           {/* Separator */}

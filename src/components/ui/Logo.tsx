@@ -7,21 +7,19 @@ interface LogoProps {
   href?: string;
 }
 
-export const Logo: React.FC<LogoProps> = ({ 
-  showSubtitle = true, 
+export const Logo: React.FC<LogoProps> = ({
   className = '',
   href = "/"
 }) => {
   const LogoContent = () => (
     <div className="flex items-center space-x-2">
-      <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200 group-hover:scale-105">
-        <span className="text-white text-lg font-bold">P</span>
+      <div className="relative">
+        <div className="w-12 h-12 bg-gradient-to-br from-purple-600 via-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
+          <span className="text-white text-2xl font-bold">P</span>
+        </div>
       </div>
       <div className="flex flex-col">
-        <span className="text-xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors duration-200">Pioloop</span>
-        {showSubtitle && (
-          <span className="text-xs text-gray-500 font-medium">Location de logements</span>
-        )}
+        <span className="text-2xl font-bold text-purple-700">Pioloop</span>
       </div>
     </div>
   );
