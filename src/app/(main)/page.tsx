@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Hero } from '../components/layout/Hero';
 import { BoutonLink } from '@/components/ui/BoutonLink';
+import { Hero } from '@/components/layout/Hero';
 
 export default function HomePage() {
   return (

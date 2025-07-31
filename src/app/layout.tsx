@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter, Poppins } from 'next/font/google';
 import './globals.css';
-import MainLayout from '../layouts/MainLayout';
 import { AuthProvider } from '../context/AuthContext';
 
+// Configuration des polices
 const inter = Inter({ 
   subsets: ['latin'],
   variable: '--font-inter',
@@ -17,6 +17,7 @@ const poppins = Poppins({
   display: 'swap',
 });
 
+// Métadonnées pour le SEO
 export const metadata: Metadata = {
   title: 'Pioloop - Location immobilière moderne et sécurisée',
   description: 'Découvrez des propriétés uniques et réservez votre séjour en toute simplicité. Une expérience de location immobilière moderne et sécurisée.',
@@ -37,6 +38,19 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * LAYOUT PRINCIPAL DE L'APPLICATION
+ * 
+ * Ce layout est la BASE de toute l'application Next.js.
+ * Il contient :
+ * - Les balises HTML de base (<html>, <head>, <body>)
+ * - Les polices (Inter, Poppins)
+ * - Les métadonnées SEO
+ * - AuthProvider pour la gestion de l'authentification
+ * 
+ * Ce layout N'INCLUT PAS de header/footer car ils sont gérés
+ * par les layouts spécifiques des groupes de routes.
+ */
 export default function RootLayout({
   children,
 }: {
@@ -54,9 +68,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} antialiased`}>
         <AuthProvider>
-          <MainLayout>
-            {children}
-          </MainLayout>
+          {children}
         </AuthProvider>
       </body>
     </html>
