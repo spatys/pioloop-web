@@ -309,7 +309,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                           className="flex items-center space-x-3 py-3 px-4 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 w-full text-left"
                         >
                           <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zM12 15v-6" />
                           </svg>
                           <span className="font-normal">Se déconnecter</span>
                         </button>

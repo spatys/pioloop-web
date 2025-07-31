@@ -65,7 +65,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Services Section - OpenClassrooms Style */}
+      {/* Services Section */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -80,7 +80,7 @@ export default function HomePage() {
             <div className="text-center">
               <div className="w-40 h-40 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6 overflow-hidden">
                 <img 
-                  src="/images/services/online.png" 
+                  src="/images/services/owner.png" 
                   alt="Location de Logements" 
                   className="w-28 h-28 object-contain"
                 />
