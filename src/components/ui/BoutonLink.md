@@ -1,97 +1,99 @@
-# Composant BoutonLink
+# BoutonLink Component
 
-Un composant Link réutilisable avec les styles de bouton pour l'application Pioloop.
+Un composant Link stylisé comme un bouton avec des variantes et tailles configurables.
 
 ## Utilisation
 
 ```tsx
 import { BoutonLink } from '@/components/ui/BoutonLink';
 
-// Bouton lien simple
-<BoutonLink href="/propose-property">Je propose mon bien</BoutonLink>
-
-// Bouton lien avec variante et taille
-<BoutonLink href="/register" variant="default" size="lg">
+// Utilisation basique
+<BoutonLink href="/register" variant="default" size="md">
   Démarrer mon inscription
 </BoutonLink>
+
+// Avec variante outline
+<BoutonLink href="/properties" variant="outline" size="lg">
+  Découvrir les logements
+</BoutonLink>
 ```
-
-## Variantes disponibles
-
-### `variant`
-- **`default`** - Bouton principal purple (par défaut)
-- **`secondary`** - Bouton gris secondaire
-- **`outline`** - Bouton avec bordure
-
-### `size`
-- **`xs`** - Très petit (h-7 px-2 py-1 text-xs)
-- **`sm`** - Petit (h-8 px-3 py-1.5 text-xs)
-- **`default`** - Taille normale (h-10 px-4 py-2)
-- **`md`** - Moyen (h-11 px-5 py-2.5)
-- **`lg`** - Grand (h-12 px-6 py-3 text-base)
-- **`xl`** - Très grand (h-14 px-8 py-4 text-lg)
-
-### `fullWidth`
-- **`true`** - Bouton prend toute la largeur disponible
-- **`false`** - Largeur automatique (par défaut)
 
 ## Props
 
 | Prop | Type | Défaut | Description |
 |------|------|--------|-------------|
-| `variant` | string | `'default'` | Style du bouton |
-| `size` | string | `'default'` | Taille du bouton |
-| `fullWidth` | boolean | `false` | Largeur complète |
-| `href` | string | **requis** | Lien de navigation |
-| `children` | ReactNode | - | Contenu du bouton |
-| `className` | string | `''` | Classes CSS supplémentaires |
+| `href` | `string` | **requis** | L'URL de destination |
+| `variant` | `'default' \| 'secondary' \| 'outline'` | `'default'` | Le style du bouton |
+| `size` | `'xs' \| 'sm' \| 'default' \| 'md' \| 'lg' \| 'xl'` | `'default'` | La taille du bouton |
+| `fullWidth` | `boolean` | `false` | Si le bouton doit prendre toute la largeur |
+| `className` | `string` | `''` | Classes CSS supplémentaires |
+| `children` | `React.ReactNode` | **requis** | Le contenu du bouton |
 
-## Exemples d'utilisation
+## Variantes
 
-### Bouton lien principal (comme dans le header)
+### Default
+Bouton principal avec fond violet et texte blanc.
+
 ```tsx
-<BoutonLink href="/propose-property" variant="default" size="md">
-  Je propose mon bien
-</BoutonLink>
-```
-
-### Bouton lien d'inscription (comme dans le Hero)
-```tsx
-<BoutonLink href="/register" variant="default" size="lg">
+<BoutonLink href="/register" variant="default">
   Démarrer mon inscription
 </BoutonLink>
 ```
 
-### Bouton lien secondaire
+### Secondary
+Bouton secondaire avec fond gris.
+
 ```tsx
-<BoutonLink href="/properties" variant="secondary">
-  Voir les logements
+<BoutonLink href="/about" variant="secondary">
+  En savoir plus
 </BoutonLink>
 ```
 
-### Bouton lien outline
+### Outline
+Bouton avec bordure et fond transparent.
+
 ```tsx
-<BoutonLink href="/contact" variant="outline" size="sm">
-  Contact
+<BoutonLink href="/properties" variant="outline">
+  Découvrir les logements
 </BoutonLink>
 ```
 
-### Bouton lien plein largeur
+## Tailles
+
+- `xs`: Très petit (h-7, px-2)
+- `sm`: Petit (h-8, px-3)
+- `default`: Taille normale (h-10, px-4)
+- `md`: Moyen (h-11, px-5)
+- `lg`: Grand (h-12, px-6)
+- `xl`: Très grand (h-14, px-8)
+
+## Exemples
+
 ```tsx
-<BoutonLink href="/login" variant="default" fullWidth>
+// Bouton principal large
+<BoutonLink href="/register" variant="default" size="lg" fullWidth>
+  Démarrer mon inscription
+</BoutonLink>
+
+// Bouton outline petit
+<BoutonLink href="/login" variant="outline" size="sm">
   Se connecter
 </BoutonLink>
+
+// Bouton secondaire avec classes personnalisées
+<BoutonLink 
+  href="/contact" 
+  variant="secondary" 
+  size="md"
+  className="custom-class"
+>
+  Nous contacter
+</BoutonLink>
 ```
 
-## Différence avec le composant Button
+## Différences avec Button
 
-- **BoutonLink** : Composant Link avec styles de bouton (toujours un lien)
-- **Button** : Composant button classique (peut être un lien ou un bouton)
+- **BoutonLink** : Composant Link avec styling de bouton (pour la navigation)
+- **Button** : Composant bouton standard (pour les actions)
 
-## Styles CSS
-
-Le composant utilise Tailwind CSS avec les couleurs suivantes :
-- **Purple** : `purple-600` / `purple-700` (couleur principale - default)
-- **Gray** : `gray-200` / `gray-300` / `gray-700` / `gray-900` (secondary et outline)
-
-Tous les boutons ont des transitions fluides et des états de focus accessibles. 
+Le BoutonLink est spécifiquement conçu pour la navigation entre les pages, tandis que Button est pour les actions comme soumettre un formulaire. 
