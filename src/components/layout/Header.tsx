@@ -74,20 +74,15 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
           <div className="flex items-center space-x-1">
             {/* Currency and Language Selectors */}
             <div className="flex items-center space-x-1">
-              <div className="relative currency-menu-container group">
+              <div className="relative currency-menu-container">
                 <button
                   onClick={() => {
                     setIsCurrencyMenuOpen(!isCurrencyMenuOpen);
                     setIsLanguageMenuOpen(false);
                   }}
-                  className="p-3 text-gray-600 hover:text-purple-600 transition-all duration-200 rounded-lg hover:bg-gray-50 relative"
+                  className="p-3 text-gray-600 hover:text-purple-600 transition-all duration-200 rounded-lg hover:bg-gray-50"
                 >
                   <span className="text-gray-700 text-sm font-semibold">{currentCurrency.code}</span>
-                  {/* Tooltip */}
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-purple-600 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                    Devise
-                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-purple-600"></div>
-                  </div>
                 </button>
 
                 {/* Currency Dropdown Menu */}
@@ -109,24 +104,19 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                 )}
               </div>
 
-              <div className="relative language-menu-container group">
+              <div className="relative language-menu-container">
                 <button
                   onClick={() => {
                     setIsLanguageMenuOpen(!isLanguageMenuOpen);
                     setIsCurrencyMenuOpen(false);
                   }}
-                  className="p-3 text-gray-600 hover:text-purple-600 transition-all duration-200 rounded-lg hover:bg-gray-50 relative"
+                  className="p-3 text-gray-600 hover:text-purple-600 transition-all duration-200 rounded-lg hover:bg-gray-50"
                 >
                   <img 
                     src={currentLanguage.flag} 
                     alt={currentLanguage.label}
                     className="w-6 h-6 rounded-full object-cover"
                   />
-                  {/* Tooltip */}
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-purple-600 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                    Langue
-                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-purple-600"></div>
-                  </div>
                 </button>
 
                 {/* Language Dropdown Menu */}
