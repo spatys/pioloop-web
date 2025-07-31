@@ -2,9 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { BoutonLink } from '@/components/ui/BoutonLink';
-import DateRangePicker from '@/components/ui/DateRangePicker';
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import SearchForm, { SearchFormData } from '@/components/ui/SearchForm';
 
 interface HeroProps {
   className?: string;
@@ -13,11 +11,11 @@ interface HeroProps {
 export const Hero: React.FC<HeroProps> = ({ className = '' }) => {
   const [currentRole, setCurrentRole] = useState(0);
   const roles = ['locataire', 'propriétaire'];
-  const [selectedDates, setSelectedDates] = useState<{ from: Date | undefined; to: Date | undefined }>({
-    from: undefined,
-    to: undefined
-  });
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
+  const handleSearch = (searchData: SearchFormData) => {
+    console.log('Search data:', searchData);
+    // Ici vous pouvez ajouter la logique de recherche
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -39,7 +37,7 @@ export const Hero: React.FC<HeroProps> = ({ className = '' }) => {
         </div>
       </div>
 
-             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-2 md:py-4 lg:py-6">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-2 md:py-4 lg:py-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <div className="space-y-8">
@@ -79,140 +77,55 @@ export const Hero: React.FC<HeroProps> = ({ className = '' }) => {
           {/* Visual */}
           <div className="relative">
             <div className="relative z-10">
-              <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200">
-                <div className="space-y-6">
-                  {/* Search Form */}
-                  <div className="space-y-4">
-                    <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-                                             <div className="space-y-4">
-                         {/* Lieu */}
-                         <div className="relative">
-                           <div className="flex items-center space-x-3 bg-gray-50 rounded-lg p-4 h-12">
-                             <svg className="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                             </svg>
-                             <input
-                               type="text"
-                               placeholder="Où voulez-vous aller ?"
-                               className="flex-1 bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none text-sm font-medium h-full"
-                             />
-                           </div>
-                         </div>
+                             <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200">
+                 <div className="space-y-6">
+                   {/* Search Form */}
+                   <SearchForm onSearch={handleSearch} />
 
-                         {/* Date Range */}
-                         <div className="relative">
-                           <div 
-                             className="flex items-center space-x-3 bg-gray-50 rounded-lg p-4 h-12 cursor-pointer hover:bg-gray-100 transition-colors duration-200"
-                             onClick={() => setIsCalendarOpen(true)}
-                           >
-                             <svg className="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                             </svg>
-                             <div className="flex-1">
-                               {selectedDates.from ? (
-                                 <div className="text-sm font-medium text-gray-700">
-                                   {format(selectedDates.from, 'dd/MM/yyyy', { locale: fr })}
-                                   {selectedDates.to && ` - ${format(selectedDates.to, 'dd/MM/yyyy', { locale: fr })}`}
-                                 </div>
-                               ) : (
-                                 <div className="text-sm text-gray-500">Sélectionner vos dates</div>
-                               )}
-                             </div>
-                             <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                             </svg>
-                           </div>
-                           
-                           {/* Calendar Modal */}
-                           {isCalendarOpen && (
-                             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                               <div className="relative">
-                                                                   <DateRangePicker
-                                    selectedDates={selectedDates}
-                                    onSelect={setSelectedDates}
-                                    onClose={() => setIsCalendarOpen(false)}
-                                  />
-                               </div>
-                             </div>
-                           )}
+                   {/* Property Cards */}
+                   <div className="space-y-4">
+                     <div className="bg-yellow-50 rounded-lg p-4 border-l-4 border-yellow-400">
+                       <div className="flex items-center space-x-3">
+                         <div className="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center">
+                           <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                           </svg>
                          </div>
-
-                         {/* Nombre de voyageurs */}
-                         <div className="relative">
-                           <div className="flex items-center justify-between bg-gray-50 rounded-lg p-4 h-12 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
-                             <div className="flex items-center space-x-3">
-                               <svg className="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                               </svg>
-                               <div>
-                                 <div className="text-sm font-medium text-gray-700">Voyageurs</div>
-                                 <div className="text-xs text-gray-500">Ajouter des voyageurs</div>
-                               </div>
-                             </div>
-                             <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                             </svg>
-                           </div>
+                         <div className="flex-1">
+                           <div className="font-semibold text-gray-900">Appartement moderne</div>
+                           <div className="text-sm text-gray-600">Ekounou, Yaoundé</div>
+                         </div>
+                         <div className="text-right">
+                           <div className="font-bold text-purple-600">28000 FCFA</div>
+                           <div className="text-xs text-gray-500">par nuit</div>
                          </div>
                        </div>
+                     </div>
 
-                      {/* Bouton de recherche */}
-                      <div className="mt-4">
-                        <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                          </svg>
-                          <span>Rechercher</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Property Cards */}
-                  <div className="space-y-4">
-                    <div className="bg-yellow-50 rounded-lg p-4 border-l-4 border-yellow-400">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center">
-                          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                          </svg>
-                        </div>
-                        <div className="flex-1">
-                          <div className="font-semibold text-gray-900">Appartement moderne</div>
-                          <div className="text-sm text-gray-600">Ekounou, Yaoundé</div>
-                        </div>
-                        <div className="text-right">
-                          <div className="font-bold text-purple-600">28000 FCFA</div>
-                          <div className="text-xs text-gray-500">par nuit</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-400">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
-                          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                          </svg>
-                        </div>
-                        <div className="flex-1">
-                          <div className="font-semibold text-gray-900">Maison de campagne</div>
-                          <div className="text-sm text-gray-600">Mboamanga, Kribi</div>
-                        </div>
-                        <div className="text-right">
-                          <div className="font-bold text-blue-600">55000 FCFA</div>
-                          <div className="text-xs text-gray-500">par nuit</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+                     <div className="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-400">
+                       <div className="flex items-center space-x-3">
+                         <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
+                           <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                           </svg>
+                         </div>
+                         <div className="flex-1">
+                           <div className="font-semibold text-gray-900">Maison de campagne</div>
+                           <div className="text-sm text-gray-600">Mboamanga, Kribi</div>
+                         </div>
+                         <div className="text-right">
+                           <div className="font-bold text-blue-600">55000 FCFA</div>
+                           <div className="text-xs text-gray-500">par nuit</div>
+                         </div>
+                       </div>
+                                          </div>
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+       </div>
+     </section>
+   );
 }; 
