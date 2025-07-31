@@ -2,6 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { BoutonLink } from '@/components/ui/BoutonLink';
+import DateRangePicker from '@/components/ui/DateRangePicker';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 
 interface HeroProps {
   className?: string;
@@ -10,6 +13,11 @@ interface HeroProps {
 export const Hero: React.FC<HeroProps> = ({ className = '' }) => {
   const [currentRole, setCurrentRole] = useState(0);
   const roles = ['locataire', 'propriétaire'];
+  const [selectedDates, setSelectedDates] = useState<{ from: Date | undefined; to: Date | undefined }>({
+    from: undefined,
+    to: undefined
+  });
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -92,35 +100,42 @@ export const Hero: React.FC<HeroProps> = ({ className = '' }) => {
                            </div>
                          </div>
 
-                         {/* Dates */}
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                           {/* Date d'arrivée */}
-                           <div className="relative">
-                             <div className="flex items-center space-x-3 bg-gray-50 rounded-lg p-4 h-12">
-                               <svg className="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                               </svg>
-                               <input
-                                 type="date"
-                                 placeholder="Date d'arrivée"
-                                 className="flex-1 bg-transparent text-gray-700 focus:outline-none text-sm font-medium h-full"
-                               />
+                         {/* Date Range */}
+                         <div className="relative">
+                           <div 
+                             className="flex items-center space-x-3 bg-gray-50 rounded-lg p-4 h-12 cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                             onClick={() => setIsCalendarOpen(true)}
+                           >
+                             <svg className="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                             </svg>
+                             <div className="flex-1">
+                               {selectedDates.from ? (
+                                 <div className="text-sm font-medium text-gray-700">
+                                   {format(selectedDates.from, 'dd/MM/yyyy', { locale: fr })}
+                                   {selectedDates.to && ` - ${format(selectedDates.to, 'dd/MM/yyyy', { locale: fr })}`}
+                                 </div>
+                               ) : (
+                                 <div className="text-sm text-gray-500">Sélectionner vos dates</div>
+                               )}
                              </div>
+                             <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                             </svg>
                            </div>
-
-                           {/* Date de départ */}
-                           <div className="relative">
-                             <div className="flex items-center space-x-3 bg-gray-50 rounded-lg p-4 h-12">
-                               <svg className="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                               </svg>
-                               <input
-                                 type="date"
-                                 placeholder="Date de départ"
-                                 className="flex-1 bg-transparent text-gray-700 focus:outline-none text-sm font-medium h-full"
-                               />
+                           
+                           {/* Calendar Modal */}
+                           {isCalendarOpen && (
+                             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                               <div className="relative">
+                                                                   <DateRangePicker
+                                    selectedDates={selectedDates}
+                                    onSelect={setSelectedDates}
+                                    onClose={() => setIsCalendarOpen(false)}
+                                  />
+                               </div>
                              </div>
-                           </div>
+                           )}
                          </div>
 
                          {/* Nombre de voyageurs */}
