@@ -62,43 +62,71 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/properties" className="text-gray-700 hover:text-purple-600 transition-colors duration-200 font-medium">
-              Logements
-            </Link>
             <Link href="/about" className="text-gray-700 hover:text-purple-600 transition-colors duration-200 font-medium">
               À propos
             </Link>
-            <Link href="/contact" className="text-gray-700 hover:text-purple-600 transition-colors duration-200 font-medium">
-              Contact
+            <Link href="/properties" className="text-gray-700 hover:text-purple-600 transition-colors duration-200 font-medium">
+              Logements
             </Link>
           </nav>
 
           {/* Right side menu */}
           <div className="flex items-center space-x-1">
-            {/* Je propose mon bien button */}
-            <BoutonLink
-              href="/propose-property"
-              variant="default"
-              size="md"
-            >
-              Je propose mon bien
-            </BoutonLink>
-
-            {/* Language and Currency Selectors */}
+            {/* Currency and Language Selectors */}
             <div className="flex items-center space-x-1">
-              <div className="relative language-menu-container">
+              <div className="relative currency-menu-container group">
+                <button
+                  onClick={() => {
+                    setIsCurrencyMenuOpen(!isCurrencyMenuOpen);
+                    setIsLanguageMenuOpen(false);
+                  }}
+                  className="p-3 text-gray-600 hover:text-purple-600 transition-all duration-200 rounded-lg hover:bg-gray-50 relative"
+                >
+                  <span className="text-gray-700 text-sm font-semibold">{currentCurrency.code}</span>
+                  {/* Tooltip */}
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-purple-600 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                    Devise
+                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-purple-600"></div>
+                  </div>
+                </button>
+
+                {/* Currency Dropdown Menu */}
+                {isCurrencyMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+                    {devises.map((devise) => (
+                      <button
+                        key={devise.code}
+                        onClick={() => {
+                          setCurrentCurrency(devise);
+                          setIsCurrencyMenuOpen(false);
+                        }}
+                        className="flex items-center space-x-3 px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 transition-colors duration-200 w-full text-left"
+                      >
+                        <span className="font-medium">{devise.code} - {devise.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="relative language-menu-container group">
                 <button
                   onClick={() => {
                     setIsLanguageMenuOpen(!isLanguageMenuOpen);
                     setIsCurrencyMenuOpen(false);
                   }}
-                  className="p-3 text-gray-600 hover:text-purple-600 transition-all duration-200 rounded-lg hover:bg-gray-50"
+                  className="p-3 text-gray-600 hover:text-purple-600 transition-all duration-200 rounded-lg hover:bg-gray-50 relative"
                 >
                   <img 
                     src={currentLanguage.flag} 
                     alt={currentLanguage.label}
                     className="w-6 h-6 rounded-full object-cover"
                   />
+                  {/* Tooltip */}
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-purple-600 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                    Langue
+                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-purple-600"></div>
+                  </div>
                 </button>
 
                 {/* Language Dropdown Menu */}
@@ -124,44 +152,18 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   </div>
                 )}
               </div>
-
-              <div className="relative currency-menu-container">
-                <button
-                  onClick={() => {
-                    setIsCurrencyMenuOpen(!isCurrencyMenuOpen);
-                    setIsLanguageMenuOpen(false);
-                  }}
-                  className="p-3 text-gray-600 hover:text-purple-600 transition-all duration-200 rounded-lg hover:bg-gray-50"
-                >
-                  <span className="text-gray-700 text-sm font-semibold">{currentCurrency.code}</span>
-                </button>
-
-                {/* Currency Dropdown Menu */}
-                {isCurrencyMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
-                    {devises.map((devise) => (
-                      <button
-                        key={devise.code}
-                        onClick={() => {
-                          setCurrentCurrency(devise);
-                          setIsCurrencyMenuOpen(false);
-                        }}
-                        className="flex items-center space-x-3 px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 transition-colors duration-200 w-full text-left"
-                      >
-                        <span className="font-medium">{devise.code} - {devise.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
             </div>
 
-            {/* Help Icon */}
-            <Link href="/help" className="p-3 text-gray-600 hover:text-purple-600 transition-all duration-200 rounded-lg hover:bg-gray-50">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </Link>
+            {/* Je propose mon bien button */}
+            <BoutonLink
+              href="/propose-property"
+              variant="default"
+              size="md"
+            >
+              Je propose mon bien
+            </BoutonLink>
+
+
 
             {/* User Profile */}
             <div className="relative user-menu-container">
@@ -196,7 +198,12 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                   </div>
-                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg 
+                    className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`}
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
@@ -273,6 +280,19 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                       <span className="font-medium">Mes paramètres</span>
+                    </Link>
+                  </div>
+
+                  {/* Help */}
+                  <div className="px-0 py-2 border-t border-gray-200">
+                    <Link
+                      href="/help"
+                      className="flex items-center space-x-3 py-3 px-4 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200 w-full"
+                    >
+                      <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="font-medium">Centre d'aide</span>
                     </Link>
                   </div>
 
