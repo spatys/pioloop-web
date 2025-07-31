@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { languages } from '@/core/data/languages';
 import { devises } from '@/core/data/devises';
 import { BoutonLink } from '@/components/ui/BoutonLink';
+import { Logo } from '@/components/ui/Logo';
 import type { Language } from '@/core/types/Language';
 import type { Devise } from '@/core/types/Devise';
 
@@ -41,24 +42,12 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
     };
   }, [isUserMenuOpen, isLanguageMenuOpen, isCurrencyMenuOpen]);
 
-  // const navigation = [
-  //   { name: 'Logement', href: '/logements' },
-  //   { name: 'Réservations', href: '/reservations' },
-  //   { name: 'À propos', href: '/about' },
-  //   { name: 'Contact', href: '/contact' },
-  // ];
-
   return (
     <header className={`bg-white shadow-sm border-b border-gray-200 ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-18">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3 group">
-            <div className="w-9 h-9 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow duration-200">
-              <span className="text-white text-sm font-bold">P</span>
-            </div>
-            <span className="text-xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors duration-200">Pioloop</span>
-          </Link>
+          <Logo />
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">

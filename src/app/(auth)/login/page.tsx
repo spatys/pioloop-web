@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { Logo } from '@/components/ui/Logo';
 
 // Schéma de validation
 const schema = yup.object({
@@ -63,14 +64,7 @@ export default function LoginPage() {
         <div className="w-full pt-4">
           {/* Logo */}
           <div className="text-center mb-4">
-            <Link href="/" className="inline-block">
-              <div className="flex items-center justify-center space-x-3">
-                <div className="w-9 h-9 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center shadow-sm">
-                  <span className="text-white text-sm font-bold">P</span>
-                </div>
-                <span className="text-2xl font-bold text-gray-900">Pioloop</span>
-              </div>
-            </Link>
+            <Logo showSubtitle={false} className="justify-center" />
           </div>
 
           {/* Separator */}
