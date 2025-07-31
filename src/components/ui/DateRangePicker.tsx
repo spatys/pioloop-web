@@ -81,11 +81,22 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ selectedDates, onSele
   const days = getDaysInMonth(currentMonth);
 
   return (
-    <div className="bg-white rounded-2xl shadow-2xl border border-purple-100 p-6 w-[600px]">
+    <div className="bg-white rounded-2xl shadow-2xl border border-purple-100 w-[400px] sm:w-[450px] md:w-[500px] lg:w-[550px] mx-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">Sélectionner vos dates</h3>
+      <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                 <h3 className="text-lg font-normal text-gray-900">Sélectionner vos dates</h3>
+        <button
+          onClick={onClose}
+          className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+        >
+          <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
       </div>
+
+      {/* Content */}
+      <div className="p-6">
 
       {/* Navigation */}
       <div className="flex items-center justify-between mb-4">
@@ -97,7 +108,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ selectedDates, onSele
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
-        <h2 className="text-xl font-bold text-gray-900">
+                 <h2 className="text-lg sm:text-xl font-normal text-gray-900 text-center">
           {(() => {
             const label = format(currentMonth, 'MMMM yyyy', { locale: fr });
             return label.charAt(0).toUpperCase() + label.slice(1);
@@ -116,7 +127,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ selectedDates, onSele
       {/* Days of week */}
       <div className="grid grid-cols-7 gap-1 mb-2">
         {daysOfWeek.map((day) => (
-          <div key={day} className="h-10 flex items-center justify-center text-sm font-semibold text-gray-600">
+          <div key={day} className="h-8 sm:h-10 flex items-center justify-center text-xs sm:text-sm font-normal text-gray-600">
             {day}
           </div>
         ))}
@@ -137,13 +148,13 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ selectedDates, onSele
             <div key={index} className="relative flex items-center justify-center">
               {/* Bande continue avec arrondis intérieurs */}
               {isStart && !isEnd && (
-                <div className="absolute left-1/2 right-0 top-1/2 -translate-y-1/2 h-10 bg-purple-100 z-0" />
+                <div className="absolute left-1/2 right-0 top-1/2 -translate-y-1/2 h-8 sm:h-10 bg-purple-100 z-0" />
               )}
               {isEnd && !isStart && (
-                <div className="absolute left-0 right-1/2 top-1/2 -translate-y-1/2 h-10 bg-purple-100 z-0" />
+                <div className="absolute left-0 right-1/2 top-1/2 -translate-y-1/2 h-8 sm:h-10 bg-purple-100 z-0" />
               )}
               {isInSelectedRange && !isStart && !isEnd && (
-                <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-10 bg-purple-100 z-0" />
+                <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-8 sm:h-10 bg-purple-100 z-0" />
               )}
               <button
                 onClick={() => handleDateClick(day)}
@@ -151,7 +162,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ selectedDates, onSele
                 onMouseLeave={() => setHoveredDate(null)}
                 disabled={isPast}
                 className={`
-                  w-10 h-10 text-sm font-medium transition-all duration-200 flex items-center justify-center relative rounded-full mx-auto
+                  w-8 h-8 sm:w-10 sm:h-10 text-xs sm:text-sm font-medium transition-all duration-200 flex items-center justify-center relative rounded-full mx-auto
                   ${isPast
                     ? 'text-gray-300 cursor-not-allowed'
                     : 'hover:bg-purple-50 hover:text-purple-700 cursor-pointer text-gray-900'
@@ -173,7 +184,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ selectedDates, onSele
                     : ''
                   }
                   ${isHovered && !isSelected && !isInSelectedRange && !isPast
-                    ? 'bg-purple-50 text-purple-700 scale-110 z-10' 
+                    ? 'bg-purple-50 text-purple-700' 
                     : ''
                   }
                 `}
@@ -185,9 +196,11 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ selectedDates, onSele
         })}
       </div>
 
+      </div>
+
       {/* Footer */}
-      <div className="mt-6 pt-4 border-t border-gray-100">
-        <div className="flex items-center justify-between">
+      <div className="p-6 border-t border-gray-200">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="text-sm text-gray-600">
             {selectedDates.from && (
               <span>
@@ -196,16 +209,16 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ selectedDates, onSele
               </span>
             )}
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full sm:w-auto">
             <button
               onClick={() => onSelect({ from: undefined, to: undefined })}
-              className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+              className="flex-1 sm:flex-none px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
             >
               Effacer
             </button>
             <button
               onClick={onClose}
-              className="px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+              className="flex-1 sm:flex-none px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
             >
               Valider
             </button>
