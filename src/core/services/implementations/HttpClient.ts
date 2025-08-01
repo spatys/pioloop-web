@@ -7,7 +7,7 @@ export class HttpClient implements IHttpClient {
   private baseURL: string;
 
   constructor() {
-    this.baseURL = typeof window !== 'undefined' && (window as any).env?.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+    this.baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:64605/api';
   }
 
   private async apiRequest<T>(
