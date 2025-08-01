@@ -1,11 +1,13 @@
 'use client';
 
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { User } from '../core/types';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  registrationEmail: string | null; // Email en cours d'inscription
+  setRegistrationEmail: (email: string | null) => void; // Pour stocker l'email
   login: (email: string, password: string) => Promise<void>;
   register: (userData: any) => Promise<void>;
   logout: () => Promise<void>;
@@ -15,10 +17,9 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  // Pour l'instant, on utilise un contexte simple
-  // Le vrai AuthProvider sera implémenté avec le hook useAuth
   const [user, setUser] = React.useState<User | null>(null);
   const [loading, setLoading] = React.useState(false);
+  const [registrationEmail, setRegistrationEmail] = useState<string | null>(null);
 
   const login = async (email: string, password: string) => {
     // TODO: Implémenter avec useAuth
@@ -43,6 +44,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const value = {
     user,
     loading,
+    registrationEmail,
+    setRegistrationEmail,
     login,
     register,
     logout,

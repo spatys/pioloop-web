@@ -2,11 +2,13 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Logo } from '@/components/ui/Logo';
 import { useAuth } from '@/hooks/useAuth';
+import { useAuth as useAuthContext } from '@/context/AuthContext';
 
 // Schéma de validation
 const schema = yup.object({
@@ -24,7 +26,9 @@ type RegisterFormData = {
 };
 
 export const RegistrationEmail: React.FC = () => {
-  const { emailRegistration, isLoading, error, success, clearError, clearSuccess } = useAuth();
+  const router = useRouter();
+  const { registrationEmail, isLoading, error, success, clearError, clearSuccess } = useAuth();
+  const { setRegistrationEmail } = useAuthContext();
 
   const {
     register,
@@ -36,11 +40,15 @@ export const RegistrationEmail: React.FC = () => {
   });
 
   const onSubmit = async (data: RegisterFormData) => {
-    const response = await emailRegistration(data.email);
+    //const response = await registrationEmail(data.email);
+    const response = { success: true, email: 'nanyim.alain@gmail.com', message: 'Inscription par email réussie' };
     
     if (response.success) {
-      console.log('Inscription par email réussie:', response.data.message);
-      // Ici vous pouvez rediriger vers la page suivante ou afficher un message de succès
+      // console.log('Inscription par email réussie:', response.data.message);
+      // Stocker l'email dans le contexte
+      setRegistrationEmail(data.email);
+      // Redirection vers la page de vérification (sans email dans l'URL)
+      router.push('/registration-verify-code');
     } else {
       console.error('Erreur lors de l\'inscription par email:', response.message);
       // L'erreur sera automatiquement affichée par le hook useAuth
@@ -111,7 +119,6 @@ export const RegistrationEmail: React.FC = () => {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Initialisation en cours...
                     </>
                   ) : (
                     'Continuer'

@@ -1,36 +1,35 @@
 import { useState } from 'react';
-import { getAuthService } from '@/core/di/container';
-import type { LoginForm, RegisterForm, ApiResponse, User } from '@/core/types';
+import { getAuthService } from '../core/di/container';
+import { ApiResponse } from '../core/types';
+import { LoginForm, RegisterForm } from '../core/types/Forms';
 
 interface UseAuthReturn {
   // States
-  user: User | null;
+  user: any | null;
   isLoading: boolean;
   error: string | null;
   success: string | null;
-  
+
   // Methods
   login: (credentials: LoginForm) => Promise<ApiResponse<{ token: string; user: any }>>;
   register: (userData: RegisterForm) => Promise<ApiResponse<any>>;
-  emailRegistration: (email: string) => Promise<ApiResponse<{ message: string; email: string }>>;
+  registrationEmail: (email: string) => Promise<ApiResponse<{ message: string; email: string }>>;
+  registrationVerifyEmailCode: (email: string, code: string) => Promise<ApiResponse<boolean>>;
   logout: () => Promise<void>;
   getCurrentUser: () => Promise<ApiResponse<any>>;
-  
+
   // Utilities
   clearError: () => void;
   clearSuccess: () => void;
 }
 
 export const useAuth = (): UseAuthReturn => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
   const authService = getAuthService();
-
-  const clearError = () => setError(null);
-  const clearSuccess = () => setSuccess(null);
 
   const executeWithLoading = async <T>(
     operation: () => Promise<ApiResponse<T>>
@@ -43,12 +42,7 @@ export const useAuth = (): UseAuthReturn => {
       const result = await operation();
       
       if (result.success) {
-        // Utilise le message de l'API si disponible, sinon un message par défaut
-        if (result.data && typeof result.data === 'object' && 'message' in result.data) {
-          setSuccess((result.data as any).message);
-        } else {
-          setSuccess('Opération réussie');
-        }
+        setSuccess(result.message || 'Opération réussie');
       } else {
         setError(result.message || 'Une erreur est survenue');
       }
@@ -57,12 +51,7 @@ export const useAuth = (): UseAuthReturn => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Une erreur inattendue est survenue';
       setError(errorMessage);
-      return {
-        success: false,
-        data: null as T,
-        message: errorMessage,
-        errors: []
-      };
+      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -72,11 +61,9 @@ export const useAuth = (): UseAuthReturn => {
     const result = await executeWithLoading(
       () => authService.login(credentials)
     );
-    
     if (result.success && result.data?.user) {
       setUser(result.data.user);
     }
-    
     return result;
   };
 
@@ -86,16 +73,22 @@ export const useAuth = (): UseAuthReturn => {
     );
   };
 
-  const emailRegistration = async (email: string) => {
+  const registrationEmail = async (email: string) => {
     return await executeWithLoading(
-      () => authService.emailRegistration(email)
+      () => authService.registrationEmail(email)
+    );
+  };
+
+  const registrationVerifyEmailCode = async (email: string, code: string) => {
+    return await executeWithLoading(
+      () => authService.registrationVerifyEmailCode(email, code)
     );
   };
 
   const logout = async () => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       await authService.logout();
       setUser(null);
@@ -112,29 +105,26 @@ export const useAuth = (): UseAuthReturn => {
     const result = await executeWithLoading(
       () => authService.getCurrentUser()
     );
-    
     if (result.success && result.data) {
       setUser(result.data);
     }
-    
     return result;
   };
 
+  const clearError = () => setError(null);
+  const clearSuccess = () => setSuccess(null);
+
   return {
-    // States
     user,
     isLoading,
     error,
     success,
-    
-    // Methods
     login,
     register,
-    emailRegistration,
+    registrationEmail,
+    registrationVerifyEmailCode,
     logout,
     getCurrentUser,
-    
-    // Utilities
     clearError,
     clearSuccess,
   };
