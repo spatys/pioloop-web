@@ -37,6 +37,11 @@ export class HttpClient implements IHttpClient {
       const data = await response.json();
 
       if (!response.ok) {
+        // Ne pas log les erreurs 401 normales pour /auth/me
+        if (response.status !== 401 || !endpoint.includes('/auth/me')) {
+          console.error(`HTTP ${response.status} error for ${endpoint}:`, data);
+        }
+        
         return {
           success: false,
           data: null as T,

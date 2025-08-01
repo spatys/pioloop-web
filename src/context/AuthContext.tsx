@@ -1,60 +1,69 @@
 'use client';
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User } from '../core/types';
+import { useAuth as useAuthHook } from '../hooks/useAuth';
 
 interface AuthContextType {
-  user: User | null;
+  user: any | null;
   loading: boolean;
-  registrationEmail: string | null; // Email en cours d'inscription
-  registrationExpirationMinutes: number | null; // Expiration du code de vérification
-  setRegistrationEmail: (email: string | null) => void; // Pour stocker l'email
-  setRegistrationExpirationMinutes: (minutes: number | null) => void; // Pour stocker l'expiration
-  login: (email: string, password: string) => Promise<void>;
-  register: (userData: any) => Promise<void>;
+  registrationEmail: string | null;
+  registrationExpirationMinutes: number | null;
+  setRegistrationEmail: (email: string | null) => void;
+  setRegistrationExpirationMinutes: (minutes: number | null) => void;
+  login: (credentials: any) => Promise<any>;
+  register: (userData: any) => Promise<any>;
   logout: () => Promise<void>;
-  checkAuth: () => Promise<void>;
+  getCurrentUser: () => Promise<any>;
+  clearError: () => void;
+  clearSuccess: () => void;
+  error: string | null;
+  success: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = React.useState<User | null>(null);
-  const [loading, setLoading] = React.useState(false);
   const [registrationEmail, setRegistrationEmail] = useState<string | null>(null);
   const [registrationExpirationMinutes, setRegistrationExpirationMinutes] = useState<number | null>(null);
+  
+  // Utiliser le hook useAuth pour la logique d'authentification
+  const authHook = useAuthHook();
 
-  const login = async (email: string, password: string) => {
-    // TODO: Implémenter avec useAuth
-    console.log('Login:', email, password);
-  };
+  // Vérifier l'authentification au chargement de la page
+  useEffect(() => {
+    const checkAuthOnLoad = async () => {
+      // Vérifier si on a un cookie JWT avant de faire l'appel API
+      const hasJwtCookie = document.cookie.includes('JWTToken=');
+      
+      if (!authHook.user && hasJwtCookie) {
+        try {
+          await authHook.getCurrentUser();
+        } catch (error) {
+          // User is not authenticated, that's fine
+          console.log('No authenticated user found on page load');
+        }
+      }
+    };
 
-  const register = async (userData: any) => {
-    // TODO: Implémenter avec useAuth
-    console.log('Register:', userData);
-  };
-
-  const logout = async () => {
-    // TODO: Implémenter avec useAuth
-    setUser(null);
-  };
-
-  const checkAuth = async () => {
-    // TODO: Implémenter avec useAuth
-    console.log('Check auth');
-  };
+    checkAuthOnLoad();
+  }, []); // Supprimer la dépendance pour éviter les appels en boucle
 
   const value = {
-    user,
-    loading,
+    user: authHook.user,
+    loading: authHook.isLoading,
     registrationEmail,
     registrationExpirationMinutes,
     setRegistrationEmail,
     setRegistrationExpirationMinutes,
-    login,
-    register,
-    logout,
-    checkAuth,
+    login: authHook.login,
+    register: authHook.register,
+    logout: authHook.logout,
+    getCurrentUser: authHook.getCurrentUser,
+    clearError: authHook.clearError,
+    clearSuccess: authHook.clearSuccess,
+    error: authHook.error,
+    success: authHook.success,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
