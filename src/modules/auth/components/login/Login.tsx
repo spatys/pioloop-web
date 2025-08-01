@@ -192,7 +192,7 @@ export const Login: React.FC = () => {
       </div>
 
       {/* Right Section - Image */}
-      <div className="hidden lg:block lg:w-1/2 bg-gradient-to-br from-purple-600 to-blue-600">
+      <div className="hidden lg:block lg:w-1/2">
         <div className="h-full flex items-center justify-center">
           <img
             src="/images/register.png"
