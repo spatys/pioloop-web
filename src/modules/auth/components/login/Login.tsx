@@ -41,7 +41,6 @@ export const Login: React.FC = () => {
 
   const onSubmit = async (data: LoginForm) => {
     const response = await login(data);
-
     if (response.success) {
       // Nettoyer le message de succès pour ne pas l'afficher
       clearSuccess();

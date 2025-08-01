@@ -36,7 +36,7 @@ export const useAuth = (): UseAuthReturn => {
 
   const authService = container.get<IAuthService>(TYPES.IAuthService);
 
-  // Auto-fetch user data on mount and when cookies change
+  // Auto-fetch user data when cookies change
   const fetchUserData = useCallback(async () => {
     try {
       const result = await authService.getCurrentUser();
@@ -49,11 +49,6 @@ export const useAuth = (): UseAuthReturn => {
       setUser(null);
     }
   }, [authService]);
-
-  // Check for user data on mount
-  useEffect(() => {
-    fetchUserData();
-  }, [fetchUserData]);
 
   // Listen for storage events (when cookies change in other tabs)
   useEffect(() => {
@@ -97,8 +92,6 @@ export const useAuth = (): UseAuthReturn => {
     );
     if (result.success && result.data?.user) {
       setUser(result.data.user);
-      // Refresh user data after login
-      await fetchUserData();
     }
     return result;
   };
@@ -125,9 +118,8 @@ export const useAuth = (): UseAuthReturn => {
     const result = await executeWithLoading(
       () => authService.registrationComplete(data)
     );
-    if (result.success) {
-      // Refresh user data after registration completion
-      await fetchUserData();
+    if (result.success && result.data?.user) {
+      setUser(result.data.user);
     }
     return result;
   };

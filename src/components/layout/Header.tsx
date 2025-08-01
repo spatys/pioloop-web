@@ -147,13 +147,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
 
             {/* User Profile */}
             <div className="relative user-menu-container">
-              {isLoading ? (
-                // Loading state - Airbnb style skeleton
-                <div className="flex items-center space-x-3 px-4 py-2">
-                  <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
-                  <div className="w-16 h-4 bg-gray-200 rounded animate-pulse"></div>
-                </div>
-              ) : user ? (
+              {user ? (
                 // Authenticated user - Airbnb/Booking style
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
