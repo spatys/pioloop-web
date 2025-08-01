@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,6 +8,7 @@ import * as yup from 'yup';
 import { Logo } from '@/components/ui/Logo';
 import { useAuth } from '@/hooks/useAuth';
 import { CompleteRegistration } from '@/core/types/Forms';
+import LoadingSpinner from '@/modules/shared/components/LoadingSpinner';
 
 // Schema de validation
 const schema = yup.object({
@@ -40,6 +41,7 @@ export const RegistrationComplete: React.FC = () => {
   const { registrationComplete, isLoading, error, success, clearError, clearSuccess } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const {
     register,
@@ -60,7 +62,12 @@ export const RegistrationComplete: React.FC = () => {
 
     if (response.success) {
       console.log('Inscription complétée avec succès');
-      router.push('/'); // Redirect to home page
+      setIsRedirecting(true);
+      
+      // Timeout de 2 secondes avant la redirection
+      setTimeout(() => {
+        router.push('/');
+      }, 2000);
     } else {
       console.error('Erreur lors de la complétion de l\'inscription:', response.message);
     }
@@ -68,6 +75,13 @@ export const RegistrationComplete: React.FC = () => {
 
   return (
     <div className="min-h-screen flex">
+      {/* Loading Spinner Overlay */}
+      {!isRedirecting && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <LoadingSpinner size="lg" color="white" />
+        </div>
+      )}
+
       {/* Left Section - Form */}
       <div className="flex-1 flex items-start justify-center bg-white">
         <div className="w-full pt-4">
@@ -208,10 +222,7 @@ export const RegistrationComplete: React.FC = () => {
                 >
                   {isLoading ? (
                     <>
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
+                      <LoadingSpinner size="sm" color="white" className="mr-3" />
                       Création en cours...
                     </>
                   ) : (
