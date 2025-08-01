@@ -1,15 +1,22 @@
+import { injectable, inject } from 'inversify';
 import { IContractService } from '../interfaces/IContractService';
+import type { IContractRepository } from '../../repositories/interfaces/IContractRepository';
 import { Contract, CreateContractForm, UpdateContractForm } from '../../types';
-import { contractRepository } from '../../repositories/implementations/ContractRepository';
+import { TYPES } from '../../di/types';
 
+@injectable()
 export class ContractService implements IContractService {
+  constructor(
+    @inject(TYPES.IContractRepository) private contractRepository: IContractRepository
+  ) {}
+
   async getContracts(filters?: any): Promise<Contract[]> {
-    const response = await contractRepository.getContracts(filters);
+    const response = await this.contractRepository.getContracts(filters);
     return response.data || [];
   }
 
   async getContract(id: string): Promise<Contract> {
-    const response = await contractRepository.getContract(id);
+    const response = await this.contractRepository.getContract(id);
     if (!response.success) {
       throw new Error(response.message || 'Failed to fetch contract');
     }
@@ -17,7 +24,7 @@ export class ContractService implements IContractService {
   }
 
   async createContract(data: CreateContractForm): Promise<Contract> {
-    const response = await contractRepository.createContract(data);
+    const response = await this.contractRepository.createContract(data);
     if (!response.success) {
       throw new Error(response.message || 'Failed to create contract');
     }
@@ -25,7 +32,7 @@ export class ContractService implements IContractService {
   }
 
   async updateContract(id: string, data: UpdateContractForm): Promise<Contract> {
-    const response = await contractRepository.updateContract(id, data);
+    const response = await this.contractRepository.updateContract(id, data);
     if (!response.success) {
       throw new Error(response.message || 'Failed to update contract');
     }
@@ -33,14 +40,14 @@ export class ContractService implements IContractService {
   }
 
   async deleteContract(id: string): Promise<void> {
-    const response = await contractRepository.deleteContract(id);
+    const response = await this.contractRepository.deleteContract(id);
     if (!response.success) {
       throw new Error(response.message || 'Failed to delete contract');
     }
   }
 
   async getMyContracts(): Promise<Contract[]> {
-    const response = await contractRepository.getMyContracts();
+    const response = await this.contractRepository.getMyContracts();
     if (!response.success) {
       throw new Error(response.message || 'Failed to fetch my contracts');
     }
@@ -48,7 +55,7 @@ export class ContractService implements IContractService {
   }
 
   async getContractsByTenant(tenantId: string): Promise<Contract[]> {
-    const response = await contractRepository.getContractsByTenant(tenantId);
+    const response = await this.contractRepository.getContractsByTenant(tenantId);
     if (!response.success) {
       throw new Error(response.message || 'Failed to fetch contracts by tenant');
     }
@@ -56,7 +63,7 @@ export class ContractService implements IContractService {
   }
 
   async getContractsByProperty(propertyId: string): Promise<Contract[]> {
-    const response = await contractRepository.getContractsByProperty(propertyId);
+    const response = await this.contractRepository.getContractsByProperty(propertyId);
     if (!response.success) {
       throw new Error(response.message || 'Failed to fetch contracts by property');
     }
@@ -64,7 +71,7 @@ export class ContractService implements IContractService {
   }
 
   async updateContractStatus(id: string, status: string, reason?: string): Promise<Contract> {
-    const response = await contractRepository.updateContractStatus(id, status, reason);
+    const response = await this.contractRepository.updateContractStatus(id, status, reason);
     if (!response.success) {
       throw new Error(response.message || 'Failed to update contract status');
     }
@@ -72,7 +79,7 @@ export class ContractService implements IContractService {
   }
 
   async signContract(id: string, signatureType: 'tenant' | 'owner'): Promise<Contract> {
-    const response = await contractRepository.signContract(id, signatureType);
+    const response = await this.contractRepository.signContract(id, signatureType);
     if (!response.success) {
       throw new Error(response.message || 'Failed to sign contract');
     }
@@ -80,7 +87,7 @@ export class ContractService implements IContractService {
   }
 
   async validateContract(data: CreateContractForm): Promise<{ isValid: boolean; errors: string[] }> {
-    const response = await contractRepository.validateContract(data);
+    const response = await this.contractRepository.validateContract(data);
     if (!response.success) {
       throw new Error(response.message || 'Failed to validate contract');
     }
@@ -88,7 +95,7 @@ export class ContractService implements IContractService {
   }
 
   async getContractStats(userId?: string): Promise<any> {
-    const response = await contractRepository.getContractStats(userId);
+    const response = await this.contractRepository.getContractStats(userId);
     if (!response.success) {
       throw new Error(response.message || 'Failed to fetch contract stats');
     }
@@ -101,14 +108,12 @@ export class ContractService implements IContractService {
   }
 
   async getContractTemplates(): Promise<any[]> {
-    // This would be implemented with template service
+    // This would be implemented with template fetching logic
     throw new Error('Contract templates not implemented');
   }
 
   async applyContractTemplate(contractId: string, templateId: string): Promise<Contract> {
-    // This would be implemented with template service
+    // This would be implemented with template application logic
     throw new Error('Contract template application not implemented');
   }
-}
-
-export const contractService = new ContractService(); 
+} 

@@ -1,37 +1,42 @@
-import { User, LoginForm, RegisterForm } from '../../types';
+import { User, LoginForm, RegisterForm, ApiResponse } from '../../types';
 
 export interface IAuthService {
-  // Authentication methods
-  login(credentials: LoginForm): Promise<{ user: User; token: string }>;
-  register(userData: RegisterForm): Promise<User>;
+  // User login
+  login(credentials: LoginForm): Promise<ApiResponse<{ token: string; user: User }>>;
+  
+  // User registration
+  register(userData: RegisterForm): Promise<ApiResponse<User>>;
+  
+  // Email registration
+  emailRegistration(email: string): Promise<ApiResponse<{ message: string; email: string }>>;
+  
+  // Email confirmation
+  confirmEmail(email: string, code: string): Promise<ApiResponse<boolean>>;
+  
+  // User logout
   logout(): Promise<void>;
   
-  // User management
-  getCurrentUser(): Promise<User | null>;
-  updateProfile(userData: Partial<User>): Promise<User>;
-  changePassword(currentPassword: string, newPassword: string): Promise<void>;
+  // Get current user
+  getCurrentUser(): Promise<ApiResponse<User>>;
   
-  // Email verification
-  confirmEmail(email: string, code: string): Promise<boolean>;
-  resendConfirmationEmail(email: string): Promise<void>;
+  // Refresh token
+  refreshToken(): Promise<ApiResponse<{ token: string }>>;
   
-  // Password reset
-  forgotPassword(email: string): Promise<void>;
-  resetPassword(token: string, newPassword: string): Promise<void>;
+  // Forgot password
+  forgotPassword(email: string): Promise<ApiResponse<void>>;
   
-  // Account management
-  uploadProfileImage(file: File): Promise<{ imageUrl: string }>;
-  deleteAccount(password: string): Promise<void>;
+  // Reset password
+  resetPassword(token: string, newPassword: string): Promise<ApiResponse<void>>;
   
-  // Token management
-  refreshToken(): Promise<{ token: string }>;
-  isTokenValid(): boolean;
-  getStoredToken(): string | null;
-  setStoredToken(token: string): void;
-  clearStoredToken(): void;
+  // Change password
+  changePassword(currentPassword: string, newPassword: string): Promise<ApiResponse<void>>;
   
-  // Utility methods
-  isAuthenticated(): boolean;
-  hasRole(role: string): boolean;
-  hasAnyRole(roles: string[]): boolean;
+  // Update profile
+  updateProfile(userData: Partial<User>): Promise<ApiResponse<User>>;
+  
+  // Upload profile image
+  uploadProfileImage(file: File): Promise<ApiResponse<{ imageUrl: string }>>;
+  
+  // Delete account
+  deleteAccount(password: string): Promise<ApiResponse<void>>;
 } 

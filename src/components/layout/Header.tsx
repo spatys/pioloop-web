@@ -310,7 +310,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                       {/* Create Account */}
                       <div className="px-0 py-2">
                         <Link
-                          href="/register"
+                          href="/registration-email"
                           className="flex items-center space-x-3 py-3 px-4 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200 w-full"
                         >
                           <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

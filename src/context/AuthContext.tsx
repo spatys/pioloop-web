@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import React, { createContext, useContext } from 'react';
 import { User } from '../core/types';
-import { authRepository } from '../core/repositories/implementations/AuthRepository';
 
 interface AuthContextType {
   user: User | null;
@@ -16,77 +15,30 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  const checkAuth = async () => {
-    try {
-      const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-      if (token) {
-        const response = await authRepository.getCurrentUser();
-        if (response.success) {
-          setUser(response.data);
-        } else {
-          if (typeof window !== 'undefined') {
-            localStorage.removeItem('authToken');
-          }
-        }
-      }
-    } catch (error) {
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('authToken');
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Pour l'instant, on utilise un contexte simple
+  // Le vrai AuthProvider sera implémenté avec le hook useAuth
+  const [user, setUser] = React.useState<User | null>(null);
+  const [loading, setLoading] = React.useState(false);
 
   const login = async (email: string, password: string) => {
-    try {
-      const response = await authRepository.login({ email, password });
-      if (response.success && response.data.token) {
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('authToken', response.data.token);
-        }
-        setUser(response.data.user);
-      } else {
-        throw new Error(response.message || 'Login failed');
-      }
-    } catch (error) {
-      throw error;
-    }
+    // TODO: Implémenter avec useAuth
+    console.log('Login:', email, password);
   };
 
   const register = async (userData: any) => {
-    try {
-      const response = await authRepository.register(userData);
-      if (response.success) {
-        // Registration successful, but user needs to confirm email
-        // You might want to redirect to email confirmation page
-      } else {
-        throw new Error(response.message || 'Registration failed');
-      }
-    } catch (error) {
-      throw error;
-    }
+    // TODO: Implémenter avec useAuth
+    console.log('Register:', userData);
   };
 
   const logout = async () => {
-    try {
-      await authRepository.logout();
-    } catch (error) {
-      // Even if logout fails, clear local state
-    } finally {
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('authToken');
-      }
-      setUser(null);
-    }
+    // TODO: Implémenter avec useAuth
+    setUser(null);
   };
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  const checkAuth = async () => {
+    // TODO: Implémenter avec useAuth
+    console.log('Check auth');
+  };
 
   const value = {
     user,

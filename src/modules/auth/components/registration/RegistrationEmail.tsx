@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Logo } from '@/components/ui/Logo';
+import { useAuth } from '@/hooks/useAuth';
 
 // Schéma de validation
 const schema = yup.object({
@@ -22,31 +23,27 @@ type RegisterFormData = {
   email: string;
 };
 
-export default function RegisterPage() {
-  const [isLoading, setIsLoading] = useState(false);
+export const RegistrationEmail: React.FC = () => {
+  const { emailRegistration, isLoading, error, success, clearError, clearSuccess } = useAuth();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting }
+    formState: { errors }
   } = useForm<RegisterFormData>({
     resolver: yupResolver(schema),
     mode: 'onChange' // Validation en temps réel
   });
 
   const onSubmit = async (data: RegisterFormData) => {
-    setIsLoading(true);
-    try {
-      // Logique de soumission du formulaire
-      console.log('Email:', data.email);
-      
-      // Simulation d'un appel API
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-    } catch (error) {
-      console.error('Erreur d\'inscription:', error);
-    } finally {
-      setIsLoading(false);
+    const response = await emailRegistration(data.email);
+    
+    if (response.success) {
+      console.log('Inscription par email réussie:', response.data.message);
+      // Ici vous pouvez rediriger vers la page suivante ou afficher un message de succès
+    } else {
+      console.error('Erreur lors de l\'inscription par email:', response.message);
+      // L'erreur sera automatiquement affichée par le hook useAuth
     }
   };
 
@@ -84,29 +81,37 @@ export default function RegisterPage() {
                     autoComplete="off"
                     {...register("email")}
                     className={`w-full px-4 py-3 border rounded-lg transition-colors outline-none ${
-                      errors.email ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-gray-400 focus:border-purple-500'
+                      errors.email || error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-gray-400 focus:border-purple-500'
                     }`}
                   />
                   {errors.email && (
                     <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
                   )}
+                  {error && !errors.email && (
+                    <p className="mt-1 text-sm text-red-600">{error}</p>
+                  )}
                 </div>
 
-
+                {/* Success Message */}
+                {success && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                    <p className="text-sm text-green-600">{success}</p>
+                  </div>
+                )}
 
                 {/* Continue Button */}
                 <button
                   type="submit"
-                  disabled={isSubmitting || isLoading}
+                  disabled={isLoading}
                   className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:bg-purple-400 disabled:cursor-not-allowed flex items-center justify-center"
                 >
-                  {isSubmitting || isLoading ? (
+                  {isLoading ? (
                     <>
                       <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Création en cours...
+                      Initialisation en cours...
                     </>
                   ) : (
                     'Continuer'
@@ -170,4 +175,4 @@ export default function RegisterPage() {
       </div>
     </div>
   );
-} 
+}; 

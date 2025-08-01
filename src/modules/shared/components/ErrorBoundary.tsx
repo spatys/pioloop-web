@@ -2,7 +2,6 @@
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
-import { Button } from '../../../ui/Button';
 
 interface Props {
   children: ReactNode;
@@ -65,21 +64,20 @@ export default class ErrorBoundary extends Component<Props, State> {
             )}
 
             <div className="flex space-x-3">
-              <Button
+              <button
                 onClick={this.handleRetry}
-                className="flex-1"
+                className="flex-1 bg-purple-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors flex items-center justify-center"
               >
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Try Again
-              </Button>
+              </button>
               
-              <Button
+              <button
                 onClick={() => window.location.reload()}
-                variant="outline"
-                className="flex-1"
+                className="flex-1 bg-white text-purple-600 py-2 px-4 rounded-lg font-medium border border-purple-600 hover:bg-purple-50 transition-colors"
               >
                 Refresh Page
-              </Button>
+              </button>
             </div>
           </div>
         </div>

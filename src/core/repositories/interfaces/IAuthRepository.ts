@@ -7,6 +7,9 @@ export interface IAuthRepository {
   // User registration
   register(userData: RegisterForm): Promise<ApiResponse<User>>;
   
+  // Email registration
+  emailRegistration(email: string): Promise<ApiResponse<{ message: string; email: string }>>;
+  
   // Email confirmation
   confirmEmail(email: string, code: string): Promise<ApiResponse<boolean>>;
   

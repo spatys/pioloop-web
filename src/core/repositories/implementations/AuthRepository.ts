@@ -1,77 +1,19 @@
+import { injectable, inject } from 'inversify';
 import { IAuthRepository } from '../interfaces/IAuthRepository';
+import type { IHttpClient } from '../../services/interfaces/IHttpClient';
 import { User, LoginForm, RegisterForm, ApiResponse } from '../../types';
+import { TYPES } from '../../di/types';
 
-class AuthRepository implements IAuthRepository {
-  private baseURL: string;
-  private api: any;
-
-  constructor() {
-    this.baseURL = typeof window !== 'undefined' && (window as any).env?.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-    this.setupApi();
-  }
-
-  private setupApi() {
-    // This would be replaced with actual axios instance
-    // For now, we'll use fetch with proper configuration
-    this.api = {
-      get: async (url: string, config?: any) => {
-        const response = await fetch(`${this.baseURL}${url}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            ...config?.headers,
-          },
-          credentials: 'include',
-        });
-        return response.json();
-      },
-      post: async (url: string, data?: any, config?: any) => {
-        const response = await fetch(`${this.baseURL}${url}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...config?.headers,
-          },
-          credentials: 'include',
-          body: JSON.stringify(data),
-        });
-        return response.json();
-      },
-      put: async (url: string, data?: any, config?: any) => {
-        const response = await fetch(`${this.baseURL}${url}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            ...config?.headers,
-          },
-          credentials: 'include',
-          body: JSON.stringify(data),
-        });
-        return response.json();
-      },
-      delete: async (url: string, config?: any) => {
-        const response = await fetch(`${this.baseURL}${url}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            ...config?.headers,
-          },
-          credentials: 'include',
-        });
-        return response.json();
-      },
-    };
-  }
-
-  private getAuthHeaders(): Record<string, string> {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-    return token ? { Authorization: `Bearer ${token}` } : {};
-  }
+@injectable()
+export class AuthRepository implements IAuthRepository {
+  constructor(
+    @inject(TYPES.IHttpClient) private httpClient: IHttpClient
+  ) {}
 
   async login(credentials: LoginForm): Promise<ApiResponse<{ token: string; user: User }>> {
     try {
-      const response = await this.api.post('/auth/login', credentials);
-      if (response.success && response.data.token) {
+      const response = await this.httpClient.post<{ token: string; user: User }>('/auth/login', credentials);
+      if (response.success && response.data?.token) {
         if (typeof window !== 'undefined') {
           localStorage.setItem('authToken', response.data.token);
         }
@@ -84,15 +26,23 @@ class AuthRepository implements IAuthRepository {
 
   async register(userData: RegisterForm): Promise<ApiResponse<User>> {
     try {
-      return await this.api.post('/auth/register', userData);
+      return await this.httpClient.post<User>('/auth/register', userData);
     } catch (error) {
       throw new Error('Registration failed');
     }
   }
 
+  async emailRegistration(email: string): Promise<ApiResponse<{ message: string; email: string }>> {
+    try {
+      return await this.httpClient.post<{ message: string; email: string }>('/auth/registration/registration-email', { email });
+    } catch (error) {
+      throw new Error('Email registration failed');
+    }
+  }
+
   async confirmEmail(email: string, code: string): Promise<ApiResponse<boolean>> {
     try {
-      return await this.api.post('/auth/confirm-email', { email, code });
+      return await this.httpClient.post<boolean>('/auth/confirm-email', { email, code });
     } catch (error) {
       throw new Error('Email confirmation failed');
     }
@@ -100,7 +50,7 @@ class AuthRepository implements IAuthRepository {
 
   async logout(): Promise<void> {
     try {
-      await this.api.post('/auth/logout');
+      await this.httpClient.post<void>('/auth/logout', {});
     } catch (error) {
       // Even if logout fails, clear local token
     } finally {
@@ -112,7 +62,7 @@ class AuthRepository implements IAuthRepository {
 
   async getCurrentUser(): Promise<ApiResponse<User>> {
     try {
-      return await this.api.get('/auth/me', { headers: this.getAuthHeaders() });
+      return await this.httpClient.get<User>('/auth/me');
     } catch (error) {
       throw new Error('Failed to get current user');
     }
@@ -120,8 +70,8 @@ class AuthRepository implements IAuthRepository {
 
   async refreshToken(): Promise<ApiResponse<{ token: string }>> {
     try {
-      const response = await this.api.post('/auth/refresh', {}, { headers: this.getAuthHeaders() });
-      if (response.success && response.data.token) {
+      const response = await this.httpClient.post<{ token: string }>('/auth/refresh', {});
+      if (response.success && response.data?.token) {
         if (typeof window !== 'undefined') {
           localStorage.setItem('authToken', response.data.token);
         }
@@ -134,7 +84,7 @@ class AuthRepository implements IAuthRepository {
 
   async forgotPassword(email: string): Promise<ApiResponse<void>> {
     try {
-      return await this.api.post('/auth/forgot-password', { email });
+      return await this.httpClient.post<void>('/auth/forgot-password', { email });
     } catch (error) {
       throw new Error('Password reset request failed');
     }
@@ -142,7 +92,7 @@ class AuthRepository implements IAuthRepository {
 
   async resetPassword(token: string, newPassword: string): Promise<ApiResponse<void>> {
     try {
-      return await this.api.post('/auth/reset-password', { token, newPassword });
+      return await this.httpClient.post<void>('/auth/reset-password', { token, newPassword });
     } catch (error) {
       throw new Error('Password reset failed');
     }
@@ -150,7 +100,7 @@ class AuthRepository implements IAuthRepository {
 
   async changePassword(currentPassword: string, newPassword: string): Promise<ApiResponse<void>> {
     try {
-      return await this.api.put('/auth/change-password', { currentPassword, newPassword }, { headers: this.getAuthHeaders() });
+      return await this.httpClient.put<void>('/auth/change-password', { currentPassword, newPassword });
     } catch (error) {
       throw new Error('Password change failed');
     }
@@ -158,7 +108,7 @@ class AuthRepository implements IAuthRepository {
 
   async updateProfile(userData: Partial<User>): Promise<ApiResponse<User>> {
     try {
-      return await this.api.put('/auth/profile', userData, { headers: this.getAuthHeaders() });
+      return await this.httpClient.put<User>('/auth/profile', userData);
     } catch (error) {
       throw new Error('Profile update failed');
     }
@@ -169,9 +119,12 @@ class AuthRepository implements IAuthRepository {
       const formData = new FormData();
       formData.append('image', file);
       
-      const response = await fetch(`${this.baseURL}/auth/upload-profile-image`, {
+      // Note: Pour les uploads de fichiers, on peut étendre HttpClient ou créer une méthode spéciale
+      const response = await fetch(`${typeof window !== 'undefined' && (window as any).env?.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/auth/upload-profile-image`, {
         method: 'POST',
-        headers: this.getAuthHeaders(),
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
+        },
         credentials: 'include',
         body: formData,
       });
@@ -184,14 +137,11 @@ class AuthRepository implements IAuthRepository {
 
   async deleteAccount(password: string): Promise<ApiResponse<void>> {
     try {
-      return await this.api.delete('/auth/account', { 
-        headers: this.getAuthHeaders(),
+      return await this.httpClient.delete<void>('/auth/account', {
         body: JSON.stringify({ password })
       });
     } catch (error) {
       throw new Error('Account deletion failed');
     }
   }
-}
-
-export const authRepository = new AuthRepository(); 
+} 
