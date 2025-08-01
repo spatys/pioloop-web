@@ -19,7 +19,7 @@ export class AuthService implements IAuthService {
     return await this.authRepository.register(userData);
   }
 
-  async registrationEmail(email: string): Promise<ApiResponse<{ message: string; email: string }>> {
+  async registrationEmail(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
     return await this.authRepository.registrationEmail(email);
   }
 

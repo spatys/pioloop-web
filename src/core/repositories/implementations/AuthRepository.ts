@@ -27,9 +27,9 @@ export class AuthRepository implements IAuthRepository {
     }
   }
 
-  async registrationEmail(email: string): Promise<ApiResponse<{ message: string; email: string }>> {
+  async registrationEmail(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
     try {
-      return await this.httpClient.post<{ message: string; email: string }>('/auth/register/register-email', { email });
+      return await this.httpClient.post<{ message: string; email: string; expirationMinutes: number }>('/auth/register/register-email', { email });
     } catch (error) {
       throw new Error('Email registration failed');
     }

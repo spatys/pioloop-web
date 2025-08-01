@@ -28,7 +28,7 @@ type RegisterFormData = {
 export const RegistrationEmail: React.FC = () => {
   const router = useRouter();
   const { registrationEmail, isLoading, error, success, clearError, clearSuccess } = useAuth();
-  const { setRegistrationEmail } = useAuthContext();
+  const { setRegistrationEmail, setRegistrationExpirationMinutes } = useAuthContext();
 
   const {
     register,
@@ -42,10 +42,11 @@ export const RegistrationEmail: React.FC = () => {
   const onSubmit = async (data: RegisterFormData) => {
     const response = await registrationEmail(data.email);
     
-    if (response.success) {
+    if (response.success && response.data) {
       // console.log('Inscription par email réussie:', response.data.message);
-      // Stocker l'email dans le contexte
+      // Stocker l'email et l'expiration dans le contexte
       setRegistrationEmail(data.email);
+      setRegistrationExpirationMinutes(response.data.expirationMinutes);
       // Redirection vers la page de vérification (sans email dans l'URL)
       router.push('/registration-verify-code');
     } else {

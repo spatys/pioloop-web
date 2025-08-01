@@ -25,8 +25,8 @@ type VerifyCodeFormData = {
 export const RegistrationVerifyEmail: React.FC = () => {
   const router = useRouter();
   const { registrationVerifyEmailCode, isLoading, error, success, clearError, clearSuccess } = useAuth();
-  const { registrationEmail } = useAuthContext();
-  const [timeLeft, setTimeLeft] = useState(45);
+  const { registrationEmail, registrationExpirationMinutes } = useAuthContext();
+  const [timeLeft, setTimeLeft] = useState(registrationExpirationMinutes ? registrationExpirationMinutes * 60 : 60);
   const [canResend, setCanResend] = useState(false);
   const [codeDigits, setCodeDigits] = useState(['', '', '', '', '', '']);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -40,6 +40,14 @@ export const RegistrationVerifyEmail: React.FC = () => {
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
+
+  // Initialize timer when component mounts or expiration changes
+  useEffect(() => {
+    if (registrationExpirationMinutes) {
+      setTimeLeft(registrationExpirationMinutes * 60);
+      setCanResend(false);
+    }
+  }, [registrationExpirationMinutes]);
 
   // Countdown logic
   useEffect(() => {
@@ -120,7 +128,8 @@ export const RegistrationVerifyEmail: React.FC = () => {
   const handleResendCode = async () => {
     // TODO: Implement resend code function
     console.log('Renvoi du code...');
-    setTimeLeft(300); // Reset timer
+    const newExpiration = registrationExpirationMinutes ? registrationExpirationMinutes * 60 : 60;
+    setTimeLeft(newExpiration); // Reset timer with current expiration
     setCanResend(false);
   };
 

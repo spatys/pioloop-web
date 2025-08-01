@@ -220,7 +220,7 @@ export const RegistrationComplete: React.FC = () => {
                   disabled={isLoading}
                   className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:bg-purple-400 disabled:cursor-not-allowed flex items-center justify-center"
                 >
-                    'Envoyer'
+                    Envoyer
                 </button>
               </form>
             </div>

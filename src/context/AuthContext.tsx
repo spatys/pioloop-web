@@ -7,7 +7,9 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   registrationEmail: string | null; // Email en cours d'inscription
+  registrationExpirationMinutes: number | null; // Expiration du code de vérification
   setRegistrationEmail: (email: string | null) => void; // Pour stocker l'email
+  setRegistrationExpirationMinutes: (minutes: number | null) => void; // Pour stocker l'expiration
   login: (email: string, password: string) => Promise<void>;
   register: (userData: any) => Promise<void>;
   logout: () => Promise<void>;
@@ -20,6 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<User | null>(null);
   const [loading, setLoading] = React.useState(false);
   const [registrationEmail, setRegistrationEmail] = useState<string | null>(null);
+  const [registrationExpirationMinutes, setRegistrationExpirationMinutes] = useState<number | null>(null);
 
   const login = async (email: string, password: string) => {
     // TODO: Implémenter avec useAuth
@@ -45,7 +48,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user,
     loading,
     registrationEmail,
+    registrationExpirationMinutes,
     setRegistrationEmail,
+    setRegistrationExpirationMinutes,
     login,
     register,
     logout,
