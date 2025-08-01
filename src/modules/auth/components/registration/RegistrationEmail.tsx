@@ -80,12 +80,10 @@ export const RegistrationEmail: React.FC = () => {
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 {/* Email Input */}
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                    E-mail
-                  </label>
                   <input
                     id="email"
                     type="email"
+                    placeholder="E-mail"
                     autoComplete="off"
                     {...register("email")}
                     className={`w-full px-4 py-3 border rounded-lg transition-colors outline-none ${

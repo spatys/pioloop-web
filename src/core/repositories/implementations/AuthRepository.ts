@@ -3,7 +3,7 @@ import { IAuthRepository } from '../interfaces/IAuthRepository';
 import type { IHttpClient } from '../../services/interfaces/IHttpClient';
 import { TYPES } from '../../di/types';
 import { ApiResponse } from '../../types';
-import { LoginForm, RegisterForm } from '../../types/Forms';
+import { LoginForm, RegisterForm, CompleteRegistration } from '../../types/Forms';
 
 @injectable()
 export class AuthRepository implements IAuthRepository {
@@ -40,6 +40,14 @@ export class AuthRepository implements IAuthRepository {
       return await this.httpClient.post<boolean>('/auth/register/verify-email', { email, code });
     } catch (error) {
       throw new Error('Email verification failed');
+    }
+  }
+
+  async registrationComplete(data: CompleteRegistration): Promise<ApiResponse<any>> {
+    try {
+      return await this.httpClient.post<any>('/auth/register/complete', data);
+    } catch (error) {
+      throw new Error('Registration completion failed');
     }
   }
 

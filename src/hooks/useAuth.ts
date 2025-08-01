@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { getAuthService } from '../core/di/container';
 import { ApiResponse } from '../core/types';
-import { LoginForm, RegisterForm } from '../core/types/Forms';
+import { LoginForm, RegisterForm, CompleteRegistration } from '../core/types/Forms';
 
 interface UseAuthReturn {
   // States
@@ -15,6 +15,7 @@ interface UseAuthReturn {
   register: (userData: RegisterForm) => Promise<ApiResponse<any>>;
   registrationEmail: (email: string) => Promise<ApiResponse<{ message: string; email: string }>>;
   registrationVerifyEmailCode: (email: string, code: string) => Promise<ApiResponse<boolean>>;
+  registrationComplete: (data: CompleteRegistration) => Promise<ApiResponse<any>>;
   logout: () => Promise<void>;
   getCurrentUser: () => Promise<ApiResponse<any>>;
 
@@ -85,6 +86,12 @@ export const useAuth = (): UseAuthReturn => {
     );
   };
 
+  const registrationComplete = async (data: CompleteRegistration) => {
+    return await executeWithLoading(
+      () => authService.registrationComplete(data)
+    );
+  };
+
   const logout = async () => {
     setIsLoading(true);
     setError(null);
@@ -123,6 +130,7 @@ export const useAuth = (): UseAuthReturn => {
     register,
     registrationEmail,
     registrationVerifyEmailCode,
+    registrationComplete,
     logout,
     getCurrentUser,
     clearError,

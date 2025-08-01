@@ -3,7 +3,7 @@ import type { IAuthRepository } from '../../repositories/interfaces/IAuthReposit
 import { IAuthService } from '../interfaces/IAuthService';
 import { TYPES } from '../../di/types';
 import { ApiResponse } from '../../types';
-import { LoginForm, RegisterForm } from '../../types/Forms';
+import { LoginForm, RegisterForm, CompleteRegistration } from '../../types/Forms';
 
 @injectable()
 export class AuthService implements IAuthService {
@@ -25,6 +25,10 @@ export class AuthService implements IAuthService {
 
   async registrationVerifyEmailCode(email: string, code: string): Promise<ApiResponse<boolean>> {
     return await this.authRepository.registrationVerifyEmailCode(email, code);
+  }
+
+  async registrationComplete(data: CompleteRegistration): Promise<ApiResponse<any>> {
+    return await this.authRepository.registrationComplete(data);
   }
 
   async logout(): Promise<ApiResponse<any>> {

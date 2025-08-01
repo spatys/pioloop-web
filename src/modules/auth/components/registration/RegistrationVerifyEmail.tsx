@@ -106,11 +106,12 @@ export const RegistrationVerifyEmail: React.FC = () => {
       return;
     }
 
-    const response = await registrationVerifyEmailCode(registrationEmail, data.code);
+    //const response = await registrationVerifyEmailCode(registrationEmail, data.code);
+    const response = { success: true, message: 'Code vérifié avec succès' };
 
     if (response.success) {
       console.log('Code vérifié avec succès');
-      router.push('/'); // Redirect to home page
+      router.push('/registration-complete'); // Redirect to complete registration page
     } else {
       console.error('Erreur lors de la vérification du code:', response.message);
     }

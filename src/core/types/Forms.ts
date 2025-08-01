@@ -17,6 +17,13 @@ export interface RegisterForm {
   address?: PropertyAddress;
 }
 
+export interface CompleteRegistration {
+  firstName: string;
+  lastName: string;
+  password: string;
+  confirmPassword: string;
+}
+
 export interface PropertySearchForm {
   location?: string;
   checkIn?: string;
