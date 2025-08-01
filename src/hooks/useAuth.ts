@@ -1,7 +1,11 @@
-import { useState } from 'react';
-import { getAuthService } from '../core/di/container';
-import { ApiResponse } from '../core/types';
-import { LoginForm, RegisterForm, CompleteRegistration } from '../core/types/Forms';
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import { container } from '@/core/di/container';
+import { TYPES } from '@/core/di/types';
+import { IAuthService } from '@/core/services/interfaces/IAuthService';
+import { ApiResponse } from '@/core/types';
+import { LoginForm, RegisterForm, CompleteRegistration } from '@/core/types/Forms';
 
 interface UseAuthReturn {
   // States
@@ -30,7 +34,36 @@ export const useAuth = (): UseAuthReturn => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const authService = getAuthService();
+  const authService = container.get<IAuthService>(TYPES.IAuthService);
+
+  // Auto-fetch user data on mount and when cookies change
+  const fetchUserData = useCallback(async () => {
+    try {
+      const result = await authService.getCurrentUser();
+      if (result.success && result.data) {
+        setUser(result.data);
+      } else {
+        setUser(null);
+      }
+    } catch (error) {
+      setUser(null);
+    }
+  }, [authService]);
+
+  // Check for user data on mount
+  useEffect(() => {
+    fetchUserData();
+  }, [fetchUserData]);
+
+  // Listen for storage events (when cookies change in other tabs)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      fetchUserData();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [fetchUserData]);
 
   const executeWithLoading = async <T>(
     operation: () => Promise<ApiResponse<T>>
@@ -64,6 +97,8 @@ export const useAuth = (): UseAuthReturn => {
     );
     if (result.success && result.data?.user) {
       setUser(result.data.user);
+      // Refresh user data after login
+      await fetchUserData();
     }
     return result;
   };
@@ -87,9 +122,14 @@ export const useAuth = (): UseAuthReturn => {
   };
 
   const registrationComplete = async (data: CompleteRegistration) => {
-    return await executeWithLoading(
+    const result = await executeWithLoading(
       () => authService.registrationComplete(data)
     );
+    if (result.success) {
+      // Refresh user data after registration completion
+      await fetchUserData();
+    }
+    return result;
   };
 
   const logout = async () => {
