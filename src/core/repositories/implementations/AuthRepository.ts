@@ -11,9 +11,9 @@ export class AuthRepository implements IAuthRepository {
     @inject(TYPES.IHttpClient) private httpClient: IHttpClient
   ) {}
 
-  async login(credentials: LoginForm): Promise<ApiResponse<{ token: string; user: any }>> {
+  async login(credentials: LoginForm): Promise<ApiResponse<{ email: string; user: any }>> {
     try {
-      return await this.httpClient.post<{ token: string; user: any }>('/auth/login', credentials);
+      return await this.httpClient.post<{ email: string; user: any }>('/auth/login', credentials);
     } catch (error) {
       throw new Error('Login failed');
     }

@@ -9,7 +9,6 @@ import { Logo } from '@/components/ui/Logo';
 import { useAuth } from '@/hooks/useAuth';
 import { useAuth as useAuthContext } from '@/context/AuthContext';
 import { CompleteRegistrationForm } from '@/core/types/Forms';
-import LoadingSpinner from '@/modules/shared/components/LoadingSpinner';
 
 // Schema de validation
 const schema = yup.object({
@@ -87,13 +86,6 @@ export const RegistrationComplete: React.FC = () => {
 
   return (
     <div className="min-h-screen flex">
-      {/* Loading Spinner Overlay */}
-      {isRedirecting && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <LoadingSpinner />
-        </div>
-      )}
-
       {/* Left Section - Form */}
       <div className="flex-1 flex items-start justify-center bg-white">
         <div className="w-full pt-4">
@@ -232,7 +224,14 @@ export const RegistrationComplete: React.FC = () => {
                   disabled={isLoading}
                   className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:bg-purple-400 disabled:cursor-not-allowed flex items-center justify-center"
                 >
-                    Envoyer
+                  {isLoading ? (
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                  ) : (
+                    'Envoyer'
+                  )}
                 </button>
               </form>
             </div>

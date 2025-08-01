@@ -11,7 +11,7 @@ export class AuthService implements IAuthService {
     @inject(TYPES.IAuthRepository) private authRepository: IAuthRepository
   ) {}
 
-  async login(credentials: LoginForm): Promise<ApiResponse<{ token: string; user: any }>> {
+  async login(credentials: LoginForm): Promise<ApiResponse<{ email: string; user: any }>> {
     return await this.authRepository.login(credentials);
   }
 
