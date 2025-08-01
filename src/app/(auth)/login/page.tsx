@@ -58,7 +58,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <>
       {/* Left Section - Form */}
       <div className="flex-1 flex items-start bg-white">
         <div className="w-full pt-4">
@@ -210,6 +210,6 @@ export default function LoginPage() {
           />
         </div>
       </div>
-    </div>
+    </>
   );
 } 

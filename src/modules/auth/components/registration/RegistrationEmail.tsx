@@ -56,7 +56,7 @@ export const RegistrationEmail: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <>
       {/* Left Section - Form */}
       <div className="flex-1 flex items-start justify-center bg-white">
         <div className="w-full pt-4">
@@ -178,6 +178,6 @@ export const RegistrationEmail: React.FC = () => {
           />
         </div>
       </div>
-    </div>
+    </>
   );
 }; 
