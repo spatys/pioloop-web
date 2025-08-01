@@ -18,11 +18,14 @@ export interface RegisterForm {
 }
 
 export interface CompleteRegistration {
+  email: string;
   firstName: string;
   lastName: string;
   password: string;
   confirmPassword: string;
 }
+
+export type CompleteRegistrationForm = Omit<CompleteRegistration, 'email'>;
 
 export interface PropertySearchForm {
   location?: string;

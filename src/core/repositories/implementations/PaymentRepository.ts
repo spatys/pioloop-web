@@ -1,6 +1,6 @@
 import { IPaymentRepository } from '../interfaces/IPaymentRepository';
 import { Payment, CreatePaymentForm, ProcessPaymentForm, RefundPaymentForm, ApiResponse, PaginatedResponse } from '../../types';
-import { HttpClient } from '../../services/implementations/HttpClient';
+import { HttpClient } from './HttpClient';
 
 class PaymentRepository implements IPaymentRepository {
   private httpClient: HttpClient;

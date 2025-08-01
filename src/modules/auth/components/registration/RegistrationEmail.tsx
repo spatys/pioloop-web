@@ -41,15 +41,16 @@ export const RegistrationEmail: React.FC = () => {
 
   const onSubmit = async (data: RegisterFormData) => {
     const response = await registrationEmail(data.email);
-
-    console.log(response)
     
     if (response.success && response.data) {
-      // console.log('Inscription par email réussie:', response.data.message);
+      // Nettoyer le message de succès pour ne pas l'afficher
+      clearSuccess();
+      
       // Stocker l'email et l'expiration dans le contexte
       setRegistrationEmail(data.email);
       setRegistrationExpirationMinutes(response.data.expirationMinutes);
-      // Redirection vers la page de vérification (sans email dans l'URL)
+      
+      // Redirection directe vers la page de vérification
       router.push('/registration-verify-code');
     } else {
       console.error('Erreur lors de l\'inscription par email:', response.message);

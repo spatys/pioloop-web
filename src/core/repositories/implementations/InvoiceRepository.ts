@@ -1,6 +1,6 @@
 import { IInvoiceRepository } from '../interfaces/IInvoiceRepository';
 import { Invoice, CreateInvoiceForm, UpdateInvoiceForm, ApiResponse, PaginatedResponse } from '../../types';
-import { HttpClient } from '../../services/implementations/HttpClient';
+import { HttpClient } from './HttpClient';
 
 class InvoiceRepository implements IInvoiceRepository {
   private httpClient: HttpClient;

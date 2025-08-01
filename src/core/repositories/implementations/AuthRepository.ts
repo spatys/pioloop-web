@@ -1,6 +1,6 @@
 import { injectable, inject } from 'inversify';
 import { IAuthRepository } from '../interfaces/IAuthRepository';
-import type { IHttpClient } from '../../services/interfaces/IHttpClient';
+import type { IHttpClient } from '../interfaces/IHttpClient';
 import { TYPES } from '../../di/types';
 import { ApiResponse } from '../../types';
 import { LoginForm, RegisterForm, CompleteRegistration } from '../../types/Forms';

@@ -7,7 +7,11 @@ export class HttpClient implements IHttpClient {
   private baseURL: string;
 
   constructor() {
-    this.baseURL = process.env.NEXT_PUBLIC_API_URL!;
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    if (!apiUrl) {
+      throw new Error('NEXT_PUBLIC_API_URL environment variable is not defined');
+    }
+    this.baseURL = apiUrl;
   }
 
   private async apiRequest<T>(
@@ -20,6 +24,8 @@ export class HttpClient implements IHttpClient {
       ...this.getAuthHeaders(),
       ...(options.headers as Record<string, string> || {}),
     };
+
+    console.log(`Making ${options.method || 'GET'} request to: ${url}`);
 
     try {
       const response = await fetch(url, {
@@ -45,11 +51,11 @@ export class HttpClient implements IHttpClient {
         message: 'Success',
       };
     } catch (error) {
-      console.log(error)
+      console.error('HTTP Request failed:', error);
       return {
         success: false,
         data: null as T,
-        message: 'Network error',
+        message: error instanceof Error ? error.message : 'Network error',
         errors: [],
       };
     }

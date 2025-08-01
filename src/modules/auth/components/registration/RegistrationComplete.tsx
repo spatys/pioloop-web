@@ -7,7 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Logo } from '@/components/ui/Logo';
 import { useAuth } from '@/hooks/useAuth';
-import { CompleteRegistration } from '@/core/types/Forms';
+import { useAuth as useAuthContext } from '@/context/AuthContext';
+import { CompleteRegistrationForm } from '@/core/types/Forms';
 import LoadingSpinner from '@/modules/shared/components/LoadingSpinner';
 
 // Schema de validation
@@ -39,6 +40,7 @@ const schema = yup.object({
 export const RegistrationComplete: React.FC = () => {
   const router = useRouter();
   const { registrationComplete, isLoading, error, success, clearError, clearSuccess } = useAuth();
+  const { registrationEmail } = useAuthContext();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -47,13 +49,19 @@ export const RegistrationComplete: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<CompleteRegistration>({
+  } = useForm<CompleteRegistrationForm>({
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
 
-  const onSubmit = async (data: CompleteRegistration) => {
+  const onSubmit = async (data: CompleteRegistrationForm) => {
+    if (!registrationEmail) {
+      console.error('Aucun email en cours de vérification');
+      return;
+    }
+
     const response = await registrationComplete({
+      email: registrationEmail,
       firstName: data.firstName,
       lastName: data.lastName,
       password: data.password,
@@ -61,6 +69,9 @@ export const RegistrationComplete: React.FC = () => {
     });
 
     if (response.success) {
+      // Nettoyer le message de succès pour ne pas l'afficher
+      clearSuccess();
+      
       console.log('Inscription complétée avec succès');
       setIsRedirecting(true);
       
@@ -70,6 +81,7 @@ export const RegistrationComplete: React.FC = () => {
       }, 2000);
     } else {
       console.error('Erreur lors de la complétion de l\'inscription:', response.message);
+      // L'erreur sera automatiquement affichée par le hook useAuth
     }
   };
 
@@ -109,7 +121,7 @@ export const RegistrationComplete: React.FC = () => {
                     id="lastName"
                     type="text"
                     placeholder="Nom"
-                    autoComplete="family-name"
+                    autoComplete="off"
                     {...register("lastName")}
                     className={`w-full px-4 py-3 border rounded-lg transition-colors outline-none ${
                       errors.lastName ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-gray-400 focus:border-purple-500'
@@ -126,7 +138,7 @@ export const RegistrationComplete: React.FC = () => {
                     id="firstName"
                     type="text"
                     placeholder="Prénom"
-                    autoComplete="given-name"
+                    autoComplete="off"
                     {...register("firstName")}
                     className={`w-full px-4 py-3 border rounded-lg transition-colors outline-none ${
                       errors.firstName ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-gray-400 focus:border-purple-500'

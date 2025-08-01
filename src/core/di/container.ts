@@ -13,8 +13,8 @@ import { IAuthService } from '../services/interfaces/IAuthService';
 import { AuthService } from '../services/implementations/AuthService';
 import { IContractService } from '../services/interfaces/IContractService';
 import { ContractService } from '../services/implementations/ContractService';
-import { IHttpClient } from '../services/interfaces/IHttpClient';
-import { HttpClient } from '../services/implementations/HttpClient';
+import { IHttpClient } from '../repositories/interfaces/IHttpClient';
+import { HttpClient } from '../repositories/implementations/HttpClient';
 
 // Container Inversify
 const container = new Container();

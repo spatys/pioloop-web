@@ -1,6 +1,6 @@
 import { injectable, inject } from 'inversify';
 import { IContractRepository } from '../interfaces/IContractRepository';
-import type { IHttpClient } from '../../services/interfaces/IHttpClient';
+import type { IHttpClient } from '../interfaces/IHttpClient';
 import { Contract, CreateContractForm, UpdateContractForm, ApiResponse, PaginatedResponse } from '../../types';
 import { TYPES } from '../../di/types';
 
