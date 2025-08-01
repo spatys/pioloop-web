@@ -40,8 +40,7 @@ export const RegistrationEmail: React.FC = () => {
   });
 
   const onSubmit = async (data: RegisterFormData) => {
-    //const response = await registrationEmail(data.email);
-    const response = { success: true, email: 'nanyim.alain@gmail.com', message: 'Inscription par email réussie' };
+    const response = await registrationEmail(data.email);
     
     if (response.success) {
       // console.log('Inscription par email réussie:', response.data.message);

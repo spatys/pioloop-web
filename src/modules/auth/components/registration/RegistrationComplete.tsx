@@ -76,9 +76,9 @@ export const RegistrationComplete: React.FC = () => {
   return (
     <div className="min-h-screen flex">
       {/* Loading Spinner Overlay */}
-      {!isRedirecting && (
+      {isRedirecting && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <LoadingSpinner size="lg" color="white" />
+          <LoadingSpinner />
         </div>
       )}
 
@@ -220,14 +220,7 @@ export const RegistrationComplete: React.FC = () => {
                   disabled={isLoading}
                   className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:bg-purple-400 disabled:cursor-not-allowed flex items-center justify-center"
                 >
-                  {isLoading ? (
-                    <>
-                      <LoadingSpinner size="sm" color="white" className="mr-3" />
-                      Création en cours...
-                    </>
-                  ) : (
                     'Envoyer'
-                  )}
                 </button>
               </form>
             </div>
