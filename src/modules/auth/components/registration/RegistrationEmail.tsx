@@ -41,6 +41,8 @@ export const RegistrationEmail: React.FC = () => {
 
   const onSubmit = async (data: RegisterFormData) => {
     const response = await registrationEmail(data.email);
+
+    console.log(response)
     
     if (response.success && response.data) {
       // console.log('Inscription par email réussie:', response.data.message);

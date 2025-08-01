@@ -45,6 +45,7 @@ export class HttpClient implements IHttpClient {
         message: 'Success',
       };
     } catch (error) {
+      console.log(error)
       return {
         success: false,
         data: null as T,
