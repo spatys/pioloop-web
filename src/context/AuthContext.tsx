@@ -33,21 +33,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Vérifier l'authentification au chargement de la page
   useEffect(() => {
     const checkAuthOnLoad = async () => {
-      // Vérifier si on a un cookie JWT avant de faire l'appel API
-      const hasJwtCookie = document.cookie.includes('JWTToken=');
-      
-      if (!authHook.user && hasJwtCookie) {
-        try {
+      try {
+        // Vérifier si on a un cookie JWT avant de faire l'appel API
+        const hasJwtCookie = document.cookie.includes('JWTToken=');
+        
+        if (hasJwtCookie && !authHook.user) {
+          // Seulement faire l'appel si on a un cookie JWT et pas d'utilisateur
           await authHook.getCurrentUser();
-        } catch (error) {
-          // User is not authenticated, that's fine
-          console.log('No authenticated user found on page load');
         }
+      } catch (error) {
+        // User is not authenticated, that's fine
+        console.log('No authenticated user found on page load');
       }
     };
 
     checkAuthOnLoad();
-  }, []); // Supprimer la dépendance pour éviter les appels en boucle
+  }, []); // Exécuter seulement au montage
 
   const value = {
     user: authHook.user,

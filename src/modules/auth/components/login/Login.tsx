@@ -183,7 +183,7 @@ export const Login: React.FC = () => {
           <div className="text-center mt-8">
             <p className="text-gray-600">
               Pas encore de compte ?{' '}
-              <Link href="/register" className="text-purple-600 hover:text-purple-500 font-medium">
+              <Link href="/registration-email" className="text-purple-600 hover:text-purple-500 font-medium">
                 Créer un compte
               </Link>
             </p>

@@ -84,6 +84,14 @@ export const RegistrationVerifyEmail: React.FC = () => {
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
+
+    // Auto-submit when all 6 digits are entered
+    if (fullCode.length === 6) {
+      // Small delay to ensure the last digit is properly set
+      setTimeout(() => {
+        onSubmit({ code: fullCode });
+      }, 150);
+    }
   };
 
   // Handle backspace
@@ -225,24 +233,16 @@ export const RegistrationVerifyEmail: React.FC = () => {
                   </div>
                 )}
 
-                {/* Validate Button */}
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:bg-purple-400 disabled:cursor-not-allowed flex items-center justify-center"
-                >
-                  {isLoading ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Vérification...
-                    </>
-                  ) : (
-                    'Continuer'
-                  )}
-                </button>
+                {/* Loading indicator when auto-submitting */}
+                {isLoading && (
+                  <div className="text-center py-4">
+                    <svg className="animate-spin h-6 w-6 text-purple-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <p className="text-sm text-gray-600 mt-2">Vérification en cours...</p>
+                  </div>
+                )}
               </form>
 
               {/* Resend Code Section */}
