@@ -38,7 +38,6 @@ module.exports = {
         '6xl': ['3.75rem', { lineHeight: '1' }],
       },
       spacing: {
-       aded: '0.125rem',
         '18': '4.5rem',
         '88': '22rem',
         '128': '32rem',
@@ -56,7 +55,7 @@ module.exports = {
         'slide-up': 'slideUp 0.5s ease-out',
         'slide-down': 'slideDown 0.3s ease-out',
         'scale-in': 'scaleIn 0.3s ease-out',
-        'pulse': 'phalt 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
       keyframes: {
         fadeIn: {
