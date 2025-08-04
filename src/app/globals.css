@@ -55,4 +55,28 @@ body {
   .card-hover {
     @apply hover:shadow-medium transition-all duration-200;
   }
+}
+
+/* Désactiver les styles par défaut du navigateur sur les inputs */
+@layer base {
+  input:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: #9333ea !important; /* purple-600 */
+  }
+  
+  input:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: #9333ea !important;
+  }
+  
+  /* Supprimer tous les styles de focus par défaut */
+  *:focus {
+    outline: none !important;
+  }
+  
+  *:focus-visible {
+    outline: none !important;
+  }
 } 

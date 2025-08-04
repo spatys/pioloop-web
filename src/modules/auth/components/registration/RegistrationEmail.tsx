@@ -59,27 +59,27 @@ export const RegistrationEmail: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ display: 'flex', height: '100vh' }}>
-      {/* Left Section - Form (50%) */}
-      <div className="bg-white flex flex-col p-8" style={{ width: '50%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', padding: '2rem' }}>
-        {/* Logo - Full width */}
-        <div className="text-center mb-4">
-          <Logo className="justify-center" />
+    <div className="flex min-h-screen">
+      {/* Colonne gauche : formulaire */}
+      <div className="flex-1 flex flex-col items-center bg-white">
+        {/* Logo avec padding */}
+        <div className="px-8 w-full pt-8">
+          <div className="mb-6">
+            <Logo className="justify-center" href="/" />
+          </div>
         </div>
+        
+        {/* Separator - pleine largeur */}
+        <div className="border-t border-gray-200 mb-6 w-full" />
+        
+        {/* Contenu avec padding */}
+        <div className="px-8 w-full">
+          <h2 className="text-2xl font-semibold mb-4 text-center">Bienvenue</h2>
+          <p className="text-gray-600 text-center mb-6 max-w-md mx-auto">
+            Créez votre compte en quelques étapes simples
+          </p>
 
-        {/* Separator */}
-        <div className="border-t border-gray-200 mb-8" />
-
-        {/* Welcome Text */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-semibold text-gray-700 mb-2">Bienvenue</h1>
-          <p className="text-gray-600">Créez votre compte en quelques étapes simples</p>
-        </div>
-
-        {/* Form Container - Centered */}
-        <div className="flex justify-center">
-          <div className="w-full max-w-sm">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form className="w-full max-w-md space-y-6 mx-auto" onSubmit={handleSubmit(onSubmit)}>
               {/* Email Input */}
               <div>
                 <input
@@ -126,20 +126,19 @@ export const RegistrationEmail: React.FC = () => {
               </button>
             </form>
 
-            {/* Separator */}
-            <div className="relative my-8">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">ou continuer avec</span>
-              </div>
+            {/* Séparateur */}
+            <div className="mt-8 mb-6 flex items-center max-w-sm mx-auto">
+              <div className="flex-1 border-t border-gray-300"></div>
+              <span className="px-4 text-sm text-gray-500">ou continuer avec</span>
+              <div className="flex-1 border-t border-gray-300"></div>
             </div>
 
-            {/* Social Login Buttons */}
-            <div className="flex justify-center space-x-4">
-              {/* Google Button */}
-              <button className="w-12 h-12 bg-white border border-gray-200 rounded-lg transition-all duration-200 flex items-center justify-center">
+            {/* Boutons sociaux */}
+            <div className="flex gap-4 justify-center">
+              <button
+                type="button"
+                className="w-12 h-12 bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors flex items-center justify-center"
+              >
                 <svg className="w-6 h-6" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -147,35 +146,27 @@ export const RegistrationEmail: React.FC = () => {
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                 </svg>
               </button>
-
-              {/* Facebook Button */}
-              <button className="w-12 h-12 bg-blue-600 rounded-lg transition-all duration-200 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
+              
+              <button
+                type="button"
+                className="w-12 h-12 bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors flex items-center justify-center"
+              >
+                <span className="text-blue-600 font-bold text-xl">f</span>
               </button>
             </div>
-          </div>
-        </div>
-
-        {/* Login Link */}
-        <div className="text-center mt-8">
-          <p className="text-gray-600">
-            Déjà un compte ?{' '}
-            <Link href="/login" className="text-purple-600 hover:text-purple-500 font-medium">
+          
+          <div className="mt-8 text-center">
+            <span className="text-gray-600">Déjà un compte ? </span>
+            <Link href="/login" className="text-purple-600 underline hover:text-purple-500 transition-colors">
               Se connecter
             </Link>
-          </p>
+          </div>
         </div>
       </div>
 
-      {/* Right Section - Image (50%) */}
-      <div className="bg-gray-100" style={{ width: '50%', backgroundColor: '#f0f2f5' }}>
-        <img
-          src="http://localhost:3000/images/register.png"
-          alt="Register"
-          className="w-full h-full object-cover block"
-        />
+      {/* Colonne droite : illustration */}
+      <div className="hidden md:flex flex-1 items-center justify-center bg-violet-50">
+        <img src="/images/register.png" alt="Illustration" className="w-full h-full" />
       </div>
     </div>
   );
