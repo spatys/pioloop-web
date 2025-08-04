@@ -9,6 +9,7 @@ import { languages } from '@/core/data/languages';
 import { devises } from '@/core/data/devises';
 import { BoutonLink } from '@/components/ui/BoutonLink';
 import { Logo } from '@/components/ui/Logo';
+import useSWR from 'swr';
 import type { Language } from '@/core/types/Language';
 import type { Devise } from '@/core/types/Devise';
 
@@ -17,8 +18,27 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
-  const { user, isLoading, logout } = useAuth();
-  const isAuthenticated = !!user;
+  const { user, logout } = useAuth();
+  const { data, isLoading, error } = useSWR('/api/auth/me', 
+    async (url: string) => {
+      const response = await fetch(url, { credentials: 'include' });
+      if (!response.ok) {
+        return null;
+      }
+      return response.json();
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      revalidateIfStale: false,
+      dedupingInterval: 60000,
+      errorRetryCount: 0,
+      shouldRetryOnError: false,
+      revalidateOnMount: true,
+    }
+  );
+  
+  const isAuthenticated = !!data?.user;
   
   const handleLogout = async () => {
     try {
@@ -168,7 +188,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                     <div className="w-20 h-4 bg-gray-200 rounded animate-pulse"></div>
                   </div>
                 </div>
-              ) : isAuthenticated && user ? (
+              ) : isAuthenticated && data?.user ? (
                 // Authenticated user
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
@@ -176,17 +196,17 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                 >
                   <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center shadow-sm">
                     <span className="text-white text-sm font-semibold">
-                      {user.profile.firstName && user.profile.lastName 
-                        ? `${user.profile.firstName.charAt(0)}${user.profile.lastName.charAt(0)}`
-                        : user.profile.firstName?.charAt(0) || user.email?.charAt(0) || 'U'
+                      {data.user.profile.firstName && data.user.profile.lastName 
+                        ? `${data.user.profile.firstName.charAt(0)}${data.user.profile.lastName.charAt(0)}`
+                        : data.user.profile.firstName?.charAt(0) || data.user.email?.charAt(0) || 'U'
                       }
                     </span>
                   </div>
                   <div className="hidden md:block text-left">
                     <div className="text-sm font-medium text-gray-900">
-                      {user.profile.firstName && user.profile.lastName 
-                        ? `${user.profile.firstName} ${user.profile.lastName}`
-                        : user.email
+                      {data.user.profile.firstName && data.user.profile.lastName 
+                        ? `${data.user.profile.firstName} ${data.user.profile.lastName}`
+                        : data.user.email
                       }
                     </div>
                   </div>
@@ -223,14 +243,14 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
               {/* User Dropdown Menu */}
               {isUserMenuOpen && (
                 <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 py-3 z-50">
-                  {user ? (
+                  {data?.user ? (
                     // Authenticated user - Full menu
                     <>
                       {/* User Information */}
                       <div className="flex items-center space-x-3 px-4 pb-4 border-b border-gray-100">
                         <div className="flex-1">
                           <div className="text-sm font-semibold text-gray-700">
-                            {user?.email}
+                            {data.user?.email}
                           </div>
                         </div>
                       </div>
@@ -345,7 +365,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                           <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                           </svg>
-                          <span className="font-normal">Créer mon compte</span>
+                          <span className="font-normal">S'inscrire</span>
                         </Link>
                       </div>
 

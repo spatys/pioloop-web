@@ -84,10 +84,11 @@ export const Login: React.FC = () => {
                 type="email"
                 placeholder="Email"
                 autoComplete="off"
+                disabled={isLoading}
                 {...register("email")}
                 className={`w-full px-4 py-3 border-2 rounded-lg transition-colors ${
                   errors.email ? 'border-red-300 focus:border-red-500' : 'border-gray-300 hover:border-gray-400'
-                }`}
+                } ${isLoading ? 'bg-gray-100 cursor-not-allowed' : ''}`}
               />
               {errors.email && (
                 <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
@@ -104,16 +105,18 @@ export const Login: React.FC = () => {
                 type={showPassword ? "text" : "password"}
                 placeholder="Mot de passe"
                 autoComplete="off"
+                disabled={isLoading}
                 {...register("password")}
                 className={`w-full px-4 py-3 pr-10 border-2 rounded-lg transition-colors ${
                   errors.password 
                     ? 'border-red-300 focus:border-red-500' 
                     : 'border-gray-300 hover:border-gray-400'
-                }`}
+                } ${isLoading ? 'bg-gray-100 cursor-not-allowed' : ''}`}
               />
               <button
                 type="button"
-                className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700 transition-colors"
+                disabled={isLoading}
+                className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                 onClick={() => setShowPassword(v => !v)}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
