@@ -49,11 +49,12 @@ export const useAuth = (): UseAuthReturn => {
     },
     {
       revalidateOnFocus: false,
-      revalidateOnReconnect: true,
+      revalidateOnReconnect: false,
       revalidateIfStale: false,
       dedupingInterval: 60000,
       errorRetryCount: 0, // Ne pas réessayer en cas d'erreur
       shouldRetryOnError: false, // Ne pas réessayer automatiquement
+      revalidateOnMount: true, // Faire une requête automatique au montage
     }
   );
 
@@ -94,8 +95,9 @@ export const useAuth = (): UseAuthReturn => {
     const result = await executeWithLoading(
       () => authService.login(credentials)
     );
-    if (result.success && result.data?.user) {
-      await mutateUser();
+    if (result.success) {
+      // Forcer la revalidation immédiatement après la connexion
+      await mutateUser(undefined, { revalidate: true });
     }
     return result;
   };

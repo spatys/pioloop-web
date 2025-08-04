@@ -16,19 +16,12 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
-  const { user, isLoading, isAuthenticated, mutate } = useUser();
-  const { logout } = useAuth();
-  
-  // Forcer la récupération des données utilisateur au montage du composant
-  React.useEffect(() => {
-    mutate();
-  }, [mutate]);
+  const { user, isLoading, logout } = useAuth();
+  const isAuthenticated = !!user;
   
   const handleLogout = async () => {
     try {
       await logout();
-      // Revalider les données utilisateur après déconnexion
-      await mutate();
       setIsUserMenuOpen(false);
     } catch (error) {
       console.error('Erreur lors de la déconnexion:', error);

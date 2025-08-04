@@ -30,8 +30,7 @@ export const useUser = () => {
       dedupingInterval: 60000, // Dédoublonner les requêtes pendant 1 minute
       errorRetryCount: 0, // Ne pas réessayer en cas d'erreur
       shouldRetryOnError: false, // Ne pas réessayer automatiquement
-      // Ne pas faire de requête automatique au montage
-      revalidateOnMount: false,
+      revalidateOnMount: true, // Faire une requête automatique au montage
     }
   );
 
