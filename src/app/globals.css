@@ -57,6 +57,16 @@ body {
   }
 }
 
+/* Animation de rotation pour les icônes de loading */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Désactiver les styles par défaut du navigateur sur les inputs */
 @layer base {
   input:focus {

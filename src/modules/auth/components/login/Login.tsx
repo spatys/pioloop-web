@@ -9,7 +9,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { Eye, EyeOff, Send, Loader } from "lucide-react";
- 
 
 // Validation schema
 const loginSchema = yup.object({
@@ -43,19 +42,16 @@ export const Login: React.FC = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     clearError();
-    try {
-      const response = await login(data);
-      if (response.success) {
-        // Nettoyer le message de succès pour ne pas l'afficher
-        clearSuccess();
-        
-        router.push('/');
-      } else {
-        console.error('Erreur lors de la connexion:', response.message);
-        // L'erreur sera automatiquement affichée par le hook useAuth
-      }
-    } catch (error) {
-      console.error('Login error:', error);
+    const response = await login(data);
+    if (response.success) {
+      // Nettoyer le message de succès pour ne pas l'afficher
+      clearSuccess();
+      console.log(response);
+      
+      router.push('/');
+    } else {
+      console.error('Erreur lors de la connexion:', response.message);
+      // L'erreur sera automatiquement affichée par le hook useAuth
     }
   };
 
@@ -63,12 +59,12 @@ export const Login: React.FC = () => {
     <div className="flex min-h-screen">
       {/* Colonne gauche : formulaire */}
       <div className="flex-1 flex flex-col items-center bg-white">
-                 {/* Logo avec padding */}
-         <div className="px-8 w-full pt-8">
-           <div className="mb-6">
-             <Logo className="justify-center" href="/" />
-           </div>
-         </div>
+        {/* Logo avec padding */}
+        <div className="px-8 w-full pt-8">
+          <div className="mb-6">
+            <Logo className="justify-center" href="/" />
+          </div>
+        </div>
         
         {/* Separator - pleine largeur */}
         <div className="border-t border-gray-200 mb-6 w-full" />
@@ -80,67 +76,71 @@ export const Login: React.FC = () => {
             Accédez à votre espace personnel et gérez vos réservations en toute simplicité.
           </p>
           
-                     <form className="w-full max-w-md space-y-6 mx-auto" onSubmit={handleSubmit(onSubmit)}>
-             <div>
-               <input
-                 id="email"
-                 type="email"
-                 placeholder="Email"
-                 autoComplete="off"
-                 {...register("email")}
-                 className={`w-full px-4 py-3 border-2 rounded-lg transition-colors ${
-                   errors.email ? 'border-red-300 focus:border-red-500' : 'border-gray-300 hover:border-gray-400'
-                 }`}
-               />
-               {errors.email && (
-                 <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-               )}
-               {error && !errors.email && (
-                 <p className="mt-1 text-sm text-red-600">{error}</p>
-               )}
-             </div>
-             
-             <div className="relative">
-     <input
-     id="password"
-     type={showPassword ? "text" : "password"}
-     placeholder="Mot de passe"
-     autoComplete="off"
-     {...register("password")}
-     className={`w-full px-4 py-3 pr-10 border-2 rounded-lg transition-colors ${
-       errors.password 
-         ? 'border-red-300 focus:border-red-500' 
-         : 'border-gray-300 hover:border-gray-400'
-     }`}
-   />
-                                                                                               <span
-        
-         className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700 transition-colors"
-         onClick={() => setShowPassword(v => !v)}
-       >
-    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-  </span>
-  {errors.password && (
-    <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
-  )}
-</div>
-             
-             {error && <p className="text-xs text-red-700 mt-1">{error}</p>}
-             
-                         <button
-               type="submit"
-               disabled={isLoading}
-               className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:bg-purple-400 disabled:cursor-not-allowed flex items-center justify-center"
-             >
-               {isLoading ? (
-                 <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                 </svg>
-               ) : (
-                 'Valider'
-               )}
-             </button>
+          <form className="w-full max-w-md space-y-6 mx-auto" onSubmit={handleSubmit(onSubmit)}>
+            {/* Email Input */}
+            <div>
+              <input
+                id="email"
+                type="email"
+                placeholder="Email"
+                autoComplete="off"
+                {...register("email")}
+                className={`w-full px-4 py-3 border-2 rounded-lg transition-colors ${
+                  errors.email ? 'border-red-300 focus:border-red-500' : 'border-gray-300 hover:border-gray-400'
+                }`}
+              />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+              )}
+              {error && !errors.email && (
+                <p className="mt-1 text-sm text-red-600">{error}</p>
+              )}
+            </div>
+            
+            {/* Password Input */}
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Mot de passe"
+                autoComplete="off"
+                {...register("password")}
+                className={`w-full px-4 py-3 pr-10 border-2 rounded-lg transition-colors ${
+                  errors.password 
+                    ? 'border-red-300 focus:border-red-500' 
+                    : 'border-gray-300 hover:border-gray-400'
+                }`}
+              />
+              <button
+                type="button"
+                className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700 transition-colors"
+                onClick={() => setShowPassword(v => !v)}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+              )}
+            </div>
+            
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:bg-purple-400 disabled:cursor-not-allowed flex items-center justify-center"
+            >
+              {isLoading ? (
+                <Loader 
+                  className="h-5 w-5 text-white" 
+                  style={{ 
+                    animation: 'spin 1s linear infinite',
+                    transformOrigin: 'center'
+                  }} 
+                />
+              ) : (
+                'Valider'
+              )}
+            </button>
           </form>
           
           {/* Séparateur */}
@@ -172,9 +172,13 @@ export const Login: React.FC = () => {
             </button>
           </div>
           
+          {/* Lien d'inscription */}
           <div className="mt-8 text-center">
             <span className="text-gray-600">Vous n'avez pas encore de compte ? </span>
-            <Link href="/registration-email" className="text-purple-700 underline hover:text-purple-600 transition-colors">
+            <Link 
+              href="/registration-email" 
+              className="text-purple-700 underline hover:text-purple-600 transition-colors"
+            >
               Inscrivez-vous dès maintenant
             </Link>
           </div>
