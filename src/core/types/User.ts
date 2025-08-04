@@ -47,21 +47,21 @@ export interface UserAddress {
 export interface User {
   id: string;
   email: string;
-  userName: string;
-  role: UserRole;
+  userName?: string;
+  roles: string[]; // Rôles depuis l'API backend
   profile: UserProfile;
-  addresses: UserAddress[];
-  isEmailConfirmed: boolean;
-  isPhoneConfirmed: boolean;
+  addresses?: UserAddress[];
+  isEmailConfirmed?: boolean;
+  isPhoneConfirmed?: boolean;
   isActive: boolean;
   lastLoginAt?: Date;
-  properties: Property[];
-  reservations: Reservation[];
-  payments: Payment[];
-  contracts: Contract[];
-  invoices: Invoice[];
+  properties?: Property[];
+  reservations?: Reservation[];
+  payments?: Payment[];
+  contracts?: Contract[];
+  invoices?: Invoice[];
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
 }
 
 export interface CreateUserForm {

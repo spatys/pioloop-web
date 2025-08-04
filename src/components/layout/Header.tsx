@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useUser } from '@/hooks/useUser';
 import { useAuth } from '@/hooks/useAuth';
+import { OwnerOnly } from '@/components/shared/RoleGuard';
 import { languages } from '@/core/data/languages';
 import { devises } from '@/core/data/devises';
 import { BoutonLink } from '@/components/ui/BoutonLink';
@@ -276,20 +277,23 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                         </div>
                     </Link>
 
-                    <Link
-                      href="/my-properties"
-                        className="flex items-center justify-between py-3 px-4 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200 w-full"
-                  >
-                        <div className="flex items-center space-x-3">
-                      <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                      </svg>
-                      <span className="font-normal">Mes logements</span>
-                        </div>
-                        <div className="bg-green-100 text-green-600 text-xs font-medium px-2 py-1 rounded-full">
-                          5
-                        </div>
-                    </Link>
+                    {/* Afficher "Mes logements" seulement pour les propriétaires */}
+                    <OwnerOnly>
+                      <Link
+                        href="/my-properties"
+                          className="flex items-center justify-between py-3 px-4 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200 w-full"
+                      >
+                            <div className="flex items-center space-x-3">
+                        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                        <span className="font-normal">Mes logements</span>
+                            </div>
+                            <div className="bg-green-100 text-green-600 text-xs font-medium px-2 py-1 rounded-full">
+                              5
+                            </div>
+                      </Link>
+                    </OwnerOnly>
 
                     <Link
                       href="/settings"
