@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import useSWR from 'swr';
 import { container } from '@/core/di/container';
 import { TYPES } from '@/core/di/types';
 import { IAuthService } from '@/core/services/interfaces/IAuthService';
@@ -29,36 +30,39 @@ interface UseAuthReturn {
 }
 
 export const useAuth = (): UseAuthReturn => {
-  const [user, setUser] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
   const authService = container.get<IAuthService>(TYPES.IAuthService);
 
-  // Auto-fetch user data when cookies change
-  const fetchUserData = useCallback(async () => {
-    try {
-      const result = await authService.getCurrentUser();
-      if (result.success && result.data) {
-        setUser(result.data);
-      } else {
-        setUser(null);
+  // Utiliser SWR pour gérer l'état de l'utilisateur
+  const { data: userData, mutate: mutateUser } = useSWR(
+    '/api/auth/me',
+    async (url) => {
+      const response = await fetch(url, { credentials: 'include' });
+      if (!response.ok) {
+        // Ne pas lancer d'erreur, juste retourner null
+        return null;
       }
-    } catch (error) {
-      setUser(null);
+      return response.json();
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: true,
+      revalidateIfStale: false,
+      dedupingInterval: 60000,
+      errorRetryCount: 0, // Ne pas réessayer en cas d'erreur
+      shouldRetryOnError: false, // Ne pas réessayer automatiquement
     }
-  }, [authService]);
+  );
 
-  // Listen for storage events (when cookies change in other tabs)
-  useEffect(() => {
-    const handleStorageChange = () => {
-      fetchUserData();
-    };
+  const user = userData?.user || null;
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, [fetchUserData]);
+  // Revalider les données utilisateur quand nécessaire
+  const refreshUser = useCallback(async () => {
+    await mutateUser();
+  }, [mutateUser]);
 
   const executeWithLoading = async <T>(
     operation: () => Promise<ApiResponse<T>>
@@ -91,7 +95,7 @@ export const useAuth = (): UseAuthReturn => {
       () => authService.login(credentials)
     );
     if (result.success && result.data?.user) {
-      setUser(result.data.user);
+      await mutateUser();
     }
     return result;
   };
@@ -119,7 +123,7 @@ export const useAuth = (): UseAuthReturn => {
       () => authService.registrationComplete(data)
     );
     if (result.success && result.data?.user) {
-      setUser(result.data.user);
+      await mutateUser();
     }
     return result;
   };
@@ -130,7 +134,7 @@ export const useAuth = (): UseAuthReturn => {
 
     try {
       await authService.logout();
-      setUser(null);
+      await mutateUser(null, false);
       setSuccess('Déconnexion réussie');
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Erreur lors de la déconnexion';
@@ -145,7 +149,7 @@ export const useAuth = (): UseAuthReturn => {
       () => authService.getCurrentUser()
     );
     if (result.success && result.data) {
-      setUser(result.data);
+      await mutateUser();
     }
     return result;
   };

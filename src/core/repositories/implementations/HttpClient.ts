@@ -8,17 +8,25 @@ export class HttpClient implements IHttpClient {
 
   constructor() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    console.log('🔧 NEXT_PUBLIC_API_URL:', apiUrl);
     if (!apiUrl) {
-      throw new Error('NEXT_PUBLIC_API_URL environment variable is not defined');
+      console.log('⚠️ NEXT_PUBLIC_API_URL non définie, utilisation de http://localhost:64604');
+      this.baseURL = 'http://localhost:64604';
+    } else {
+      // Si l'URL contient /api, on l'enlève pour éviter le double /api/
+      this.baseURL = apiUrl.replace('/api', '');
     }
-    this.baseURL = apiUrl;
+    console.log('🔧 BaseURL:', this.baseURL);
   }
 
   private async apiRequest<T>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
-    const url = `${this.baseURL}${endpoint}`;
+    // Si l'endpoint commence par /api/, utiliser l'URL du frontend Next.js
+    const url = endpoint.startsWith('/api/') 
+      ? `http://localhost:3000${endpoint}`
+      : `${this.baseURL}${endpoint}`;
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       ...this.getAuthHeaders(),

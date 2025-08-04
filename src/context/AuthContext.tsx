@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const checkAuthOnLoad = async () => {
       try {
         // Vérifier si on a un cookie JWT avant de faire l'appel API
-        const hasJwtCookie = document.cookie.includes('JWTToken=');
+        const hasJwtCookie = document.cookie.includes('auth_token=');
         
         if (hasJwtCookie && !authHook.user) {
           // Seulement faire l'appel si on a un cookie JWT et pas d'utilisateur

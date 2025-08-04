@@ -13,7 +13,8 @@ export class AuthRepository implements IAuthRepository {
 
   async login(credentials: LoginForm): Promise<ApiResponse<{ email: string; user: any }>> {
     try {
-      return await this.httpClient.post<{ email: string; user: any }>('/auth/login', credentials);
+      // Utiliser l'endpoint Next.js qui définira le cookie
+      return await this.httpClient.post<{ email: string; user: any }>('/api/auth/login', credentials);
     } catch (error) {
       throw new Error('Login failed');
     }
@@ -53,7 +54,8 @@ export class AuthRepository implements IAuthRepository {
 
   async logout(): Promise<ApiResponse<any>> {
     try {
-      return await this.httpClient.post<any>('/auth/logout');
+      // Utiliser l'endpoint Next.js qui supprimera le cookie
+      return await this.httpClient.post<any>('/api/auth/logout');
     } catch (error) {
       throw new Error('Logout failed');
     }

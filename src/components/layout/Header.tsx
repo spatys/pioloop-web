@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useAuth } from '@/context/AuthContext';
+import { useUser } from '@/hooks/useUser';
+import { useAuth } from '@/hooks/useAuth';
 import { languages } from '@/core/data/languages';
 import { devises } from '@/core/data/devises';
 import { BoutonLink } from '@/components/ui/BoutonLink';
@@ -15,7 +16,26 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
-  const { user, logout, loading } = useAuth();
+  const { user, isLoading, isAuthenticated, mutate } = useUser();
+  const { logout } = useAuth();
+  
+  console.log("user in", user)
+  
+  // Forcer la récupération des données utilisateur au montage du composant
+  React.useEffect(() => {
+    console.log('🔄 Header monté, récupération des données utilisateur...');
+    mutate();
+  }, [mutate]);
+  const handleLogout = async () => {
+    try {
+      await logout();
+      // Revalider les données utilisateur après déconnexion
+      await mutate();
+      setIsUserMenuOpen(false);
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion:', error);
+    }
+  };
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const [isCurrencyMenuOpen, setIsCurrencyMenuOpen] = useState(false);
@@ -147,7 +167,15 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
 
             {/* User Profile */}
             <div className="relative user-menu-container">
-              {user ? (
+              {isLoading ? (
+                // Loading state
+                <div className="flex items-center space-x-3 px-4 py-1.5 rounded-lg border border-gray-200">
+                  <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
+                  <div className="hidden md:block">
+                    <div className="w-20 h-4 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                </div>
+              ) : isAuthenticated && user ? (
                 // Authenticated user - Airbnb/Booking style
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
@@ -155,15 +183,15 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                 >
                   <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center shadow-sm">
                     <span className="text-white text-sm font-semibold">
-                      {user.firstName && user.lastName 
-                        ? `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`
-                        : user.firstName?.charAt(0) || user.email?.charAt(0) || 'U'
+                      {user.profile.firstName && user.profile.lastName 
+                        ? `${user.profile.firstName.charAt(0)}${user.profile.lastName.charAt(0)}`
+                        : user.profile.firstName?.charAt(0) || user.email?.charAt(0) || 'U'
                       }
                     </span>
                   </div>
                   <div className="hidden md:block text-left">
                     <div className="text-sm font-medium text-gray-900">
-                      {user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : 'Utilisateur'}
+                      {user.profile.firstName && user.profile.lastName ? `${user.profile.firstName} ${user.profile.lastName}` : 'Utilisateur'}
                     </div>
                   </div>
                   <svg
@@ -296,7 +324,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                       {/* Logout */}
                       <div className="px-0 py-2 border-t border-gray-100">
                       <button
-                        onClick={logout}
+                        onClick={handleLogout}
                           className="flex items-center space-x-3 py-3 px-4 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 w-full text-left"
                       >
                         <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

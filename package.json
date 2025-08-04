@@ -32,6 +32,7 @@
     "react-hot-toast": "^2.4.1",
     "react-query": "^3.39.3",
     "reflect-metadata": "^0.2.2",
+    "swr": "^2.3.4",
     "tailwindcss": "^3.3.0",
     "typescript": "^5",
     "yup": "^1.6.1",
