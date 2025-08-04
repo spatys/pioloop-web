@@ -3,26 +3,19 @@ import { User } from '@/core/types/User';
 
 // Fonction fetcher pour SWR
 const fetcher = async (url: string) => {
-  console.log('🔍 useUser fetcher appelé pour:', url);
-  
   const response = await fetch(url, {
     credentials: 'include', // Important pour envoyer les cookies
     headers: {
       'Content-Type': 'application/json',
     },
   });
-
-  console.log('📡 Response status:', response.status);
-  console.log('📡 Response ok:', response.ok);
-
+  
   if (!response.ok) {
-    console.log('❌ Response not ok, returning null');
     // Si la réponse n'est pas ok, on retourne null au lieu de lancer une erreur
     return null;
   }
 
   const data = await response.json();
-  console.log('✅ Data reçue:', data);
   return data;
 };
 

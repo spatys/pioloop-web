@@ -8,15 +8,12 @@ export class HttpClient implements IHttpClient {
 
   constructor() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    console.log('🔧 NEXT_PUBLIC_API_URL:', apiUrl);
     if (!apiUrl) {
-      console.log('⚠️ NEXT_PUBLIC_API_URL non définie, utilisation de http://localhost:64604');
       this.baseURL = 'http://localhost:64604';
     } else {
       // Si l'URL contient /api, on l'enlève pour éviter le double /api/
       this.baseURL = apiUrl.replace('/api', '');
     }
-    console.log('🔧 BaseURL:', this.baseURL);
   }
 
   private async apiRequest<T>(
@@ -32,8 +29,6 @@ export class HttpClient implements IHttpClient {
       ...this.getAuthHeaders(),
       ...(options.headers as Record<string, string> || {}),
     };
-
-    console.log(`Making ${options.method || 'GET'} request to: ${url}`);
 
     try {
       const response = await fetch(url, {
@@ -75,45 +70,37 @@ export class HttpClient implements IHttpClient {
   }
 
   private getAuthHeaders(): Record<string, string> {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-    return token ? { Authorization: `Bearer ${token}` } : {};
+    // Pour l'instant, on n'ajoute pas de headers d'authentification
+    // car on utilise les cookies HttpOnly
+    return {};
   }
 
-  async get<T>(endpoint: string, config?: RequestInit): Promise<ApiResponse<T>> {
-    return await this.apiRequest<T>(endpoint, {
-      method: 'GET',
-      ...config,
-    });
+  async get<T>(endpoint: string): Promise<ApiResponse<T>> {
+    return this.apiRequest<T>(endpoint, { method: 'GET' });
   }
 
-  async post<T>(endpoint: string, data?: any, config?: RequestInit): Promise<ApiResponse<T>> {
-    return await this.apiRequest<T>(endpoint, {
+  async post<T>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
+    return this.apiRequest<T>(endpoint, {
       method: 'POST',
       body: data ? JSON.stringify(data) : undefined,
-      ...config,
     });
   }
 
-  async put<T>(endpoint: string, data?: any, config?: RequestInit): Promise<ApiResponse<T>> {
-    return await this.apiRequest<T>(endpoint, {
+  async put<T>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
+    return this.apiRequest<T>(endpoint, {
       method: 'PUT',
       body: data ? JSON.stringify(data) : undefined,
-      ...config,
     });
   }
 
-  async delete<T>(endpoint: string, config?: RequestInit): Promise<ApiResponse<T>> {
-    return await this.apiRequest<T>(endpoint, {
-      method: 'DELETE',
-      ...config,
-    });
+  async delete<T>(endpoint: string): Promise<ApiResponse<T>> {
+    return this.apiRequest<T>(endpoint, { method: 'DELETE' });
   }
 
-  async patch<T>(endpoint: string, data?: any, config?: RequestInit): Promise<ApiResponse<T>> {
-    return await this.apiRequest<T>(endpoint, {
+  async patch<T>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
+    return this.apiRequest<T>(endpoint, {
       method: 'PATCH',
       body: data ? JSON.stringify(data) : undefined,
-      ...config,
     });
   }
 } 

@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('🚀 Endpoint /api/auth/logout appelé');
-    
     // Appeler l'API C# pour la déconnexion (optionnel)
     try {
       const response = await fetch(`http://localhost:64604/api/auth/logout`, {
@@ -12,10 +10,7 @@ export async function POST(request: NextRequest) {
           'Content-Type': 'application/json',
         },
       });
-      
-      console.log('📡 Réponse API C# logout:', response.status);
     } catch (error) {
-      console.log('⚠️ Erreur lors de l\'appel à l\'API C# logout:', error);
       // On continue même si l'API C# échoue
     }
     
@@ -26,7 +21,6 @@ export async function POST(request: NextRequest) {
     });
 
     // Supprimer le cookie d'authentification
-    console.log('🍪 Suppression du cookie auth_token');
     nextResponse.cookies.delete('auth_token');
 
     return nextResponse;
