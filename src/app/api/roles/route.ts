@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   try {
     // Appeler l'API C# pour récupérer tous les rôles
-    const response = await fetch(`http://localhost:64604/api/roles`, {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:64604';
+    const response = await fetch(`${apiUrl}/api/roles`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

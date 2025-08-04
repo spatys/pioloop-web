@@ -21,7 +21,8 @@ export async function GET(request: NextRequest) {
 
     // Appeler votre API C# pour vérifier le token et récupérer les infos utilisateur
     try {
-      const response = await fetch(`http://localhost:64604/api/auth/me`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:64604';
+      const response = await fetch(`${apiUrl}/api/auth/me`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${finalToken}`,

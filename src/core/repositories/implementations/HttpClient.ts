@@ -7,13 +7,7 @@ export class HttpClient implements IHttpClient {
   private baseURL: string;
 
   constructor() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    if (!apiUrl) {
-      this.baseURL = 'http://localhost:64604';
-    } else {
-      // Si l'URL contient /api, on l'enlève pour éviter le double /api/
-      this.baseURL = apiUrl.replace('/api', '');
-    }
+    this.baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:64604';
   }
 
   private async apiRequest<T>(
