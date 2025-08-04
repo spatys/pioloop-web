@@ -2,7 +2,7 @@
 
 ## Vue d'ensemble
 
-Cette implémentation utilise SWR (Stale-While-Revalidate) pour gérer l'état d'authentification de manière efficace et performante, similaire à Airbnb/Booking.
+Cette implémentation utilise SWR (Stale-While-Revalidate) pour gérer l'état d'authentification de manière efficace et performante.
 
 ## Architecture
 

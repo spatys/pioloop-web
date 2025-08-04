@@ -168,7 +168,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   </div>
                 </div>
               ) : isAuthenticated && user ? (
-                // Authenticated user - Airbnb/Booking style
+                // Authenticated user
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className="flex items-center space-x-3 px-4 py-1.5 rounded-lg hover:bg-gray-100 transition-all duration-200 border border-gray-200"
@@ -199,7 +199,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   </svg>
                 </button>
               ) : (
-                // Non-authenticated user - Airbnb style (seulement après le chargement)
+                // Non-authenticated user
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className="flex items-center space-x-2 bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-700 transition-all duration-200"
@@ -225,7 +225,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   {user ? (
                     // Authenticated user - Full menu
                     <>
-                      {/* User Information - Airbnb style */}
+                      {/* User Information */}
                       <div className="flex items-center space-x-3 px-4 pb-4 border-b border-gray-100">
                         <div className="flex-1">
                           <div className="text-sm font-semibold text-gray-700">
