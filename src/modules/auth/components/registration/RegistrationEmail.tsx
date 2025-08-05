@@ -52,7 +52,7 @@ export const RegistrationEmail: React.FC = () => {
       setRegistrationExpirationMinutes(response.data.expirationMinutes);
       
       // Redirection directe vers la page de vérification
-      router.push('/registration-verify-code');
+      router.push('/registration-verify-email');
     } else {
       console.error('Erreur lors de l\'inscription par email:', response.message);
       // L'erreur sera automatiquement affichée par le hook useAuth

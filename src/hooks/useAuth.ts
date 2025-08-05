@@ -124,8 +124,9 @@ export const useAuth = (): UseAuthReturn => {
     const result = await executeWithLoading(
       () => authService.registrationComplete(data)
     );
-    if (result.success && result.data?.user) {
-      await mutateUser();
+    if (result.success) {
+      // Forcer la revalidation immédiatement après l'inscription
+      await mutateUser(undefined, { revalidate: true });
     }
     return result;
   };

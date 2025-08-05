@@ -161,134 +161,116 @@ export const RegistrationVerifyEmail: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left Section - Form */}
-      <div className="flex-1 flex items-start justify-center bg-white">
-        <div className="w-full pt-4">
-          {/* Logo */}
-          <div className="text-center mb-4">
-            <Logo className="justify-center" />
+    <div className="flex min-h-screen">
+      {/* Colonne gauche : formulaire */}
+      <div className="flex-1 flex flex-col items-center bg-white">
+        {/* Logo avec padding */}
+        <div className="px-8 w-full pt-8">
+          <div className="mb-6">
+            <Logo className="justify-center" href="/" />
           </div>
-
-          {/* Separator */}
-          <div className="border-t border-gray-200 mb-8" />
-
-          {/* Welcome Text */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-semibold text-gray-700 mb-2">Confirmation Email</h1>
-            <p className="text-gray-600">
-              Saisissez le code que vous avez reçu par mail à l'adresse {' '}
-              <span className="font-medium text-purple-600">{registrationEmail}</span>
-            </p>
-          </div>
-
-          {/* Form Container - Centered */}
-          <div className="flex justify-center">
-            <div className="w-full max-w-sm">
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                {/* Code Input */}
-                <div>
-                  {/* Hidden input for form validation */}
+        </div>
+        
+        {/* Separator - pleine largeur */}
+        <div className="border-t border-gray-200 mb-6 w-full" />
+        
+        {/* Contenu avec padding */}
+        <div className="px-8 w-full">
+          <h2 className="text-2xl font-semibold mb-4 text-center">Confirmation Email</h2>
+          <p className="text-gray-600 text-center mb-6 max-w-md mx-auto">
+            Saisissez le code que vous avez reçu par mail à l'adresse {' '}
+            <span className="font-medium text-purple-600">{registrationEmail}</span>
+          </p>
+          
+          <div className="w-full max-w-md space-y-6 mx-auto">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* Hidden input for form validation */}
+              <input
+                type="hidden"
+                {...register("code")}
+              />
+              
+              {/* 6-digit input */}
+              <div className="flex justify-center space-x-2">
+                {codeDigits.map((digit, index) => (
                   <input
-                    type="hidden"
-                    {...register("code")}
+                    key={index}
+                    ref={(el) => {
+                      inputRefs.current[index] = el;
+                    }}
+                    type="text"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handleDigitChange(index, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(index, e)}
+                    onPaste={handlePaste}
+                    className={`w-12 h-12 text-center text-2xl font-mono border-2 rounded-lg transition-colors outline-none ${
+                      errors.code || error ? 'border-red-300 focus:border-red-500' : 'border-gray-300 hover:border-gray-400 focus:border-purple-500'
+                    }`}
+                    autoComplete="off"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                   />
-                  
-                  {/* 6-digit input */}
-                  <div className="flex justify-center space-x-2">
-                    {codeDigits.map((digit, index) => (
-                      <input
-                        key={index}
-                        ref={(el) => {
-                          inputRefs.current[index] = el;
-                        }}
-                        type="text"
-                        maxLength={1}
-                        value={digit}
-                        onChange={(e) => handleDigitChange(index, e.target.value)}
-                        onKeyDown={(e) => handleKeyDown(index, e)}
-                        onPaste={handlePaste}
-                        className={`w-12 h-12 text-center text-2xl font-mono border rounded-lg transition-colors outline-none ${
-                          errors.code || error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-gray-400 focus:border-purple-500'
-                        }`}
-                        autoComplete="off"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                      />
-                    ))}
-                  </div>
-                  
-                  {errors.code && (
-                    <p className="mt-1 text-sm text-red-600 text-center">{errors.code.message}</p>
-                  )}
-                  {error && !errors.code && (
-                    <p className="mt-1 text-sm text-red-600 text-center">{error}</p>
-                  )}
+                ))}
+              </div>
+              
+              {errors.code && (
+                <p className="mt-1 text-sm text-red-600 text-center">{errors.code.message}</p>
+              )}
+              {error && !errors.code && (
+                <p className="mt-1 text-sm text-red-600 text-center">{error}</p>
+              )}
+
+              {/* Success Message */}
+              {success && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                  <p className="text-sm text-green-600">{success}</p>
                 </div>
+              )}
 
-                {/* Success Message */}
-                {success && (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                    <p className="text-sm text-green-600">{success}</p>
-                  </div>
-                )}
+              {/* Loading indicator when auto-submitting */}
+              {isLoading && (
+                <div className="text-center py-4">
+                  <svg className="animate-spin h-6 w-6 text-purple-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <p className="text-sm text-gray-600 mt-2">Vérification en cours...</p>
+                </div>
+              )}
+            </form>
 
-                {/* Loading indicator when auto-submitting */}
-                {isLoading && (
-                  <div className="text-center py-4">
-                    <svg className="animate-spin h-6 w-6 text-purple-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <p className="text-sm text-gray-600 mt-2">Vérification en cours...</p>
-                  </div>
-                )}
-              </form>
+            {/* Resend Code Section */}
+            <div className="text-center">
+              {canResend ? (
+                <button
+                  onClick={handleResendCode}
+                  disabled={!canResend}
+                  className="text-purple-600 hover:text-purple-500 font-medium disabled:text-gray-400 disabled:cursor-not-allowed"
+                >
+                  Renvoyer le code
+                </button>
+              ) : (
+                <div className="text-gray-600">
+                  <p className="mb-2">Vous n'avez pas reçu un code ?</p>
+                  <p>Renvoyer de nouveau dans {formatTime(timeLeft)}</p>
+                </div>
+              )}
+            </div>
 
-              {/* Resend Code Section */}
-              <div className="text-center mt-8">
-                {canResend ? (
-                    <button
-                      onClick={handleResendCode}
-                      disabled={!canResend}
-                      className="text-purple-600 hover:text-purple-500 font-medium disabled:text-gray-400 disabled:cursor-not-allowed"
-                    >
-                      {'Renvoyer le code'}
-                    </button>
-                ) : (
-                  <>
-                    <p className="text-gray-600 mb-2">
-                      {`Vous n'avez pas reçu un code ? `}
-                    </p>
-                    <p className="text-gray-600 mb-2">
-                      {`Renvoyer de nouveau dans ${formatTime(timeLeft)}`}
-                    </p>
-                  </>
-                )}
-              </div>
-
-              {/* Back to Registration */}
-              <div className="text-center mt-8">
-                <p className="text-gray-600">
-                  <Link href="/registration-email" className="text-purple-600 hover:text-purple-500 font-medium">
-                    ← Retour
-                  </Link>
-                </p>
-              </div>
+            {/* Back to Registration */}
+            <div className="text-center">
+              <Link href="/registration-email" className="text-purple-600 hover:text-purple-500 font-medium">
+                ← Retour à l'inscription
+              </Link>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Right Section - Image */}
-      <div className="hidden lg:block lg:w-1/2 bg-gradient-to-br from-purple-600 to-blue-600">
-        <div className="h-full flex items-center justify-center">
-          <img
-            src="/images/register.png"
-            alt="Register"
-            className="w-full h-full object-cover"
-          />
-        </div>
+      
+      {/* Colonne droite : illustration */}
+      <div className="hidden md:flex flex-1 items-center justify-center bg-violet-50">
+        <img src="/images/register.png" alt="Illustration" className="w-full h-full" />
       </div>
     </div>
   );
