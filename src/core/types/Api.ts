@@ -3,6 +3,7 @@ export interface ApiResponse<T> {
   data: T;
   message?: string;
   errors?: string[];
+  fieldErrors?: Record<string, string>; // Erreurs spécifiques par champ
 }
 
 export interface PaginatedResponse<T> {

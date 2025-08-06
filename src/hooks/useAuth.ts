@@ -7,17 +7,19 @@ import { TYPES } from '@/core/di/types';
 import { IAuthService } from '@/core/services/interfaces/IAuthService';
 import { ApiResponse } from '@/core/types';
 import { LoginForm, RegisterForm, CompleteRegistration } from '@/core/types/Forms';
+import { User } from '@/core/types/User';
+import { LoginNormalizedResponse } from '@/core/types/Auth';
 
 interface UseAuthReturn {
   // States
-  user: any | null;
+  user: User | null;
   isLoading: boolean;
   error: string | null;
   fieldErrors: Record<string, string> | null;
   success: string | null;
 
   // Methods
-  login: (credentials: LoginForm) => Promise<ApiResponse<{ email: string; user: any }>>;
+  login: (credentials: LoginForm) => Promise<LoginNormalizedResponse>;
   register: (userData: RegisterForm) => Promise<ApiResponse<any>>;
   registrationEmail: (email: string) => Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>>;
   registrationVerifyEmailCode: (email: string, code: string) => Promise<ApiResponse<boolean>>;
@@ -83,8 +85,8 @@ export const useAuth = (): UseAuthReturn => {
         setSuccess(result.message || 'Opération réussie');
       } else {
         // Ne pas définir d'erreur générale, seulement les erreurs par champ
-        if (result.errors) {
-          setFieldErrors(result.errors);
+        if (result.fieldErrors) {
+          setFieldErrors(result.fieldErrors);
         }
       }
       

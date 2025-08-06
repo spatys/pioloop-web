@@ -4,6 +4,7 @@ import { IAuthService } from '../interfaces/IAuthService';
 import { TYPES } from '../../di/types';
 import { ApiResponse } from '../../types';
 import { LoginForm, RegisterForm, CompleteRegistration } from '../../types/Forms';
+import { LoginNormalizedResponse } from '../../types/Auth';
 
 @injectable()
 export class AuthService implements IAuthService {
@@ -11,7 +12,7 @@ export class AuthService implements IAuthService {
     @inject(TYPES.IAuthRepository) private authRepository: IAuthRepository
   ) {}
 
-  async login(credentials: LoginForm): Promise<ApiResponse<{ email: string; user: any }>> {
+  async login(credentials: LoginForm): Promise<LoginNormalizedResponse> {
     return await this.authRepository.login(credentials);
   }
 

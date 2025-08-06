@@ -4,6 +4,7 @@ import type { IHttpClient } from '../interfaces/IHttpClient';
 import { TYPES } from '../../di/types';
 import { ApiResponse } from '../../types';
 import { LoginForm, RegisterForm, CompleteRegistration } from '../../types/Forms';
+import { LoginNormalizedResponse } from '../../types/Auth';
 
 @injectable()
 export class AuthRepository implements IAuthRepository {
@@ -11,9 +12,10 @@ export class AuthRepository implements IAuthRepository {
     @inject(TYPES.IHttpClient) private httpClient: IHttpClient
   ) {}
 
-  async login(credentials: LoginForm): Promise<ApiResponse<{ email: string; user: any }>> {
+  async login(credentials: LoginForm): Promise<LoginNormalizedResponse> {
     // Utiliser l'endpoint Next.js qui définira le cookie
-    return await this.httpClient.post<{ email: string; user: any }>('/api/auth/login', credentials);
+    const response = await this.httpClient.post<LoginNormalizedResponse>('/api/auth/login', credentials);
+    return response.data; // Retourner directement les données normalisées
   }
 
   async register(userData: RegisterForm): Promise<ApiResponse<any>> {
