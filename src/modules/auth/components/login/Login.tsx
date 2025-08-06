@@ -30,7 +30,7 @@ type LoginFormData = {
 export const Login: React.FC = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const { login, isLoading, error, success, clearError, clearSuccess } = useAuth();
+  const { login, isLoading, error, fieldErrors, success, clearError, clearSuccess, clearFieldErrors } = useAuth();
 
   const {
     register,
@@ -42,6 +42,7 @@ export const Login: React.FC = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     clearError();
+    clearFieldErrors();
     const response = await login(data);
     if (response.success) {
       // Nettoyer le message de succès pour ne pas l'afficher
@@ -90,11 +91,11 @@ export const Login: React.FC = () => {
                   errors.email ? 'border-red-300 focus:border-red-500' : 'border-gray-300 hover:border-gray-400'
                 } ${isLoading ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                    />
-                   {errors.email && (
-                     <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                   {fieldErrors?.email && (
+                     <p className="mt-1 text-sm text-red-600">{fieldErrors.email}</p>
                    )}
-                   {error && !errors.email && (
-                     <p className="mt-1 text-sm text-red-600">{error}</p>
+                   {!fieldErrors?.email && errors.email && (
+                     <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
                    )}
                  </div>
 
@@ -121,7 +122,10 @@ export const Login: React.FC = () => {
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
-                  {errors.password && (
+                  {fieldErrors?.password && (
+                    <p className="mt-1 text-sm text-red-600">{fieldErrors.password}</p>
+                  )}
+                  {!fieldErrors?.password && errors.password && (
                     <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
                   )}
                 </div>

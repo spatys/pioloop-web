@@ -13,6 +13,7 @@ interface UseAuthReturn {
   user: any | null;
   isLoading: boolean;
   error: string | null;
+  fieldErrors: Record<string, string> | null;
   success: string | null;
 
   // Methods
@@ -27,11 +28,13 @@ interface UseAuthReturn {
   // Utilities
   clearError: () => void;
   clearSuccess: () => void;
+  clearFieldErrors: () => void;
 }
 
 export const useAuth = (): UseAuthReturn => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string> | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
   const authService = container.get<IAuthService>(TYPES.IAuthService);
@@ -70,6 +73,7 @@ export const useAuth = (): UseAuthReturn => {
   ): Promise<ApiResponse<T>> => {
     setIsLoading(true);
     setError(null);
+    setFieldErrors(null);
     setSuccess(null);
 
     try {
@@ -78,7 +82,10 @@ export const useAuth = (): UseAuthReturn => {
       if (result.success) {
         setSuccess(result.message || 'Opération réussie');
       } else {
-        setError(result.message || 'Une erreur est survenue');
+        // Ne pas définir d'erreur générale, seulement les erreurs par champ
+        if (result.errors) {
+          setFieldErrors(result.errors);
+        }
       }
       
       return result;
@@ -159,11 +166,13 @@ export const useAuth = (): UseAuthReturn => {
 
   const clearError = () => setError(null);
   const clearSuccess = () => setSuccess(null);
+  const clearFieldErrors = () => setFieldErrors(null);
 
   return {
     user,
     isLoading,
     error,
+    fieldErrors,
     success,
     login,
     register,
@@ -174,5 +183,6 @@ export const useAuth = (): UseAuthReturn => {
     getCurrentUser,
     clearError,
     clearSuccess,
+    clearFieldErrors,
   };
 }; 

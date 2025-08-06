@@ -83,8 +83,8 @@ export class HttpClient implements IHttpClient {
         return {
           success: false,
           data: null as T,
-          message: data?.message || 'Request failed',
-          errors: data?.errors || [],
+          message: 'Request failed',
+          errors: data?.errors || {},
         };
       }
 

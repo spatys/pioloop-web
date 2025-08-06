@@ -12,61 +12,33 @@ export class AuthRepository implements IAuthRepository {
   ) {}
 
   async login(credentials: LoginForm): Promise<ApiResponse<{ email: string; user: any }>> {
-    try {
-      // Utiliser l'endpoint Next.js qui définira le cookie
-      return await this.httpClient.post<{ email: string; user: any }>('/api/auth/login', credentials);
-    } catch (error) {
-      throw new Error('Login failed');
-    }
+    // Utiliser l'endpoint Next.js qui définira le cookie
+    return await this.httpClient.post<{ email: string; user: any }>('/api/auth/login', credentials);
   }
 
   async register(userData: RegisterForm): Promise<ApiResponse<any>> {
-    try {
-      return await this.httpClient.post<any>('/auth/register', userData);
-    } catch (error) {
-      throw new Error('Registration failed');
-    }
+    return await this.httpClient.post<any>('/auth/register', userData);
   }
 
   async registrationEmail(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
-    try {
-      return await this.httpClient.post<{ message: string; email: string; expirationMinutes: number }>('/api/auth/register/register-email', { email });
-    } catch (error) {
-      throw new Error('Email registration failed');
-    }
+    return await this.httpClient.post<{ message: string; email: string; expirationMinutes: number }>('/api/auth/register/register-email', { email });
   }
 
   async registrationVerifyEmailCode(email: string, code: string): Promise<ApiResponse<boolean>> {
-    try {
-      return await this.httpClient.post<boolean>('/api/auth/register/verify-email', { email, code });
-    } catch (error) {
-      throw new Error('Email verification failed');
-    }
+    return await this.httpClient.post<boolean>('/api/auth/register/verify-email', { email, code });
   }
 
   async registrationComplete(data: CompleteRegistration): Promise<ApiResponse<any>> {
-    try {
-      // Utiliser l'endpoint Next.js qui définira le cookie
-      return await this.httpClient.post<any>('/api/auth/registration-complete', data);
-    } catch (error) {
-      throw new Error('Registration completion failed');
-    }
+    // Utiliser l'endpoint Next.js qui définira le cookie
+    return await this.httpClient.post<any>('/api/auth/registration-complete', data);
   }
 
   async logout(): Promise<ApiResponse<any>> {
-    try {
-      // Utiliser l'endpoint Next.js qui supprimera le cookie
-      return await this.httpClient.post<any>('/api/auth/logout');
-    } catch (error) {
-      throw new Error('Logout failed');
-    }
+    // Utiliser l'endpoint Next.js qui supprimera le cookie
+    return await this.httpClient.post<any>('/api/auth/logout');
   }
 
   async getCurrentUser(): Promise<ApiResponse<any>> {
-    try {
-      return await this.httpClient.get<any>('/api/auth/me');
-    } catch (error) {
-      throw new Error('Get current user failed');
-    }
+    return await this.httpClient.get<any>('/api/auth/me');
   }
 } 

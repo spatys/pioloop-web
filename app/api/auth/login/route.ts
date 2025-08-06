@@ -1,44 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { LoginErrorResponseDto, LoginErrorDto } from '@/core/types';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    
     // Appeler votre API C# pour le login
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:64604';
-    const response = await fetch(`${apiUrl}/api/auth/login`, {
+    // En Docker, utiliser le nom du service pour accéder à l'API
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://pioloop-api:64604';
+    const response = await fetch(`${apiUrl}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
     });
-
-    if (!response.ok) {
-      try {
-        const errorData = await response.json();
-        return NextResponse.json(
-          { error: errorData.message || 'Erreur de connexion' },
-          { status: response.status }
-        );
-      } catch (jsonError) {
-        const textResponse = await response.text();
-        return NextResponse.json(
-          { error: 'Erreur de connexion - réponse invalide' },
-          { status: response.status }
-        );
-      }
-    }
-
+    // Lire la réponse une seule fois
     let data;
     try {
       data = await response.json();
     } catch (jsonError) {
-      const textResponse = await response.text();
       return NextResponse.json(
         { error: 'Erreur de connexion - réponse invalide' },
         { status: 500 }
       );
+    }
+
+    if (!response.ok) {
+      const errorResponse: { success: false; errors: LoginErrorDto } = {
+        success: false,
+        errors: data.error || {
+          email: "",
+          password: ""
+        }
+      };
+      return NextResponse.json(errorResponse, { status: response.status });
     }
     
     // Créer la réponse Next.js
@@ -65,7 +60,6 @@ export async function POST(request: NextRequest) {
     return nextResponse;
 
   } catch (error) {
-    console.error('❌ Erreur lors du login:', error);
     const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue';
     return NextResponse.json(
       { error: `Erreur interne du serveur: ${errorMessage}` },

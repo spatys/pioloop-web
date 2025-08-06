@@ -8,6 +8,7 @@ export type { Invoice, InvoiceItem, CreateInvoiceForm, CreateInvoiceItemForm, Up
 export type { Money } from './Money';
 export type { ApiResponse, PaginatedResponse } from './Api';
 export type { LoginForm, RegisterForm } from './Forms';
+export type { LoginErrorDto, LoginErrorResponseDto } from './Auth';
 export type { PropertyFilters, PropertySearchForm } from './Filters';
 export type { DashboardStats, DashboardChart } from './Dashboard';
 export type { Notification, NotificationType } from './Notification';

@@ -8,8 +8,14 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://localhost:64604/api
+      - NEXT_PUBLIC_API_URL=http://pioloop-api:64604/api
     restart: unless-stopped
     volumes:
       - .:/app
-      - /app/node_modules 
+      - /app/node_modules
+    networks:
+      - pioloop-api_default
+
+networks:
+  pioloop-api_default:
+    external: true 
