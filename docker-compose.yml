@@ -1,0 +1,15 @@
+services:
+  pioloop-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pioloop-web
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:64604/api
+    restart: unless-stopped
+    volumes:
+      - .:/app
+      - /app/node_modules 
