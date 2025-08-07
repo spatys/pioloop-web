@@ -18,21 +18,57 @@ export class AuthRepository implements IAuthRepository {
     return response.data; // Retourner directement les données normalisées
   }
 
-  async register(userData: RegisterForm): Promise<ApiResponse<any>> {
-    return await this.httpClient.post<any>('/auth/register', userData);
-  }
+  // async register(userData: RegisterForm): Promise<ApiResponse<any>> {
+  //   return await this.httpClient.post<any>('/auth/registration', userData);
+  // }
 
   async registrationEmail(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
-    return await this.httpClient.post<{ message: string; email: string; expirationMinutes: number }>('/api/auth/register/register-email', { email });
+    const response = await this.httpClient.post<{ message: string; email: string; expirationMinutes: number }>('/api/auth/registration/registration-email', { email });
+    
+    // Transformer toute erreur en fieldErrors pour l'email
+    if (!response.success && response.message) {
+      return {
+        success: false,
+        data: null as any,
+        fieldErrors: { email: response.message || 'Une erreur est survenue' }
+      };
+    }
+    
+    return response;
   }
 
   async registrationVerifyEmailCode(email: string, code: string): Promise<ApiResponse<boolean>> {
-    return await this.httpClient.post<boolean>('/api/auth/register/verify-email', { email, code });
+    const response = await this.httpClient.post<boolean>('/api/auth/registration/registration-verify-email', { email, code });
+    
+    // Transformer toute erreur en fieldErrors pour le code
+    if (!response.success && response.message) {
+      return {
+        success: false,
+        data: null as any,
+        fieldErrors: { code: response.message || 'Une erreur est survenue' }
+      };
+    }
+    
+    return response;
   }
 
   async registrationComplete(data: CompleteRegistration): Promise<ApiResponse<any>> {
-    // Utiliser l'endpoint Next.js qui définira le cookie
-    return await this.httpClient.post<any>('/api/auth/registration-complete', data);
+    return await this.httpClient.post<any>('/api/auth/registration/registration-complete', data);
+  }
+
+  async resendEmailVerificationCode(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
+    const response = await this.httpClient.post<{ message: string; email: string; expirationMinutes: number }>('/api/auth/registration/registration-email-resend-verification', { email });
+    
+    // Transformer toute erreur en fieldErrors pour l'email
+    if (!response.success && response.message) {
+      return {
+        success: false,
+        data: null as any,
+        fieldErrors: { email: response.message || 'Une erreur est survenue' }
+      };
+    }
+    
+    return response;
   }
 
   async logout(): Promise<ApiResponse<any>> {

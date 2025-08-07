@@ -5,10 +5,11 @@ import { LoginNormalizedResponse } from '../../types/Auth';
 
 export interface IAuthRepository {
   login(credentials: LoginForm): Promise<LoginNormalizedResponse>;
-  register(userData: RegisterForm): Promise<ApiResponse<any>>;
+  // register(userData: RegisterForm): Promise<ApiResponse<any>>;
   registrationEmail(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number}>>;
   registrationVerifyEmailCode(email: string, code: string): Promise<ApiResponse<boolean>>;
   registrationComplete(data: CompleteRegistration): Promise<ApiResponse<any>>;
+  resendEmailVerificationCode(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number}>>;
   logout(): Promise<ApiResponse<any>>;
   getCurrentUser(): Promise<ApiResponse<any>>;
 } 

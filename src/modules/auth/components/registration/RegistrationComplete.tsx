@@ -60,6 +60,9 @@ export const RegistrationComplete: React.FC = () => {
       return;
     }
 
+    // Afficher le loader de redirection immédiatement
+    setIsRedirecting(true);
+
     const response = await registrationComplete({
       email: registrationEmail,
       firstName: data.firstName,
@@ -73,13 +76,14 @@ export const RegistrationComplete: React.FC = () => {
       clearSuccess();
       
       console.log('Inscription complétée avec succès');
-      setIsRedirecting(true);
       
-      // Timeout de 2 secondes avant la redirection
+      // Attendre 2 secondes avant la redirection pour laisser le temps de voir le succès
       setTimeout(() => {
         router.push('/');
-      }, 2000);
+      }, 1000);
     } else {
+      // Masquer le loader en cas d'erreur
+      setIsRedirecting(false);
       console.error('Erreur lors de la complétion de l\'inscription:', response.message);
       // L'erreur sera automatiquement affichée par le hook useAuth
     }
@@ -114,10 +118,11 @@ export const RegistrationComplete: React.FC = () => {
                 type="text"
                 placeholder="Nom"
                 autoComplete="off"
+                disabled={isLoading || isRedirecting}
                 {...register("lastName")}
                 className={`w-full px-4 py-3 border-2 rounded-lg transition-colors ${
                   errors.lastName ? 'border-red-300 focus:border-red-500' : 'border-gray-300 hover:border-gray-400'
-                }`}
+                } ${(isLoading || isRedirecting) ? 'bg-gray-100 cursor-not-allowed' : ''}`}
               />
               {errors.lastName && (
                 <p className="mt-1 text-sm text-red-600">{errors.lastName.message}</p>
@@ -131,10 +136,11 @@ export const RegistrationComplete: React.FC = () => {
                 type="text"
                 placeholder="Prénom"
                 autoComplete="off"
+                disabled={isLoading || isRedirecting}
                 {...register("firstName")}
                 className={`w-full px-4 py-3 border-2 rounded-lg transition-colors ${
                   errors.firstName ? 'border-red-300 focus:border-red-500' : 'border-gray-300 hover:border-gray-400'
-                }`}
+                } ${(isLoading || isRedirecting) ? 'bg-gray-100 cursor-not-allowed' : ''}`}
               />
               {errors.firstName && (
                 <p className="mt-1 text-sm text-red-600">{errors.firstName.message}</p>
@@ -148,14 +154,18 @@ export const RegistrationComplete: React.FC = () => {
                 type={showPassword ? "text" : "password"}
                 placeholder="Mot de passe"
                 autoComplete="off"
+                disabled={isLoading || isRedirecting}
                 {...register("password")}
                 className={`w-full px-4 py-3 pr-10 border-2 rounded-lg transition-colors ${
                   errors.password ? 'border-red-300 focus:border-red-500' : 'border-gray-300 hover:border-gray-400'
-                }`}
+                } ${(isLoading || isRedirecting) ? 'bg-gray-100 cursor-not-allowed' : ''}`}
               />
               <button
                 type="button"
-                className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700 transition-colors"
+                disabled={isLoading || isRedirecting}
+                className={`absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700 transition-colors ${
+                  (isLoading || isRedirecting) ? 'cursor-not-allowed opacity-50' : ''
+                }`}
                 onClick={() => setShowPassword(v => !v)}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -172,14 +182,18 @@ export const RegistrationComplete: React.FC = () => {
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirmer le mot de passe"
                 autoComplete="off"
+                disabled={isLoading || isRedirecting}
                 {...register("confirmPassword")}
                 className={`w-full px-4 py-3 pr-10 border-2 rounded-lg transition-colors ${
                   errors.confirmPassword ? 'border-red-300 focus:border-red-500' : 'border-gray-300 hover:border-gray-400'
-                }`}
+                } ${(isLoading || isRedirecting) ? 'bg-gray-100 cursor-not-allowed' : ''}`}
               />
               <button
                 type="button"
-                className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700 transition-colors"
+                disabled={isLoading || isRedirecting}
+                className={`absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700 transition-colors ${
+                  (isLoading || isRedirecting) ? 'cursor-not-allowed opacity-50' : ''
+                }`}
                 onClick={() => setShowConfirmPassword(v => !v)}
               >
                 {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -199,10 +213,10 @@ export const RegistrationComplete: React.FC = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || isRedirecting}
               className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:bg-purple-400 disabled:cursor-not-allowed flex items-center justify-center"
             >
-              {isLoading ? (
+              {isLoading || isRedirecting ? (
                 <Loader 
                   className="h-5 w-5 text-white" 
                   style={{ 

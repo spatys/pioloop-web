@@ -20,10 +20,10 @@ interface UseAuthReturn {
 
   // Methods
   login: (credentials: LoginForm) => Promise<LoginNormalizedResponse>;
-  register: (userData: RegisterForm) => Promise<ApiResponse<any>>;
   registrationEmail: (email: string) => Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>>;
   registrationVerifyEmailCode: (email: string, code: string) => Promise<ApiResponse<boolean>>;
   registrationComplete: (data: CompleteRegistration) => Promise<ApiResponse<any>>;
+  resendEmailVerificationCode: (email: string) => Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>>;
   logout: () => Promise<void>;
   getCurrentUser: () => Promise<ApiResponse<any>>;
 
@@ -111,11 +111,11 @@ export const useAuth = (): UseAuthReturn => {
     return result;
   };
 
-  const register = async (userData: RegisterForm) => {
-    return await executeWithLoading(
-      () => authService.register(userData)
-    );
-  };
+  // const register = async (userData: RegisterForm) => {
+  //   return await executeWithLoading(
+  //     () => authService.register(userData)
+  //   );
+  // };
 
   const registrationEmail = async (email: string) => {
     return await executeWithLoading(
@@ -138,6 +138,12 @@ export const useAuth = (): UseAuthReturn => {
       await mutateUser(undefined, { revalidate: true });
     }
     return result;
+  };
+
+  const resendEmailVerificationCode = async (email: string) => {
+    return await executeWithLoading(
+      () => authService.resendEmailVerificationCode(email)
+    );
   };
 
   const logout = async () => {
@@ -177,10 +183,11 @@ export const useAuth = (): UseAuthReturn => {
     fieldErrors,
     success,
     login,
-    register,
+    // register,
     registrationEmail,
     registrationVerifyEmailCode,
     registrationComplete,
+    resendEmailVerificationCode,
     logout,
     getCurrentUser,
     clearError,

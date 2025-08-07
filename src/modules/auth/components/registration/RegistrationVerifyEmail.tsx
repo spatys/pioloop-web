@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/ui/Logo';
 import { useAuth } from '@/hooks/useAuth';
 import { useAuth as useAuthContext } from '@/context/AuthContext';
+import { Loader } from 'lucide-react';
 
 // Schema for code validation
 const schema = yup.object({
@@ -24,11 +25,12 @@ type VerifyCodeFormData = {
 
 export const RegistrationVerifyEmail: React.FC = () => {
   const router = useRouter();
-  const { registrationVerifyEmailCode, isLoading, error, success, clearError, clearSuccess } = useAuth();
+  const { registrationVerifyEmailCode, resendEmailVerificationCode, isLoading, error, fieldErrors, success, clearError, clearSuccess, clearFieldErrors } = useAuth();
   const { registrationEmail, registrationExpirationMinutes } = useAuthContext();
   const [timeLeft, setTimeLeft] = useState(registrationExpirationMinutes ? registrationExpirationMinutes * 60 : 60);
   const [canResend, setCanResend] = useState(false);
   const [codeDigits, setCodeDigits] = useState(['', '', '', '', '', '']);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const {
@@ -87,10 +89,8 @@ export const RegistrationVerifyEmail: React.FC = () => {
 
     // Auto-submit when all 6 digits are entered
     if (fullCode.length === 6) {
-      // Small delay to ensure the last digit is properly set
-      setTimeout(() => {
-        onSubmit({ code: fullCode });
-      }, 150);
+      // Submit immediately when all 6 digits are entered
+      onSubmit({ code: fullCode });
     }
   };
 
@@ -118,31 +118,42 @@ export const RegistrationVerifyEmail: React.FC = () => {
 
   const onSubmit = async (data: VerifyCodeFormData) => {
     if (!registrationEmail) {
-      console.error('Aucun email en cours de vérification');
       return;
     }
 
+    // Afficher le loader de redirection immédiatement
+    setIsRedirecting(true);
+
     const response = await registrationVerifyEmailCode(registrationEmail, data.code);
-    // const response = { success: true, message: 'Code vérifié avec succès' };
+    //const response = { success: true, message: 'Code vérifié avec succès' };
 
     if (response.success) {
       // Nettoyer le message de succès pour ne pas l'afficher
       clearSuccess();
       
-      console.log('Code vérifié avec succès');
-      router.push('/registration-complete');
+      // Attendre 2 secondes avant la redirection pour laisser le temps de voir le succès
+      setTimeout(() => {
+        router.push('/registration-complete');
+      }, 1500);
     } else {
+      // Masquer le loader en cas d'erreur
+      setIsRedirecting(false);
       console.error('Erreur lors de la vérification du code:', response.message);
       // L'erreur sera automatiquement affichée par le hook useAuth
     }
   };
 
   const handleResendCode = async () => {
-    // TODO: Implement resend code function
-    console.log('Renvoi du code...');
-    const newExpiration = registrationExpirationMinutes ? registrationExpirationMinutes * 60 : 60;
-    setTimeLeft(newExpiration); // Reset timer with current expiration
-    setCanResend(false);
+    if (!registrationEmail) return;
+    
+    const response = await resendEmailVerificationCode(registrationEmail);
+    
+    if (response.success && response.data) {
+      // Reset timer with new expiration
+      const newExpiration = response.data.expirationMinutes * 60;
+      setTimeLeft(newExpiration);
+      setCanResend(false);
+    }
   };
 
   // Si pas d'email dans le contexte, afficher une erreur
@@ -205,7 +216,7 @@ export const RegistrationVerifyEmail: React.FC = () => {
                     onKeyDown={(e) => handleKeyDown(index, e)}
                     onPaste={handlePaste}
                     className={`w-12 h-12 text-center text-2xl font-mono border-2 rounded-lg transition-colors outline-none ${
-                      errors.code || error ? 'border-red-300 focus:border-red-500' : 'border-gray-300 hover:border-gray-400 focus:border-purple-500'
+                      errors.code || fieldErrors?.code ? 'border-red-300 focus:border-red-500' : 'border-gray-300 hover:border-gray-400 focus:border-purple-500'
                     }`}
                     autoComplete="off"
                     inputMode="numeric"
@@ -214,30 +225,31 @@ export const RegistrationVerifyEmail: React.FC = () => {
                 ))}
               </div>
               
-              {errors.code && (
+
+              {/* Loading indicator */}
+              {isRedirecting && (
+                <div className="text-center py-2">
+                  <Loader 
+                    className="h-5 w-5 text-purple-600 mx-auto" 
+                    style={{ 
+                      animation: 'spin 1s linear infinite',
+                      transformOrigin: 'center'
+                    }} 
+                  />
+                </div>
+              )}
+
+              {fieldErrors?.code && (
+                <p className="mt-1 text-sm text-red-600 text-center">{fieldErrors.code}</p>
+              )}
+              {!fieldErrors?.code && errors.code && (
                 <p className="mt-1 text-sm text-red-600 text-center">{errors.code.message}</p>
               )}
-              {error && !errors.code && (
+              {!fieldErrors?.code && !errors.code && error && (
                 <p className="mt-1 text-sm text-red-600 text-center">{error}</p>
               )}
 
-              {/* Success Message */}
-              {success && (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                  <p className="text-sm text-green-600">{success}</p>
-                </div>
-              )}
 
-              {/* Loading indicator when auto-submitting */}
-              {isLoading && (
-                <div className="text-center py-4">
-                  <svg className="animate-spin h-6 w-6 text-purple-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  <p className="text-sm text-gray-600 mt-2">Vérification en cours...</p>
-                </div>
-              )}
             </form>
 
             {/* Resend Code Section */}

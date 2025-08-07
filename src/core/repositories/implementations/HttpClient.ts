@@ -18,14 +18,15 @@ export class HttpClient implements IHttpClient {
     const cookieEndpoints = [
       '/api/auth/login', 
       '/api/auth/logout', 
-      '/api/auth/me', 
-      '/api/auth/registration-complete'
+      '/api/auth/me'
     ];
 
     // Endpoints qui vont directement au backend C# (pas de cookies nécessaires)
     const directBackendEndpoints = [
-      '/api/auth/register/register-email',
-      '/api/auth/register/verify-email'
+      '/api/auth/registration/registration-email',
+      '/api/auth/registration/registration-verify-email',
+      '/api/auth/registration/registration-complete',
+      '/api/auth/registration/registration-email-resend-verification'
     ];
 
     // Déterminer l'URL cible
@@ -34,8 +35,9 @@ export class HttpClient implements IHttpClient {
       // Endpoints de cookies → API routes Next.js
       url = `http://localhost:3000${endpoint}`;
     } else if (directBackendEndpoints.includes(endpoint)) {
-      // Endpoints directs → Backend C# (mais avec /api/ dans l'URL)
-      url = `${this.baseURL}${endpoint}`;
+      // Endpoints directs → Backend C# (enlever /api/ du baseURL car endpoint contient déjà /api/)
+      const baseURLWithoutApi = this.baseURL.replace('/api', '');
+      url = `${baseURLWithoutApi}${endpoint}`;
     } else if (endpoint.startsWith('/api/')) {
       // Autres endpoints /api/ → API routes Next.js (par défaut)
       url = `http://localhost:3000${endpoint}`;
@@ -83,7 +85,7 @@ export class HttpClient implements IHttpClient {
         return {
           success: false,
           data: null as T,
-          message: 'Request failed',
+          message: data?.message || 'Request failed',
           errors: data?.errors || {},
         };
       }

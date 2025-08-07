@@ -28,7 +28,7 @@ type RegisterFormData = {
 
 export const RegistrationEmail: React.FC = () => {
   const router = useRouter();
-  const { registrationEmail, isLoading, error, success, clearError, clearSuccess } = useAuth();
+  const { registrationEmail, isLoading, error, fieldErrors, success, clearError, clearSuccess, clearFieldErrors } = useAuth();
   const { setRegistrationEmail, setRegistrationExpirationMinutes } = useAuthContext();
 
   const {
@@ -90,13 +90,16 @@ export const RegistrationEmail: React.FC = () => {
                   autoComplete="off"
                   {...register("email")}
                   className={`w-full px-4 py-3 border rounded-lg transition-colors outline-none ${
-                    errors.email || error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-gray-400 focus:border-purple-500'
+                    errors.email || fieldErrors?.email ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-gray-400 focus:border-purple-500'
                   }`}
                 />
-                {errors.email && (
+                {fieldErrors?.email && (
+                  <p className="mt-1 text-sm text-red-600">{fieldErrors.email}</p>
+                )}
+                {!fieldErrors?.email && errors.email && (
                   <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
                 )}
-                {error && !errors.email && (
+                {!fieldErrors?.email && !errors.email && error && (
                   <p className="mt-1 text-sm text-red-600">{error}</p>
                 )}
               </div>
