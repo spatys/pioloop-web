@@ -8,7 +8,7 @@ import { IAuthService } from '@/core/services/interfaces/IAuthService';
 import { ApiResponse } from '@/core/types';
 import { LoginForm, RegisterForm, CompleteRegistration } from '@/core/types/Forms';
 import { User } from '@/core/types/User';
-import { LoginNormalizedResponse } from '@/core/types/Auth';
+import { LoginSuccessResponseDto } from '@/core/types/Auth';
 
 interface UseAuthReturn {
   // States
@@ -16,10 +16,11 @@ interface UseAuthReturn {
   isLoading: boolean;
   error: string | null;
   fieldErrors: Record<string, string> | null;
+  globalErrors: string[] | null;
   success: string | null;
 
   // Methods
-  login: (credentials: LoginForm) => Promise<LoginNormalizedResponse>;
+  login: (credentials: LoginForm) => Promise<ApiResponse<LoginSuccessResponseDto>>;
   registrationEmail: (email: string) => Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>>;
   registrationVerifyEmailCode: (email: string, code: string) => Promise<ApiResponse<boolean>>;
   registrationComplete: (data: CompleteRegistration) => Promise<ApiResponse<any>>;
@@ -31,12 +32,15 @@ interface UseAuthReturn {
   clearError: () => void;
   clearSuccess: () => void;
   clearFieldErrors: () => void;
+  clearGlobalErrors: () => void;
+  clearAllErrors: () => void;
 }
 
 export const useAuth = (): UseAuthReturn => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string> | null>(null);
+  const [globalErrors, setGlobalErrors] = useState<string[] | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
   const authService = container.get<IAuthService>(TYPES.IAuthService);
@@ -104,6 +108,7 @@ export const useAuth = (): UseAuthReturn => {
     setIsLoading(true);
     setError(null);
     setFieldErrors(null);
+    setGlobalErrors(null);
     setSuccess(null);
 
     try {
@@ -114,14 +119,20 @@ export const useAuth = (): UseAuthReturn => {
         throw new Error('Réponse invalide du serveur');
       }
      
-      if (result.success) {
+      if (result.success && result.data) {
         setSuccess(result.message || 'Connexion réussie');
         // Forcer la revalidation immédiatement après la connexion
         await mutateUser(undefined, { revalidate: true });
       } else {
-        // Ne pas définir d'erreur générale, seulement les erreurs par champ
+        // Gestion des erreurs
         if (result.fieldErrors) {
           setFieldErrors(result.fieldErrors);
+        }
+        if (result.globalErrors) {
+          setGlobalErrors(result.globalErrors);
+        }
+        if (result.message) {
+          setError(result.message);
         }
       }
       
@@ -199,12 +210,19 @@ export const useAuth = (): UseAuthReturn => {
   const clearError = () => setError(null);
   const clearSuccess = () => setSuccess(null);
   const clearFieldErrors = () => setFieldErrors(null);
+  const clearGlobalErrors = () => setGlobalErrors(null);
+  const clearAllErrors = () => {
+    setError(null);
+    setFieldErrors(null);
+    setGlobalErrors(null);
+  };
 
   return {
     user,
     isLoading,
     error,
     fieldErrors,
+    globalErrors,
     success,
     login,
     // register,
@@ -217,5 +235,7 @@ export const useAuth = (): UseAuthReturn => {
     clearError,
     clearSuccess,
     clearFieldErrors,
+    clearGlobalErrors,
+    clearAllErrors,
   };
 }; 

@@ -72,7 +72,8 @@ export class HttpClient implements IHttpClient {
           success: false,
           data: null as T,
           message: 'Invalid JSON response from server',
-          errors: [],
+          fieldErrors: undefined,
+          globalErrors: undefined,
         };
       }
 
@@ -88,7 +89,8 @@ export class HttpClient implements IHttpClient {
           success: false,
           data: data as T, // Retourner les données même en cas d'erreur
           message: data?.message || 'Request failed',
-          errors: data?.errors || {},
+          fieldErrors: data?.fieldErrors,
+          globalErrors: data?.globalErrors,
         };
       }
 
@@ -102,7 +104,8 @@ export class HttpClient implements IHttpClient {
         success: false,
         data: null as T,
         message: error instanceof Error ? error.message : 'Network error',
-        errors: [],
+        fieldErrors: undefined,
+        globalErrors: undefined,
       };
     }
   }

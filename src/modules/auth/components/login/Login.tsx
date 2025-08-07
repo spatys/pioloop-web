@@ -30,7 +30,7 @@ type LoginFormData = {
 export const Login: React.FC = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const { login, isLoading, error, fieldErrors, success, clearError, clearSuccess, clearFieldErrors } = useAuth();
+  const { login, isLoading, error, fieldErrors, globalErrors, success, clearError, clearSuccess, clearFieldErrors, clearGlobalErrors, clearAllErrors } = useAuth();
 
 
 
@@ -43,8 +43,7 @@ export const Login: React.FC = () => {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    clearError();
-    clearFieldErrors();
+    clearAllErrors();
     const response = await login(data);
     if (response.success) {
       // Nettoyer le message de succès pour ne pas l'afficher
@@ -80,7 +79,23 @@ export const Login: React.FC = () => {
           </p>
           
           <form className="w-full max-w-md space-y-6 mx-auto" onSubmit={handleSubmit(onSubmit)}>
-                                 {/* Email Input */}
+            {/* Erreurs globales */}
+            {globalErrors && globalErrors.length > 0 && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                {globalErrors.map((error, index) => (
+                  <p key={index} className="text-red-600 text-sm">{error}</p>
+                ))}
+              </div>
+            )}
+
+            {/* Erreur générale */}
+            {/* {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <p className="text-red-600 text-sm">{error}</p>
+              </div>
+            )} */}
+
+            {/* Email Input */}
                  <div>
                    <input
                      id="email"

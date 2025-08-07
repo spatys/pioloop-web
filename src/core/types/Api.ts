@@ -1,9 +1,16 @@
-export interface ApiResponse<T> {
+export interface ApiResponse<T = any> {
   success: boolean;
-  data: T;
+  data?: T;
   message?: string;
-  errors?: string[];
-  fieldErrors?: Record<string, string>; // Erreurs spécifiques par champ
+  fieldErrors?: Record<string, string>;
+  globalErrors?: string[];
+}
+
+export interface ApiErrorResponse {
+  success: false;
+  message?: string;
+  fieldErrors?: Record<string, string>;
+  globalErrors?: string[];
 }
 
 export interface PaginatedResponse<T> {
@@ -15,10 +22,4 @@ export interface PaginatedResponse<T> {
   totalPages: number;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
-}
-
-export interface ApiError {
-  message: string;
-  statusCode: number;
-  errors?: Record<string, string[]>;
 } 

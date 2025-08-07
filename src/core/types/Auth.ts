@@ -1,4 +1,5 @@
 import { User } from './User';
+import { ApiResponse } from './Api';
 
 export interface LoginErrorDto {
   email: string;
@@ -22,8 +23,11 @@ export type LoginApiResponse = LoginSuccessResponseDto | LoginErrorResponseDto;
 // Type pour la réponse Next.js qui normalise les erreurs
 export interface LoginNormalizedResponse {
   success: boolean;
-  data: LoginSuccessResponseDto | null; // Rendre data obligatoire mais nullable
+  data: LoginSuccessResponseDto | null;
   message?: string;
-  errors?: string[];
-  fieldErrors?: Record<string, string>; // Erreurs spécifiques par champ (email, password)
-} 
+  fieldErrors?: Record<string, string>;
+  globalErrors?: string[];
+}
+
+// Nouveau type pour les réponses d'authentification standardisées
+export interface LoginResponse extends ApiResponse<LoginSuccessResponseDto> {} 

@@ -28,21 +28,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!response.ok) {
-      // Transformer la réponse d'erreur du backend C# en format frontend
-      if (data.success === false && data.error) {
-        const fieldErrors: Record<string, string> = {};
-        if (data.error.email) fieldErrors.email = data.error.email;
-        if (data.error.password) fieldErrors.password = data.error.password;
-        
-        const transformedData = {
-          success: false,
-          fieldErrors: Object.keys(fieldErrors).length > 0 ? fieldErrors : undefined
-        };
-        
-        return NextResponse.json(transformedData, { status: response.status });
-      }
-      
-      // Retourner directement la réponse d'erreur du backend C#
+      // Retourner directement la réponse d'erreur standardisée du backend C#
       return NextResponse.json(data, { status: response.status });
     }
     
