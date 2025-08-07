@@ -14,8 +14,67 @@ export class AuthRepository implements IAuthRepository {
 
   async login(credentials: LoginForm): Promise<LoginNormalizedResponse> {
     // Utiliser l'endpoint Next.js qui définira le cookie
-    const response = await this.httpClient.post<LoginNormalizedResponse>('/api/auth/login', credentials);
-    return response.data; // Retourner directement les données normalisées
+    const response = await this.httpClient.post<any>('/api/auth/login', credentials);
+    
+
+    
+    // Vérifier si la réponse est valide
+    if (!response.success) {
+      // Si HttpClient a retourné une erreur, vérifier s'il y a des fieldErrors dans data
+      if (response.data && response.data.fieldErrors) {
+        return {
+          success: false,
+          data: null,
+          message: response.message || 'Erreur de connexion',
+          fieldErrors: response.data.fieldErrors
+        };
+      }
+      
+      // Retourner une réponse d'erreur normalisée
+      return {
+        success: false,
+        data: null,
+        message: response.message || 'Erreur de connexion',
+        fieldErrors: undefined
+      };
+    }
+    
+    // Transformer la réponse du backend en LoginNormalizedResponse
+    const backendData = response.data;
+
+    
+    // Si c'est une réponse d'erreur du backend (avec success: false et fieldErrors)
+    if (backendData.success === false && backendData.fieldErrors) {
+
+      
+      return {
+        success: false,
+        data: null,
+        message: 'Erreur de connexion',
+        fieldErrors: backendData.fieldErrors
+      };
+    }
+    
+    // Si c'est une réponse de succès (avec message, user, token)
+    if (backendData.message && backendData.user) {
+      return {
+        success: true,
+        data: {
+          message: backendData.message,
+          user: backendData.user,
+          token: backendData.token
+        },
+        message: backendData.message
+      };
+    }
+    
+    // Réponse inattendue
+    return {
+      success: false,
+      data: null,
+      message: 'Format de réponse inattendu',
+      fieldErrors: undefined
+    };
   }
 
   // async register(userData: RegisterForm): Promise<ApiResponse<any>> {

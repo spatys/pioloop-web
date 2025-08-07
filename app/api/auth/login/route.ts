@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
     // Appeler votre API C# pour le login
     // En Docker, utiliser le nom du service pour accéder à l'API
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://pioloop-api:64604';
-    const response = await fetch(`${apiUrl}/auth/login`, {
+    const response = await fetch(`${apiUrl}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -19,6 +19,8 @@ export async function POST(request: NextRequest) {
     try {
       data = await response.json();
     } catch (jsonError) {
+      console.error('❌ JSON parse error:', jsonError);
+      console.error('🔍 Response text:', await response.text());
       return NextResponse.json(
         { error: 'Erreur de connexion - réponse invalide' },
         { status: 500 }
@@ -26,22 +28,26 @@ export async function POST(request: NextRequest) {
     }
 
     if (!response.ok) {
-      const errorResponse: { success: false; errors: LoginErrorDto } = {
-        success: false,
-        errors: data.error || {
-          email: "",
-          password: ""
-        }
-      };
-      return NextResponse.json(errorResponse, { status: response.status });
+      // Transformer la réponse d'erreur du backend C# en format frontend
+      if (data.success === false && data.error) {
+        const fieldErrors: Record<string, string> = {};
+        if (data.error.email) fieldErrors.email = data.error.email;
+        if (data.error.password) fieldErrors.password = data.error.password;
+        
+        const transformedData = {
+          success: false,
+          fieldErrors: Object.keys(fieldErrors).length > 0 ? fieldErrors : undefined
+        };
+        
+        return NextResponse.json(transformedData, { status: response.status });
+      }
+      
+      // Retourner directement la réponse d'erreur du backend C#
+      return NextResponse.json(data, { status: response.status });
     }
     
-    // Créer la réponse Next.js
-    const nextResponse = NextResponse.json({
-      success: true,
-      message: 'Connexion réussie',
-      data: data
-    });
+    // Créer la réponse Next.js - retourner directement les données du backend
+    const nextResponse = NextResponse.json(data);
 
     // Récupérer le token depuis le corps de la réponse de l'API C#
     const token = data.token;

@@ -101,14 +101,38 @@ export const useAuth = (): UseAuthReturn => {
   };
 
   const login = async (credentials: LoginForm) => {
-    const result = await executeWithLoading(
-      () => authService.login(credentials)
-    );
-    if (result.success) {
-      // Forcer la revalidation immédiatement après la connexion
-      await mutateUser(undefined, { revalidate: true });
+    setIsLoading(true);
+    setError(null);
+    setFieldErrors(null);
+    setSuccess(null);
+
+    try {
+      const result = await authService.login(credentials);
+      
+      // Vérifier que result n'est pas null
+      if (!result) {
+        throw new Error('Réponse invalide du serveur');
+      }
+     
+      if (result.success) {
+        setSuccess(result.message || 'Connexion réussie');
+        // Forcer la revalidation immédiatement après la connexion
+        await mutateUser(undefined, { revalidate: true });
+      } else {
+        // Ne pas définir d'erreur générale, seulement les erreurs par champ
+        if (result.fieldErrors) {
+          setFieldErrors(result.fieldErrors);
+        }
+      }
+      
+      return result;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Une erreur inattendue est survenue';
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setIsLoading(false);
     }
-    return result;
   };
 
   // const register = async (userData: RegisterForm) => {

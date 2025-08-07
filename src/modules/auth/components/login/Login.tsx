@@ -32,6 +32,8 @@ export const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { login, isLoading, error, fieldErrors, success, clearError, clearSuccess, clearFieldErrors } = useAuth();
 
+
+
   const {
     register,
     handleSubmit,

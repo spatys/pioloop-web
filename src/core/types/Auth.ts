@@ -6,7 +6,7 @@ export interface LoginErrorDto {
 }
 
 export interface LoginErrorResponseDto {
-  status: boolean;
+  success: boolean;
   error: LoginErrorDto;
 }
 

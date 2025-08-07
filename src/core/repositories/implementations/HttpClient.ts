@@ -82,9 +82,11 @@ export class HttpClient implements IHttpClient {
           console.error(`HTTP ${response.status} error for ${endpoint}:`, data);
         }
         
+
+        
         return {
           success: false,
-          data: null as T,
+          data: data as T, // Retourner les données même en cas d'erreur
           message: data?.message || 'Request failed',
           errors: data?.errors || {},
         };
