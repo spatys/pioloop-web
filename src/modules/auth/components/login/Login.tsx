@@ -102,7 +102,7 @@ export const Login: React.FC = () => {
                      type="email"
                      placeholder="Email"
                      autoComplete="off"
-                disabled={isLoading}
+                    disabled={isLoading}
                      {...register("email")}
                 className={`w-full px-4 py-3 border-2 rounded-lg transition-colors ${
                   errors.email ? 'border-red-300 focus:border-red-500' : 'border-gray-300 hover:border-gray-400'
@@ -148,7 +148,7 @@ export const Login: React.FC = () => {
                 </div>
 
             {/* Submit Button */}
-                                   <button
+                  <button
                     type="submit"
               disabled={isLoading}
                     className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:bg-purple-400 disabled:cursor-not-allowed flex items-center justify-center"
@@ -200,7 +200,7 @@ export const Login: React.FC = () => {
           <div className="mt-8 text-center">
             <span className="text-gray-600">Vous n'avez pas encore de compte ? </span>
             <Link 
-              href="/registration-email" 
+              href="/register-email" 
               className="text-purple-700 underline hover:text-purple-600 transition-colors"
             >
               Inscrivez-vous dès maintenant

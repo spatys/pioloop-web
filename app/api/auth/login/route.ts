@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     // Appeler votre API C# pour le login
     // En Docker, utiliser le nom du service pour accéder à l'API
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://pioloop-api:64604';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
     const response = await fetch(`${apiUrl}/api/auth/login`, {
       method: 'POST',
       headers: {

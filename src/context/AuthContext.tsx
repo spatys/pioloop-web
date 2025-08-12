@@ -1,18 +1,16 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User } from '../core/types';
 import { useAuth as useAuthHook } from '../hooks/useAuth';
 
 interface AuthContextType {
   user: any | null;
   loading: boolean;
-  registrationEmail: string | null;
-  registrationExpirationMinutes: number | null;
-  setRegistrationEmail: (email: string | null) => void;
-  setRegistrationExpirationMinutes: (minutes: number | null) => void;
+  registerEmail: string | null;
+  registerExpirationMinutes: number | null;
+  setRegisterEmail: (email: string | null) => void;
+  setRegisterExpirationMinutes: (minutes: number | null) => void;
   login: (credentials: any) => Promise<any>;
-  register: (userData: any) => Promise<any>;
   logout: () => Promise<void>;
   getCurrentUser: () => Promise<any>;
   clearError: () => void;
@@ -24,8 +22,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [registrationEmail, setRegistrationEmail] = useState<string | null>(null);
-  const [registrationExpirationMinutes, setRegistrationExpirationMinutes] = useState<number | null>(null);
+  const [registerEmail, setRegisterEmail] = useState<string | null>(null);
+  const [registerExpirationMinutes, setRegisterExpirationMinutes] = useState<number | null>(null);
   
   // Utiliser le hook useAuth pour la logique d'authentification
   const authHook = useAuthHook();
@@ -53,12 +51,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const value = {
     user: authHook.user,
     loading: authHook.isLoading,
-    registrationEmail,
-    registrationExpirationMinutes,
-    setRegistrationEmail,
-    setRegistrationExpirationMinutes,
+    registerEmail,
+    registerExpirationMinutes,
+    setRegisterEmail,
+    setRegisterExpirationMinutes,
     login: authHook.login,
-    register: authHook.register,
     logout: authHook.logout,
     getCurrentUser: authHook.getCurrentUser,
     clearError: authHook.clearError,

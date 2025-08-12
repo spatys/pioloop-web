@@ -23,11 +23,11 @@ type VerifyCodeFormData = {
   code: string;
 };
 
-export const RegistrationVerifyEmail: React.FC = () => {
+export const RegisterVerifyEmail: React.FC = () => {
   const router = useRouter();
-  const { registrationVerifyEmailCode, resendEmailVerificationCode, isLoading, error, fieldErrors, success, clearError, clearSuccess, clearFieldErrors } = useAuth();
-  const { registrationEmail, registrationExpirationMinutes } = useAuthContext();
-  const [timeLeft, setTimeLeft] = useState(registrationExpirationMinutes ? registrationExpirationMinutes * 60 : 60);
+  const { registerVerifyEmailCode, resendRegisterEmailVerification, isLoading, error, fieldErrors, success, clearError, clearSuccess, clearFieldErrors } = useAuth();
+  const { registerEmail, registerExpirationMinutes } = useAuthContext();
+  const [timeLeft, setTimeLeft] = useState(registerExpirationMinutes ? registerExpirationMinutes * 60 : 60);
   const [canResend, setCanResend] = useState(false);
   const [codeDigits, setCodeDigits] = useState(['', '', '', '', '', '']);
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -45,11 +45,11 @@ export const RegistrationVerifyEmail: React.FC = () => {
 
   // Initialize timer when component mounts or expiration changes
   useEffect(() => {
-    if (registrationExpirationMinutes) {
-      setTimeLeft(registrationExpirationMinutes * 60);
+    if (registerExpirationMinutes) {
+      setTimeLeft(registerExpirationMinutes * 60);
       setCanResend(false);
     }
-  }, [registrationExpirationMinutes]);
+  }, [registerExpirationMinutes]);
 
   // Countdown logic
   useEffect(() => {
@@ -117,14 +117,14 @@ export const RegistrationVerifyEmail: React.FC = () => {
   };
 
   const onSubmit = async (data: VerifyCodeFormData) => {
-    if (!registrationEmail) {
+    if (!registerEmail) {
       return;
     }
 
     // Afficher le loader de redirection immédiatement
     setIsRedirecting(true);
 
-    const response = await registrationVerifyEmailCode(registrationEmail, data.code);
+    const response = await registerVerifyEmailCode(registerEmail, data.code);
     //const response = { success: true, message: 'Code vérifié avec succès' };
 
     if (response.success) {
@@ -144,9 +144,9 @@ export const RegistrationVerifyEmail: React.FC = () => {
   };
 
   const handleResendCode = async () => {
-    if (!registrationEmail) return;
+    if (!registerEmail) return;
     
-    const response = await resendEmailVerificationCode(registrationEmail);
+    const response = await resendRegisterEmailVerification(registerEmail);
     
     if (response.success && response.data) {
       // Reset timer with new expiration
@@ -157,13 +157,13 @@ export const RegistrationVerifyEmail: React.FC = () => {
   };
 
   // Si pas d'email dans le contexte, afficher une erreur
-  if (!registrationEmail) {
+  if (!registerEmail) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <h1 className="text-2xl font-semibold text-gray-900 mb-2">Erreur</h1>
           <p className="text-gray-600">Aucun email en cours de vérification. Veuillez retourner à la page d'inscription.</p>
-          <Link href="/registration-email" className="text-purple-600 hover:text-purple-500 font-medium mt-4 inline-block">
+          <Link href="/register-email" className="text-purple-600 hover:text-purple-500 font-medium mt-4 inline-block">
             Retour à l'inscription
           </Link>
         </div>
@@ -190,7 +190,7 @@ export const RegistrationVerifyEmail: React.FC = () => {
           <h2 className="text-2xl font-semibold mb-4 text-center">Confirmation Email</h2>
           <p className="text-gray-600 text-center mb-6 max-w-md mx-auto">
             Saisissez le code que vous avez reçu par mail à l'adresse {' '}
-            <span className="font-medium text-purple-600">{registrationEmail}</span>
+            <span className="font-medium text-purple-600">{registerEmail}</span>
           </p>
           
           <div className="w-full max-w-md space-y-6 mx-auto">

@@ -20,20 +20,20 @@ export class AuthService implements IAuthService {
   //   return await this.authRepository.register(userData);
   // }
 
-  async registrationEmail(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
-    return await this.authRepository.registrationEmail(email);
+  async registerEmail(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
+    return await this.authRepository.registerEmail(email);
   }
 
-  async registrationVerifyEmailCode(email: string, code: string): Promise<ApiResponse<boolean>> {
-    return await this.authRepository.registrationVerifyEmailCode(email, code);
+  async registerVerifyEmail(email: string, code: string): Promise<ApiResponse<boolean>> {
+    return await this.authRepository.registerVerifyEmail(email, code);
   }
 
-  async registrationComplete(data: CompleteRegistration): Promise<ApiResponse<any>> {
-    return await this.authRepository.registrationComplete(data);
+  async registerComplete(data: CompleteRegistration): Promise<ApiResponse<any>> {
+    return await this.authRepository.registerComplete(data);
   }
 
-  async resendEmailVerificationCode(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
-    return await this.authRepository.resendEmailVerificationCode(email);
+  async resendRegisterVerifyEmail(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
+    return await this.authRepository.resendRegisterVerifyEmail(email);
   }
 
   async logout(): Promise<ApiResponse<any>> {

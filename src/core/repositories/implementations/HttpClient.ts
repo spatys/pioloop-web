@@ -23,10 +23,10 @@ export class HttpClient implements IHttpClient {
 
     // Endpoints qui vont directement au backend C# (pas de cookies nécessaires)
     const directBackendEndpoints = [
-      '/api/auth/registration/registration-email',
-      '/api/auth/registration/registration-verify-email',
-      '/api/auth/registration/registration-complete',
-      '/api/auth/registration/registration-email-resend-verification'
+      '/api/auth/register/register-email',
+      '/api/auth/register/register-verify-email',
+      '/api/auth/register/register-complete',
+      '/api/auth/register/register-email-resend-verification'
     ];
 
     // Déterminer l'URL cible

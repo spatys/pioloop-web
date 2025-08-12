@@ -26,10 +26,10 @@ type RegisterFormData = {
   email: string;
 };
 
-export const RegistrationEmail: React.FC = () => {
+export const RegisterEmail: React.FC = () => {
   const router = useRouter();
-  const { registrationEmail, isLoading, error, fieldErrors, success, clearError, clearSuccess, clearFieldErrors } = useAuth();
-  const { setRegistrationEmail, setRegistrationExpirationMinutes } = useAuthContext();
+  const { registerEmail, isLoading, error, fieldErrors, success, clearError, clearSuccess, clearFieldErrors } = useAuth();
+  const { setRegisterEmail, setRegisterExpirationMinutes } = useAuthContext();
 
   const {
     register,
@@ -41,18 +41,18 @@ export const RegistrationEmail: React.FC = () => {
   });
 
   const onSubmit = async (data: RegisterFormData) => {
-    const response = await registrationEmail(data.email);
+    const response = await registerEmail(data.email);
     
     if (response.success && response.data) {
       // Nettoyer le message de succès pour ne pas l'afficher
       clearSuccess();
       
       // Stocker l'email et l'expiration dans le contexte
-      setRegistrationEmail(data.email);
-      setRegistrationExpirationMinutes(response.data.expirationMinutes);
+      setRegisterEmail(data.email);
+      setRegisterExpirationMinutes(response.data.expirationMinutes);
       
       // Redirection directe vers la page de vérification
-      router.push('/registration-verify-email');
+      router.push('/register-verify-email');
     } else {
       console.error('Erreur lors de l\'inscription par email:', response.message);
       // L'erreur sera automatiquement affichée par le hook useAuth

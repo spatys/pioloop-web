@@ -37,10 +37,10 @@ const schema = yup.object({
     .oneOf([yup.ref('password')], 'Les mots de passe ne correspondent pas')
 });
 
-export const RegistrationComplete: React.FC = () => {
+export const RegisterComplete: React.FC = () => {
   const router = useRouter();
-  const { registrationComplete, isLoading, error, success, clearError, clearSuccess } = useAuth();
-  const { registrationEmail } = useAuthContext();
+  const { registerComplete, isLoading, error, success, clearError, clearSuccess } = useAuth();
+  const { registerEmail } = useAuthContext();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -55,7 +55,7 @@ export const RegistrationComplete: React.FC = () => {
   });
 
   const onSubmit = async (data: CompleteRegistrationForm) => {
-    if (!registrationEmail) {
+    if (!registerEmail) {
       console.error('Aucun email en cours de vérification');
       return;
     }
@@ -63,8 +63,8 @@ export const RegistrationComplete: React.FC = () => {
     // Afficher le loader de redirection immédiatement
     setIsRedirecting(true);
 
-    const response = await registrationComplete({
-      email: registrationEmail,
+    const response = await registerComplete({
+      email: registerEmail,
       firstName: data.firstName,
       lastName: data.lastName,
       password: data.password,

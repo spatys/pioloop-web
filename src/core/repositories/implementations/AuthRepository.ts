@@ -3,7 +3,7 @@ import { IAuthRepository } from '../interfaces/IAuthRepository';
 import type { IHttpClient } from '../interfaces/IHttpClient';
 import { TYPES } from '../../di/types';
 import { ApiResponse } from '../../types';
-import { LoginForm, RegisterForm, CompleteRegistration } from '../../types/Forms';
+import { LoginForm, CompleteRegistration } from '../../types/Forms';
 import { LoginSuccessResponseDto } from '../../types/Auth';
 
 @injectable()
@@ -16,16 +16,11 @@ export class AuthRepository implements IAuthRepository {
     // Utiliser l'endpoint Next.js qui définira le cookie
     const response = await this.httpClient.post<LoginSuccessResponseDto>('/api/auth/login', credentials);
     
-    // Retourner directement la réponse standardisée
     return response;
   }
 
-  // async register(userData: RegisterForm): Promise<ApiResponse<any>> {
-  //   return await this.httpClient.post<any>('/auth/registration', userData);
-  // }
-
-  async registrationEmail(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
-    const response = await this.httpClient.post<{ message: string; email: string; expirationMinutes: number }>('/api/auth/registration/registration-email', { email });
+  async registerEmail(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
+    const response = await this.httpClient.post<{ message: string; email: string; expirationMinutes: number }>('/api/auth/register/register-email', { email });
     
     // Transformer toute erreur en fieldErrors pour l'email
     if (!response.success && response.message) {
@@ -39,8 +34,8 @@ export class AuthRepository implements IAuthRepository {
     return response;
   }
 
-  async registrationVerifyEmailCode(email: string, code: string): Promise<ApiResponse<boolean>> {
-    const response = await this.httpClient.post<boolean>('/api/auth/registration/registration-verify-email', { email, code });
+  async registerVerifyEmail(email: string, code: string): Promise<ApiResponse<boolean>> {
+    const response = await this.httpClient.post<boolean>('/api/auth/register/register-verify-email', { email, code });
     
     // Transformer toute erreur en fieldErrors pour le code
     if (!response.success && response.message) {
@@ -54,12 +49,12 @@ export class AuthRepository implements IAuthRepository {
     return response;
   }
 
-  async registrationComplete(data: CompleteRegistration): Promise<ApiResponse<any>> {
-    return await this.httpClient.post<any>('/api/auth/registration/registration-complete', data);
+  async registerComplete(data: CompleteRegistration): Promise<ApiResponse<any>> {
+    return await this.httpClient.post<any>('/api/auth/register/register-complete', data);
   }
 
-  async resendEmailVerificationCode(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
-    const response = await this.httpClient.post<{ message: string; email: string; expirationMinutes: number }>('/api/auth/registration/registration-email-resend-verification', { email });
+  async resendRegisterVerifyEmail(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
+    const response = await this.httpClient.post<{ message: string; email: string; expirationMinutes: number }>('/api/auth/register/register-email-resend-verification', { email });
     
     // Transformer toute erreur en fieldErrors pour l'email
     if (!response.success && response.message) {

@@ -21,10 +21,10 @@ interface UseAuthReturn {
 
   // Methods
   login: (credentials: LoginForm) => Promise<ApiResponse<LoginSuccessResponseDto>>;
-  registrationEmail: (email: string) => Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>>;
-  registrationVerifyEmailCode: (email: string, code: string) => Promise<ApiResponse<boolean>>;
-  registrationComplete: (data: CompleteRegistration) => Promise<ApiResponse<any>>;
-  resendEmailVerificationCode: (email: string) => Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>>;
+  registerEmail: (email: string) => Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>>;
+  registerVerifyEmailCode: (email: string, code: string) => Promise<ApiResponse<boolean>>;
+  registerComplete: (data: CompleteRegistration) => Promise<ApiResponse<any>>;
+  resendRegisterEmailVerification: (email: string) => Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>>;
   logout: () => Promise<void>;
   getCurrentUser: () => Promise<ApiResponse<any>>;
 
@@ -152,21 +152,21 @@ export const useAuth = (): UseAuthReturn => {
   //   );
   // };
 
-  const registrationEmail = async (email: string) => {
+  const registerEmail = async (email: string) => {
     return await executeWithLoading(
-      () => authService.registrationEmail(email)
+      () => authService.registerEmail(email)
     );
   };
 
-  const registrationVerifyEmailCode = async (email: string, code: string) => {
+  const registerVerifyEmailCode = async (email: string, code: string) => {
     return await executeWithLoading(
-      () => authService.registrationVerifyEmailCode(email, code)
+      () => authService.registerVerifyEmail(email, code)
     );
   };
 
-  const registrationComplete = async (data: CompleteRegistration) => {
+  const registerComplete = async (data: CompleteRegistration) => {
     const result = await executeWithLoading(
-      () => authService.registrationComplete(data)
+      () => authService.registerComplete(data)
     );
     if (result.success) {
       // Forcer la revalidation immédiatement après l'inscription
@@ -175,9 +175,9 @@ export const useAuth = (): UseAuthReturn => {
     return result;
   };
 
-  const resendEmailVerificationCode = async (email: string) => {
+  const resendRegisterEmailVerification = async (email: string) => {
     return await executeWithLoading(
-      () => authService.resendEmailVerificationCode(email)
+      () => authService.resendRegisterVerifyEmail(email)
     );
   };
 
@@ -225,11 +225,10 @@ export const useAuth = (): UseAuthReturn => {
     globalErrors,
     success,
     login,
-    // register,
-    registrationEmail,
-    registrationVerifyEmailCode,
-    registrationComplete,
-    resendEmailVerificationCode,
+    registerEmail,
+    registerVerifyEmailCode,
+    registerComplete,
+    resendRegisterEmailVerification,
     logout,
     getCurrentUser,
     clearError,
