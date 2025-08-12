@@ -32,14 +32,13 @@ export const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { login, isLoading, error, fieldErrors, globalErrors, success, clearError, clearSuccess, clearFieldErrors, clearGlobalErrors, clearAllErrors } = useAuth();
 
-
-
   const {
     register,
     handleSubmit,
     formState: { errors }
   } = useForm<LoginFormData>({
-    resolver: yupResolver(loginSchema)
+    resolver: yupResolver(loginSchema),
+    mode: 'onChange' // Validation en temps réel
   });
 
   const onSubmit = async (data: LoginFormData) => {
