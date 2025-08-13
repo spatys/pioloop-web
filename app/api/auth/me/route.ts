@@ -18,9 +18,12 @@ export async function GET(request: NextRequest) {
       const response = await fetch(`${apiUrl}/api/auth/me`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
+          // forward user's cookies so backend reads auth_token from cookie
+          'Cookie': request.headers.get('cookie') || ''
         },
+        // credentials hint (not strictly required in Node, but explicit)
+        credentials: 'include'
       });
 
       if (!response.ok) {

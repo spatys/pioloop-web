@@ -7,7 +7,11 @@ export async function POST(request: NextRequest) {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
       await fetch(`${apiUrl}/api/auth/logout`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          // forward cookies to let backend clear HttpOnly cookie if it supports logout
+          'Cookie': request.headers.get('cookie') || ''
+        },
         credentials: 'include'
       });
     } catch (error) {
