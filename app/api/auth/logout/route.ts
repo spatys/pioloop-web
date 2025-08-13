@@ -4,12 +4,11 @@ export async function POST(request: NextRequest) {
   try {
     // Appeler l'API C# pour la déconnexion (optionnel)
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:64604';
-    const response = await fetch(`${apiUrl}/api/auth/logout`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      await fetch(`${apiUrl}/api/auth/logout`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
       });
     } catch (error) {
       // On continue même si l'API C# échoue
@@ -21,7 +20,7 @@ export async function POST(request: NextRequest) {
       message: 'Déconnexion réussie'
     });
 
-    // Supprimer le cookie d'authentification
+    // Supprimer le cookie d'authentification côté Next (en plus du backend)
     nextResponse.cookies.delete('auth_token');
 
     return nextResponse;

@@ -2,22 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   try {
-    // Récupérer le token depuis les cookies
+    // Récupérer le token depuis les cookies (auth_token posé en HttpOnly côté backend)
     const token = request.cookies.get('auth_token')?.value;
-    
-    // Essayer d'autres noms de cookies possibles
-    const alternativeToken = request.cookies.get('token')?.value || 
-                          request.cookies.get('jwt')?.value ||
-                          request.cookies.get('access_token')?.value;
 
-    if (!token && !alternativeToken) {
+    if (!token) {
       return NextResponse.json(
         { error: 'Token d\'authentification manquant' },
         { status: 401 }
       );
     }
-
-    const finalToken = token || alternativeToken;
 
     // Appeler votre API C# pour vérifier le token et récupérer les infos utilisateur
     try {
@@ -25,7 +18,7 @@ export async function GET(request: NextRequest) {
       const response = await fetch(`${apiUrl}/api/auth/me`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${finalToken}`,
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
