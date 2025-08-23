@@ -1,15 +1,15 @@
-import { User } from './User';
-import { Property } from './Property';
-import { Payment } from './Payment';
-import { Money } from './Money';
+import { User } from "./User";
+import { Property } from "./Property";
+import { Payment } from "./Payment";
+import { Money } from "./Money";
 
 export enum ReservationStatus {
-  Pending = 'Pending',
-  Confirmed = 'Confirmed',
-  CheckedIn = 'CheckedIn',
-  CheckedOut = 'CheckedOut',
-  Cancelled = 'Cancelled',
-  NoShow = 'NoShow'
+  Pending = "Pending",
+  Confirmed = "Confirmed",
+  CheckedIn = "CheckedIn",
+  CheckedOut = "CheckedOut",
+  Cancelled = "Cancelled",
+  NoShow = "NoShow",
 }
 
 export interface Reservation {
@@ -49,4 +49,4 @@ export interface UpdateReservationForm {
   status?: ReservationStatus;
   specialRequests?: string;
   cancellationReason?: string;
-} 
+}

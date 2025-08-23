@@ -7,17 +7,18 @@ Cette implémentation utilise SWR (Stale-While-Revalidate) pour gérer l'état d
 ## Architecture
 
 ### 1. **Hook useUser avec SWR**
+
 ```typescript
 // src/hooks/useUser.ts
 export const useUser = () => {
   const { data, error, mutate, isLoading } = useSWR<{ user: User }>(
-    '/api/auth/me',
+    "/api/auth/me",
     fetcher,
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: true,
       dedupingInterval: 60000,
-    }
+    },
   );
 
   return {
@@ -31,24 +32,31 @@ export const useUser = () => {
 ```
 
 ### 2. **Endpoint API Next.js**
+
 ```typescript
 // src/app/api/auth/me/route.ts
 export async function GET(request: NextRequest) {
-  const token = request.cookies.get('auth_token')?.value;
-  
+  const token = request.cookies.get("auth_token")?.value;
+
   if (!token) {
-    return NextResponse.json({ error: 'Token manquant' }, { status: 401 });
+    return NextResponse.json({ error: "Token manquant" }, { status: 401 });
   }
 
   // Appel vers votre API C#
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`, {
-    headers: { 'Authorization': `Bearer ${token}` },
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
 
   if (!response.ok) {
     // Supprimer le cookie si invalide
-    const errorResponse = NextResponse.json({ error: 'Token invalide' }, { status: 401 });
-    errorResponse.cookies.delete('auth_token');
+    const errorResponse = NextResponse.json(
+      { error: "Token invalide" },
+      { status: 401 },
+    );
+    errorResponse.cookies.delete("auth_token");
     return errorResponse;
   }
 
@@ -58,6 +66,7 @@ export async function GET(request: NextRequest) {
 ```
 
 ### 3. **Provider SWR global**
+
 ```typescript
 // src/providers/SWRProvider.tsx
 export const SWRProvider = ({ children }) => {
@@ -83,6 +92,7 @@ export const SWRProvider = ({ children }) => {
 ## Utilisation
 
 ### Dans un composant
+
 ```typescript
 import { useUser } from '@/hooks/useUser';
 
@@ -90,7 +100,7 @@ const MyComponent = () => {
   const { user, isLoading, isAuthenticated } = useUser();
 
   if (isLoading) return <div>Chargement...</div>;
-  
+
   if (!isAuthenticated) return <div>Non connecté</div>;
 
   return <div>Bonjour {user.profile.firstName} !</div>;
@@ -98,6 +108,7 @@ const MyComponent = () => {
 ```
 
 ### Dans le Header
+
 ```typescript
 const Header = () => {
   const { user, isLoading, isAuthenticated } = useUser();
@@ -126,12 +137,15 @@ const Header = () => {
 ## Configuration
 
 ### Variables d'environnement
+
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
 
 ### Backend C# requis
+
 Votre API C# doit avoir un endpoint `/api/auth/me` qui :
+
 - Accepte un token JWT dans le header Authorization
 - Retourne les informations utilisateur
 - Gère les tokens expirés/invalides
@@ -154,4 +168,4 @@ await mutate();
 await mutate({ user: newUserData });
 ```
 
-Cette implémentation offre une expérience utilisateur fluide tout en maintenant un niveau de sécurité élevé ! 🚀 
+Cette implémentation offre une expérience utilisateur fluide tout en maintenant un niveau de sécurité élevé ! 🚀

@@ -3,6 +3,7 @@
 ## 🎨 Frontend Architecture
 
 ### Tech Stack
+
 - **Next.js 14** with App Router
 - **TypeScript** for type safety
 - **TailwindCSS** for styling
@@ -13,6 +14,7 @@
 - **React Hot Toast** for notifications
 
 ### Project Structure
+
 ```
 Pioloop-web/
 ├── src/
@@ -122,27 +124,32 @@ Pioloop-web/
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js 18+ and npm
 - Git
 
 ### Installation
 
 1. **Navigate to the frontend directory:**
+
    ```bash
    cd Pioloop-web
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 3. **Create environment file:**
+
    ```bash
    cp .env.example .env.local
    ```
 
 4. **Update environment variables:**
+
    ```env
    NEXT_PUBLIC_API_URL=http://localhost:5000/api
    ```
@@ -157,12 +164,15 @@ The frontend will be available at `http://localhost:3000`.
 ## 🎨 Design System
 
 ### Color Palette
+
 The application uses a consistent violet color palette:
+
 - **Primary**: `#a855f7` (violet-500)
 - **Secondary**: `#9333ea` (violet-600)
 - **Accent**: `#7c3aed` (violet-700)
 
 ### Components
+
 - **Button**: Multiple variants (primary, outline, ghost)
 - **Input**: Form inputs with validation states
 - **Card**: Property cards with hover effects
@@ -172,6 +182,7 @@ The application uses a consistent violet color palette:
 ## 📱 Responsive Design
 
 The frontend is fully responsive and optimized for:
+
 - **Desktop** (1024px+)
 - **Tablet** (768px - 1023px)
 - **Mobile** (320px - 767px)
@@ -179,30 +190,32 @@ The frontend is fully responsive and optimized for:
 ## 🔧 Configuration
 
 ### TailwindCSS
+
 The project uses TailwindCSS with custom configuration:
+
 ```javascript
 // tailwind.config.js
 module.exports = {
-  content: [
-    './src/**/*.{js,ts,jsx,tsx}',
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
         primary: {
-          50: '#faf5ff',
-          500: '#a855f7',
-          600: '#9333ea',
-          700: '#7c3aed',
-        }
-      }
-    }
-  }
-}
+          50: "#faf5ff",
+          500: "#a855f7",
+          600: "#9333ea",
+          700: "#7c3aed",
+        },
+      },
+    },
+  },
+};
 ```
 
 ### TypeScript
+
 Strict TypeScript configuration for type safety:
+
 ```json
 {
   "compilerOptions": {
@@ -216,11 +229,13 @@ Strict TypeScript configuration for type safety:
 ## 🧪 Testing
 
 ### Run Tests
+
 ```bash
 npm test
 ```
 
 ### Run Tests with Coverage
+
 ```bash
 npm run test:coverage
 ```
@@ -228,17 +243,20 @@ npm run test:coverage
 ## 📦 Build & Deployment
 
 ### Development Build
+
 ```bash
 npm run build
 ```
 
 ### Production Build
+
 ```bash
 npm run build
 npm start
 ```
 
 ### Deploy to Vercel
+
 1. Connect your GitHub repository to Vercel
 2. Configure environment variables
 3. Deploy automatically on push to main branch
@@ -246,6 +264,7 @@ npm start
 ## 🔐 Authentication
 
 ### Features
+
 - JWT token management
 - Role-based access control
 - Protected routes
@@ -253,8 +272,9 @@ npm start
 - Remember me functionality
 
 ### Context Usage
+
 ```typescript
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from "../hooks/useAuth";
 
 const { user, login, logout, loading } = useAuth();
 ```
@@ -262,20 +282,24 @@ const { user, login, logout, loading } = useAuth();
 ## 📊 State Management
 
 ### React Query
+
 For server state management:
+
 ```typescript
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation } from "@tanstack/react-query";
 
 const { data, isLoading } = useQuery({
-  queryKey: ['properties'],
-  queryFn: () => propertyService.getProperties()
+  queryKey: ["properties"],
+  queryFn: () => propertyService.getProperties(),
 });
 ```
 
 ### Local State
+
 For component state:
+
 ```typescript
-import { useState } from 'react';
+import { useState } from "react";
 
 const [isOpen, setIsOpen] = useState(false);
 ```
@@ -283,6 +307,7 @@ const [isOpen, setIsOpen] = useState(false);
 ## 🎯 Features
 
 ### Core Functionality
+
 - ✅ User Registration & Authentication
 - ✅ Property Browsing & Search
 - ✅ Reservation Management
@@ -293,6 +318,7 @@ const [isOpen, setIsOpen] = useState(false);
 - ✅ Dark/Light Theme Support
 
 ### User Experience
+
 - ✅ Loading states
 - ✅ Error boundaries
 - ✅ Form validation
@@ -303,12 +329,14 @@ const [isOpen, setIsOpen] = useState(false);
 ## 🛠️ Development
 
 ### Code Style
+
 - ESLint configuration
 - Prettier formatting
 - TypeScript strict mode
 - Component documentation
 
 ### Git Workflow
+
 1. Create feature branch
 2. Make changes
 3. Add tests
@@ -317,6 +345,7 @@ const [isOpen, setIsOpen] = useState(false);
 ## 📈 Performance
 
 ### Optimizations
+
 - Next.js Image optimization
 - Code splitting
 - Lazy loading
@@ -324,6 +353,7 @@ const [isOpen, setIsOpen] = useState(false);
 - Performance monitoring
 
 ### Lighthouse Scores
+
 - Performance: 95+
 - Accessibility: 100
 - Best Practices: 95+
@@ -331,4 +361,4 @@ const [isOpen, setIsOpen] = useState(false);
 
 ---
 
-**Pioloop Frontend** - Modern, responsive, and user-friendly real estate platform. 
+**Pioloop Frontend** - Modern, responsive, and user-friendly real estate platform.

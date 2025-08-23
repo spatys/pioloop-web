@@ -1,4 +1,4 @@
-import { PropertyType } from './Property';
+import { PropertyType } from "./Property";
 
 export interface PropertyFilters {
   location?: string;
@@ -28,12 +28,12 @@ export interface PropertySearchForm {
 
 export interface SortOptions {
   field: string;
-  direction: 'asc' | 'desc';
+  direction: "asc" | "desc";
 }
 
 export interface PaginationParams {
   pageNumber: number;
   pageSize: number;
   sortBy?: string;
-  sortDirection?: 'asc' | 'desc';
-} 
+  sortDirection?: "asc" | "desc";
+}

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertTriangle, RefreshCw } from 'lucide-react';
+import React, { Component, ErrorInfo, ReactNode } from "react";
+import { AlertTriangle, RefreshCw } from "lucide-react";
 
 interface Props {
   children: ReactNode;
@@ -24,7 +24,7 @@ export default class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    console.error("ErrorBoundary caught an error:", error, errorInfo);
   }
 
   handleRetry = () => {
@@ -43,13 +43,14 @@ export default class ErrorBoundary extends Component<Props, State> {
             <div className="flex justify-center mb-4">
               <AlertTriangle className="h-12 w-12 text-red-500" />
             </div>
-            
+
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               Something went wrong
             </h2>
-            
+
             <p className="text-gray-600 mb-6">
-              We encountered an unexpected error. Please try refreshing the page or contact support if the problem persists.
+              We encountered an unexpected error. Please try refreshing the page
+              or contact support if the problem persists.
             </p>
 
             {this.state.error && (
@@ -71,7 +72,7 @@ export default class ErrorBoundary extends Component<Props, State> {
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Try Again
               </button>
-              
+
               <button
                 onClick={() => window.location.reload()}
                 className="flex-1 bg-white text-purple-600 py-2 px-4 rounded-lg font-medium border border-purple-600 hover:bg-purple-50 transition-colors"
@@ -86,4 +87,4 @@ export default class ErrorBoundary extends Component<Props, State> {
 
     return this.props.children;
   }
-} 
+}

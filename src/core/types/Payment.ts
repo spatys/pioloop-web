@@ -1,35 +1,35 @@
-import { User } from './User';
-import { Property } from './Property';
-import { Reservation } from './Reservation';
-import { Invoice } from './Invoice';
-import { Money } from './Money';
+import { User } from "./User";
+import { Property } from "./Property";
+import { Reservation } from "./Reservation";
+import { Invoice } from "./Invoice";
+import { Money } from "./Money";
 
 export enum PaymentStatus {
-  Pending = 'Pending',
-  Processing = 'Processing',
-  Completed = 'Completed',
-  Failed = 'Failed',
-  Refunded = 'Refunded',
-  Cancelled = 'Cancelled'
+  Pending = "Pending",
+  Processing = "Processing",
+  Completed = "Completed",
+  Failed = "Failed",
+  Refunded = "Refunded",
+  Cancelled = "Cancelled",
 }
 
 export enum PaymentMethod {
-  CreditCard = 'CreditCard',
-  DebitCard = 'DebitCard',
-  BankTransfer = 'BankTransfer',
-  PayPal = 'PayPal',
-  Stripe = 'Stripe',
-  Cash = 'Cash',
-  Check = 'Check'
+  CreditCard = "CreditCard",
+  DebitCard = "DebitCard",
+  BankTransfer = "BankTransfer",
+  PayPal = "PayPal",
+  Stripe = "Stripe",
+  Cash = "Cash",
+  Check = "Check",
 }
 
 export enum PaymentType {
-  Rent = 'Rent',
-  SecurityDeposit = 'SecurityDeposit',
-  LateFee = 'LateFee',
-  UtilityFee = 'UtilityFee',
-  MaintenanceFee = 'MaintenanceFee',
-  Other = 'Other'
+  Rent = "Rent",
+  SecurityDeposit = "SecurityDeposit",
+  LateFee = "LateFee",
+  UtilityFee = "UtilityFee",
+  MaintenanceFee = "MaintenanceFee",
+  Other = "Other",
 }
 
 export interface Payment {
@@ -76,4 +76,4 @@ export interface RefundPaymentForm {
   paymentId: string;
   refundAmount: number;
   refundReason: string;
-} 
+}

@@ -1,5 +1,5 @@
-import { RegisterComplete } from '@/modules/auth/components/register/RegisterComplete';
+import { RegisterComplete } from "@/modules/auth/components/register/RegisterComplete";
 
 export default function RegisterCompletePage() {
   return <RegisterComplete />;
-} 
+}

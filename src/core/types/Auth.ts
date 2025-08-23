@@ -1,5 +1,5 @@
-import { User } from './User';
-import { ApiResponse } from './Api';
+import { User } from "./User";
+import { ApiResponse } from "./Api";
 
 export interface LoginErrorDto {
   email: string;
@@ -30,4 +30,4 @@ export interface LoginNormalizedResponse {
 }
 
 // Nouveau type pour les réponses d'authentification standardisées
-export interface LoginResponse extends ApiResponse<LoginSuccessResponseDto> {} 
+export interface LoginResponse extends ApiResponse<LoginSuccessResponseDto> {}

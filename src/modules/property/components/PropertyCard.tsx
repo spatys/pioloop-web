@@ -1,19 +1,23 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { MapPin, Star, Bed, Bath, Users, Calendar } from 'lucide-react';
-import { Property } from '../../../core/types';
-import { formatMoney } from '../../../core/utils';
+import React from "react";
+import Link from "next/link";
+import { MapPin, Star, Bed, Bath, Users, Calendar } from "lucide-react";
+import { Property } from "../../../core/types";
+import { formatMoney } from "../../../core/utils";
 
 interface PropertyCardProps {
   property: Property;
   showOwner?: boolean;
 }
 
-export default function PropertyCard({ property, showOwner = false }: PropertyCardProps) {
-  const primaryImage = property.images.find(img => img.isPrimary) || property.images[0];
-  
+export default function PropertyCard({
+  property,
+  showOwner = false,
+}: PropertyCardProps) {
+  const primaryImage =
+    property.images.find((img) => img.isPrimary) || property.images[0];
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
       {/* Property Image */}
@@ -29,22 +33,28 @@ export default function PropertyCard({ property, showOwner = false }: PropertyCa
             <span className="text-gray-400">No image</span>
           </div>
         )}
-        
+
         {/* Status Badge */}
         <div className="absolute top-3 left-3">
-          <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-            property.status === 'Available' 
-              ? 'bg-green-100 text-green-800' 
-              : 'bg-red-100 text-red-800'
-          }`}>
+          <span
+            className={`px-2 py-1 text-xs font-semibold rounded-full ${
+              property.status === "Available"
+                ? "bg-green-100 text-green-800"
+                : "bg-red-100 text-red-800"
+            }`}
+          >
             {property.status}
           </span>
         </div>
-        
+
         {/* Price Badge */}
         <div className="absolute top-3 right-3">
           <span className="bg-white/90 backdrop-blur-sm px-3 py-1 text-sm font-semibold text-gray-900 rounded-full">
-            {formatMoney(property.pricePerNight.amount, property.pricePerNight.currency)}/night
+            {formatMoney(
+              property.pricePerNight.amount,
+              property.pricePerNight.currency,
+            )}
+            /night
           </span>
         </div>
       </div>
@@ -115,17 +125,18 @@ export default function PropertyCard({ property, showOwner = false }: PropertyCa
               ) : (
                 <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center mr-3">
                   <span className="text-primary-600 text-sm font-semibold">
-                    {property.owner.profile?.firstName?.charAt(0) || property.owner.email.charAt(0)}
-                    {property.owner.profile?.lastName?.charAt(0) || ''}
+                    {property.owner.profile?.firstName?.charAt(0) ||
+                      property.owner.email.charAt(0)}
+                    {property.owner.profile?.lastName?.charAt(0) || ""}
                   </span>
                 </div>
               )}
               <div>
                 <p className="text-sm font-medium text-gray-900">
-                  {property.owner.profile?.firstName && property.owner.profile?.lastName 
+                  {property.owner.profile?.firstName &&
+                  property.owner.profile?.lastName
                     ? `${property.owner.profile.firstName} ${property.owner.profile.lastName}`
-                    : property.owner.email
-                  }
+                    : property.owner.email}
                 </p>
                 <p className="text-xs text-gray-500">Property Owner</p>
               </div>
@@ -172,4 +183,4 @@ export default function PropertyCard({ property, showOwner = false }: PropertyCa
       </div>
     </div>
   );
-} 
+}

@@ -1,14 +1,14 @@
-import { User } from './User';
-import { Property } from './Property';
-import { Reservation } from './Reservation';
-import { Money } from './Money';
+import { User } from "./User";
+import { Property } from "./Property";
+import { Reservation } from "./Reservation";
+import { Money } from "./Money";
 
 export enum InvoiceStatus {
-  Draft = 'Draft',
-  Sent = 'Sent',
-  Paid = 'Paid',
-  Overdue = 'Overdue',
-  Cancelled = 'Cancelled'
+  Draft = "Draft",
+  Sent = "Sent",
+  Paid = "Paid",
+  Overdue = "Overdue",
+  Cancelled = "Cancelled",
 }
 
 export interface InvoiceItem {
@@ -62,4 +62,4 @@ export interface UpdateInvoiceForm {
   dueDate?: string;
   status?: InvoiceStatus;
   notes?: string;
-} 
+}

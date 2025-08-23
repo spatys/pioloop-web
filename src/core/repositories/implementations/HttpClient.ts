@@ -1,32 +1,32 @@
-import { injectable } from 'inversify';
-import { IHttpClient } from '../interfaces/IHttpClient';
-import { ApiResponse } from '../../types';
+import { injectable } from "inversify";
+import { IHttpClient } from "../interfaces/IHttpClient";
+import { ApiResponse } from "../../types";
 
 @injectable()
 export class HttpClient implements IHttpClient {
   private baseURL: string;
 
   constructor() {
-    this.baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:64604';
+    this.baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:64604";
   }
 
   private async apiRequest<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
   ): Promise<ApiResponse<T>> {
     // Endpoints qui nécessitent des cookies → API routes Next.js
     const cookieEndpoints = [
-      '/api/auth/login', 
-      '/api/auth/logout', 
-      '/api/auth/me'
+      "/api/auth/login",
+      "/api/auth/logout",
+      "/api/auth/me",
     ];
 
     // Endpoints qui vont directement au backend C# (pas de cookies nécessaires)
     const directBackendEndpoints = [
-      '/api/auth/register/register-email',
-      '/api/auth/register/register-verify-email',
-      '/api/auth/register/register-complete',
-      '/api/auth/register/register-email-resend-verification'
+      "/api/auth/register/register-email",
+      "/api/auth/register/register-verify-email",
+      "/api/auth/register/register-complete",
+      "/api/auth/register/resend-email-code",
     ];
 
     // Déterminer l'URL cible
@@ -36,9 +36,9 @@ export class HttpClient implements IHttpClient {
       url = `http://localhost:3000${endpoint}`;
     } else if (directBackendEndpoints.includes(endpoint)) {
       // Endpoints directs → Backend C# (enlever /api/ du baseURL car endpoint contient déjà /api/)
-      const baseURLWithoutApi = this.baseURL.replace('/api', '');
+      const baseURLWithoutApi = this.baseURL.replace("/api", "");
       url = `${baseURLWithoutApi}${endpoint}`;
-    } else if (endpoint.startsWith('/api/')) {
+    } else if (endpoint.startsWith("/api/")) {
       // Autres endpoints /api/ → API routes Next.js (par défaut)
       url = `http://localhost:3000${endpoint}`;
     } else {
@@ -47,9 +47,9 @@ export class HttpClient implements IHttpClient {
     }
 
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...this.getAuthHeaders(),
-      ...(options.headers as Record<string, string> || {}),
+      ...((options.headers as Record<string, string>) || {}),
     };
 
     console.log(`🌐 Making request to: ${url} (endpoint: ${endpoint})`);
@@ -58,7 +58,7 @@ export class HttpClient implements IHttpClient {
       const response = await fetch(url, {
         ...options,
         headers,
-        credentials: 'include',
+        credentials: "include",
       });
 
       // Vérifier si la réponse a du contenu
@@ -71,7 +71,7 @@ export class HttpClient implements IHttpClient {
         return {
           success: false,
           data: null as T,
-          message: 'Invalid JSON response from server',
+          message: "Invalid JSON response from server",
           fieldErrors: undefined,
           globalErrors: undefined,
         };
@@ -79,16 +79,14 @@ export class HttpClient implements IHttpClient {
 
       if (!response.ok) {
         // Ne pas log les erreurs 401 normales pour /auth/me
-        if (response.status !== 401 || !endpoint.includes('/auth/me')) {
-          console.error(`HTTP ${response.status} error for ${endpoint}:`, data);
-        }
-        
+        // if (response.status !== 401 || !endpoint.includes('/auth/me')) {
+        //   console.error(`HTTP ${response.status} error for ${endpoint}:`, data);
+        // }
 
-        
         return {
           success: false,
           data: data as T, // Retourner les données même en cas d'erreur
-          message: data?.message || 'Request failed',
+          message: data?.message || "Request failed",
           fieldErrors: data?.fieldErrors,
           globalErrors: data?.globalErrors,
         };
@@ -97,13 +95,13 @@ export class HttpClient implements IHttpClient {
       return {
         success: true,
         data,
-        message: 'Success',
+        message: "Success",
       };
     } catch (error) {
       return {
         success: false,
         data: null as T,
-        message: error instanceof Error ? error.message : 'Network error',
+        message: error instanceof Error ? error.message : "Network error",
         fieldErrors: undefined,
         globalErrors: undefined,
       };
@@ -117,31 +115,31 @@ export class HttpClient implements IHttpClient {
   }
 
   async get<T>(endpoint: string): Promise<ApiResponse<T>> {
-    return this.apiRequest<T>(endpoint, { method: 'GET' });
+    return this.apiRequest<T>(endpoint, { method: "GET" });
   }
 
   async post<T>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
     return this.apiRequest<T>(endpoint, {
-      method: 'POST',
+      method: "POST",
       body: data ? JSON.stringify(data) : undefined,
     });
   }
 
   async put<T>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
     return this.apiRequest<T>(endpoint, {
-      method: 'PUT',
+      method: "PUT",
       body: data ? JSON.stringify(data) : undefined,
     });
   }
 
   async delete<T>(endpoint: string): Promise<ApiResponse<T>> {
-    return this.apiRequest<T>(endpoint, { method: 'DELETE' });
+    return this.apiRequest<T>(endpoint, { method: "DELETE" });
   }
 
   async patch<T>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
     return this.apiRequest<T>(endpoint, {
-      method: 'PATCH',
+      method: "PATCH",
       body: data ? JSON.stringify(data) : undefined,
     });
   }
-} 
+}

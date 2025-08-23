@@ -1,11 +1,18 @@
-import { IPropertyService } from '../interfaces/IPropertyService';
-import { Property, PropertySearchForm, PropertyFilters, PaginatedResponse } from '../../types';
-import { propertyRepository } from '../../repositories/implementations/PropertyRepository';
+import { IPropertyService } from "../interfaces/IPropertyService";
+import {
+  Property,
+  PropertySearchForm,
+  PropertyFilters,
+  PaginatedResponse,
+} from "../../types";
+import { propertyRepository } from "../../repositories/implementations/PropertyRepository";
 
 export class PropertyService implements IPropertyService {
   private propertyCache = new Map<string, Property>();
 
-  async getProperties(filters?: PropertyFilters): Promise<PaginatedResponse<Property>> {
+  async getProperties(
+    filters?: PropertyFilters,
+  ): Promise<PaginatedResponse<Property>> {
     return await propertyRepository.getProperties(filters as any);
   }
 
@@ -16,7 +23,7 @@ export class PropertyService implements IPropertyService {
 
     const response = await propertyRepository.getProperty(id);
     if (!response.success) {
-      throw new Error(response.message || 'Failed to fetch property');
+      throw new Error(response.message || "Failed to fetch property");
     }
 
     // Cache the property
@@ -27,7 +34,7 @@ export class PropertyService implements IPropertyService {
   async createProperty(propertyData: any): Promise<Property> {
     const response = await propertyRepository.createProperty(propertyData);
     if (!response.success) {
-      throw new Error(response.message || 'Failed to create property');
+      throw new Error(response.message || "Failed to create property");
     }
     return response.data;
   }
@@ -35,7 +42,7 @@ export class PropertyService implements IPropertyService {
   async updateProperty(id: string, propertyData: any): Promise<Property> {
     const response = await propertyRepository.updateProperty(id, propertyData);
     if (!response.success) {
-      throw new Error(response.message || 'Failed to update property');
+      throw new Error(response.message || "Failed to update property");
     }
 
     // Update cache
@@ -46,29 +53,39 @@ export class PropertyService implements IPropertyService {
   async deleteProperty(id: string): Promise<void> {
     const response = await propertyRepository.deleteProperty(id);
     if (!response.success) {
-      throw new Error(response.message || 'Failed to delete property');
+      throw new Error(response.message || "Failed to delete property");
     }
 
     // Remove from cache
     this.propertyCache.delete(id);
   }
 
-  async searchProperties(searchParams: PropertySearchForm): Promise<PaginatedResponse<Property>> {
+  async searchProperties(
+    searchParams: PropertySearchForm,
+  ): Promise<PaginatedResponse<Property>> {
     return await propertyRepository.getProperties(searchParams);
   }
 
   async getFeaturedProperties(limit: number = 6): Promise<Property[]> {
     const response = await propertyRepository.getFeaturedProperties(limit);
     if (!response.success) {
-      throw new Error(response.message || 'Failed to fetch featured properties');
+      throw new Error(
+        response.message || "Failed to fetch featured properties",
+      );
     }
     return response.data;
   }
 
-  async getSimilarProperties(propertyId: string, limit: number = 4): Promise<Property[]> {
-    const response = await propertyRepository.getSimilarProperties(propertyId, limit);
+  async getSimilarProperties(
+    propertyId: string,
+    limit: number = 4,
+  ): Promise<Property[]> {
+    const response = await propertyRepository.getSimilarProperties(
+      propertyId,
+      limit,
+    );
     if (!response.success) {
-      throw new Error(response.message || 'Failed to fetch similar properties');
+      throw new Error(response.message || "Failed to fetch similar properties");
     }
     return response.data;
   }
@@ -76,7 +93,7 @@ export class PropertyService implements IPropertyService {
   async getMyProperties(): Promise<Property[]> {
     const response = await propertyRepository.getMyProperties();
     if (!response.success) {
-      throw new Error(response.message || 'Failed to fetch my properties');
+      throw new Error(response.message || "Failed to fetch my properties");
     }
     return response.data;
   }
@@ -84,7 +101,9 @@ export class PropertyService implements IPropertyService {
   async getPropertiesByOwner(ownerId: string): Promise<Property[]> {
     const response = await propertyRepository.getPropertiesByOwner(ownerId);
     if (!response.success) {
-      throw new Error(response.message || 'Failed to fetch properties by owner');
+      throw new Error(
+        response.message || "Failed to fetch properties by owner",
+      );
     }
     return response.data;
   }
@@ -92,100 +111,124 @@ export class PropertyService implements IPropertyService {
   async getPropertyStats(propertyId: string): Promise<any> {
     const response = await propertyRepository.getPropertyStats(propertyId);
     if (!response.success) {
-      throw new Error(response.message || 'Failed to fetch property stats');
+      throw new Error(response.message || "Failed to fetch property stats");
     }
     return response.data;
   }
 
-  async getPropertyAnalytics(propertyId: string, dateRange?: { start: Date; end: Date }): Promise<any> {
+  async getPropertyAnalytics(
+    propertyId: string,
+    dateRange?: { start: Date; end: Date },
+  ): Promise<any> {
     // This would be implemented with analytics service
-    throw new Error('Property analytics not implemented');
+    throw new Error("Property analytics not implemented");
   }
 
-  async checkAvailability(propertyId: string, checkIn: Date, checkOut: Date): Promise<boolean> {
+  async checkAvailability(
+    propertyId: string,
+    checkIn: Date,
+    checkOut: Date,
+  ): Promise<boolean> {
     // This would be implemented with availability service
-    throw new Error('Availability check not implemented');
+    throw new Error("Availability check not implemented");
   }
 
-  async getAvailableDates(propertyId: string, month: number, year: number): Promise<Date[]> {
+  async getAvailableDates(
+    propertyId: string,
+    month: number,
+    year: number,
+  ): Promise<Date[]> {
     // This would be implemented with availability service
-    throw new Error('Available dates not implemented');
+    throw new Error("Available dates not implemented");
   }
 
-  async uploadPropertyImages(propertyId: string, files: File[]): Promise<{ imageUrls: string[] }> {
+  async uploadPropertyImages(
+    propertyId: string,
+    files: File[],
+  ): Promise<{ imageUrls: string[] }> {
     // This would be implemented with file upload service
-    throw new Error('Image upload not implemented');
+    throw new Error("Image upload not implemented");
   }
 
-  async deletePropertyImage(propertyId: string, imageId: string): Promise<void> {
+  async deletePropertyImage(
+    propertyId: string,
+    imageId: string,
+  ): Promise<void> {
     // This would be implemented with file service
-    throw new Error('Image deletion not implemented');
+    throw new Error("Image deletion not implemented");
   }
 
   async setPrimaryImage(propertyId: string, imageId: string): Promise<void> {
     // This would be implemented with file service
-    throw new Error('Primary image setting not implemented');
+    throw new Error("Primary image setting not implemented");
   }
 
   async addAmenity(propertyId: string, amenity: string): Promise<void> {
     // This would be implemented with property update
-    throw new Error('Amenity addition not implemented');
+    throw new Error("Amenity addition not implemented");
   }
 
   async removeAmenity(propertyId: string, amenityId: string): Promise<void> {
     // This would be implemented with property update
-    throw new Error('Amenity removal not implemented');
+    throw new Error("Amenity removal not implemented");
   }
 
-  async updateAmenities(propertyId: string, amenities: string[]): Promise<void> {
+  async updateAmenities(
+    propertyId: string,
+    amenities: string[],
+  ): Promise<void> {
     // This would be implemented with property update
-    throw new Error('Amenities update not implemented');
+    throw new Error("Amenities update not implemented");
   }
 
-  async validatePropertyData(propertyData: any): Promise<{ isValid: boolean; errors: string[] }> {
+  async validatePropertyData(
+    propertyData: any,
+  ): Promise<{ isValid: boolean; errors: string[] }> {
     const errors: string[] = [];
 
     if (!propertyData.title?.trim()) {
-      errors.push('Property title is required');
+      errors.push("Property title is required");
     }
 
     if (!propertyData.description?.trim()) {
-      errors.push('Property description is required');
+      errors.push("Property description is required");
     }
 
     if (!propertyData.address?.street?.trim()) {
-      errors.push('Property address is required');
+      errors.push("Property address is required");
     }
 
     if (!propertyData.pricePerNight || propertyData.pricePerNight <= 0) {
-      errors.push('Valid price per night is required');
+      errors.push("Valid price per night is required");
     }
 
     if (!propertyData.bedrooms || propertyData.bedrooms <= 0) {
-      errors.push('Number of bedrooms is required');
+      errors.push("Number of bedrooms is required");
     }
 
     if (!propertyData.bathrooms || propertyData.bathrooms <= 0) {
-      errors.push('Number of bathrooms is required');
+      errors.push("Number of bathrooms is required");
     }
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
-  async validatePropertyImages(files: File[]): Promise<{ isValid: boolean; errors: string[] }> {
+  async validatePropertyImages(
+    files: File[],
+  ): Promise<{ isValid: boolean; errors: string[] }> {
     const errors: string[] = [];
     const maxSize = 5 * 1024 * 1024; // 5MB
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
 
     if (files.length === 0) {
-      errors.push('At least one image is required');
+      errors.push("At least one image is required");
     }
 
     if (files.length > 10) {
-      errors.push('Maximum 10 images allowed');
+      errors.push("Maximum 10 images allowed");
     }
 
     files.forEach((file, index) => {
@@ -194,24 +237,29 @@ export class PropertyService implements IPropertyService {
       }
 
       if (allowedTypes.indexOf(file.type) === -1) {
-        errors.push(`Image ${index + 1} has invalid format (JPEG, PNG, WebP only)`);
+        errors.push(
+          `Image ${index + 1} has invalid format (JPEG, PNG, WebP only)`,
+        );
       }
     });
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
-  async getRecommendedProperties(userId: string, limit: number = 6): Promise<Property[]> {
+  async getRecommendedProperties(
+    userId: string,
+    limit: number = 6,
+  ): Promise<Property[]> {
     // This would be implemented with recommendation service
-    throw new Error('Property recommendations not implemented');
+    throw new Error("Property recommendations not implemented");
   }
 
   async getPopularProperties(limit: number = 6): Promise<Property[]> {
     // This would be implemented with analytics service
-    throw new Error('Popular properties not implemented');
+    throw new Error("Popular properties not implemented");
   }
 
   cacheProperty(property: Property): void {
@@ -227,4 +275,4 @@ export class PropertyService implements IPropertyService {
   }
 }
 
-export const propertyService = new PropertyService(); 
+export const propertyService = new PropertyService();

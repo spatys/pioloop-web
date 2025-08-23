@@ -1,31 +1,31 @@
-import { User } from './User';
-import { Money } from './Money';
+import { User } from "./User";
+import { Money } from "./Money";
 
 export enum PropertyStatus {
-  Available = 'Available',
-  Rented = 'Rented',
-  UnderMaintenance = 'UnderMaintenance',
-  Unavailable = 'Unavailable',
-  Sold = 'Sold'
+  Available = "Available",
+  Rented = "Rented",
+  UnderMaintenance = "UnderMaintenance",
+  Unavailable = "Unavailable",
+  Sold = "Sold",
 }
 
 export enum PropertyType {
-  Apartment = 'Apartment',
-  House = 'House',
-  Condo = 'Condo',
-  Villa = 'Villa',
-  Studio = 'Studio',
-  Loft = 'Loft',
-  Townhouse = 'Townhouse',
-  Penthouse = 'Penthouse',
-  Duplex = 'Duplex',
-  Triplex = 'Triplex',
-  MobileHome = 'MobileHome',
-  Cabin = 'Cabin',
-  Cottage = 'Cottage',
-  Bungalow = 'Bungalow',
-  Mansion = 'Mansion',
-  Other = 'Other'
+  Apartment = "Apartment",
+  House = "House",
+  Condo = "Condo",
+  Villa = "Villa",
+  Studio = "Studio",
+  Loft = "Loft",
+  Townhouse = "Townhouse",
+  Penthouse = "Penthouse",
+  Duplex = "Duplex",
+  Triplex = "Triplex",
+  MobileHome = "MobileHome",
+  Cabin = "Cabin",
+  Cottage = "Cottage",
+  Bungalow = "Bungalow",
+  Mansion = "Mansion",
+  Other = "Other",
 }
 
 export interface PropertyImage {
@@ -172,4 +172,4 @@ export interface UpdatePropertyForm {
   pool?: boolean;
   gym?: boolean;
   spa?: boolean;
-} 
+}

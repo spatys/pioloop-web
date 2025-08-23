@@ -1,8 +1,8 @@
 export enum NotificationType {
-  Info = 'info',
-  Success = 'success',
-  Warning = 'warning',
-  Error = 'error'
+  Info = "info",
+  Success = "success",
+  Warning = "warning",
+  Error = "error",
 }
 
 export interface Notification {
@@ -14,4 +14,4 @@ export interface Notification {
   isRead: boolean;
   createdAt: Date;
   actionUrl?: string;
-} 
+}

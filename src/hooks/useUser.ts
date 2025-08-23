@@ -1,15 +1,15 @@
-import useSWR from 'swr';
-import { User } from '@/core/types/User';
+import useSWR from "swr";
+import { User } from "@/core/types/User";
 
 // Fonction fetcher pour SWR
 const fetcher = async (url: string) => {
   const response = await fetch(url, {
-    credentials: 'include', // Important pour envoyer les cookies
+    credentials: "include", // Important pour envoyer les cookies
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   });
-  
+
   if (!response.ok) {
     // Si la réponse n'est pas ok, on retourne null au lieu de lancer une erreur
     return null;
@@ -21,7 +21,7 @@ const fetcher = async (url: string) => {
 
 export const useUser = () => {
   const { data, error, mutate, isLoading } = useSWR<{ user: User }>(
-    '/api/auth/me', // Endpoint pour récupérer les infos utilisateur
+    "/api/auth/me", // Endpoint pour récupérer les infos utilisateur
     fetcher,
     {
       revalidateOnFocus: false, // Ne pas revalider quand la fenêtre reprend le focus
@@ -31,7 +31,7 @@ export const useUser = () => {
       errorRetryCount: 0, // Ne pas réessayer en cas d'erreur
       shouldRetryOnError: false, // Ne pas réessayer automatiquement
       revalidateOnMount: true, // Faire une requête automatique au montage
-    }
+    },
   );
 
   return {
@@ -42,4 +42,4 @@ export const useUser = () => {
     mutate, // Fonction pour forcer la revalidation
     isAuthenticated: !!data?.user,
   };
-}; 
+};

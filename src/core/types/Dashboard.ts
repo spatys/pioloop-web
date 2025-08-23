@@ -19,10 +19,10 @@ export interface DashboardChart {
 
 export interface ActivityItem {
   id: string;
-  type: 'reservation' | 'payment' | 'property' | 'user';
+  type: "reservation" | "payment" | "property" | "user";
   title: string;
   description: string;
   timestamp: Date;
   userId?: string;
   userName?: string;
-} 
+}

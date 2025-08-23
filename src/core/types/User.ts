@@ -1,14 +1,14 @@
-import { Property } from './Property';
-import { Reservation } from './Reservation';
-import { Payment } from './Payment';
-import { Contract } from './Contract';
-import { Invoice } from './Invoice';
+import { Property } from "./Property";
+import { Reservation } from "./Reservation";
+import { Payment } from "./Payment";
+import { Contract } from "./Contract";
+import { Invoice } from "./Invoice";
 
 export enum UserRole {
-  Tenant = 'Tenant',
-  Owner = 'Owner',
-  Admin = 'Admin',
-  Manager = 'Manager'
+  Tenant = "Tenant",
+  Owner = "Owner",
+  Admin = "Admin",
+  Manager = "Manager",
 }
 
 export interface UserProfile {
@@ -98,4 +98,4 @@ export interface ResetPasswordForm {
   token: string;
   newPassword: string;
   confirmNewPassword: string;
-} 
+}

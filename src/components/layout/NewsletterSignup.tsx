@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Mail, Send } from 'lucide-react';
+import { useState } from "react";
+import { Mail, Send } from "lucide-react";
 
 export default function NewsletterSignup() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -13,12 +13,12 @@ export default function NewsletterSignup() {
     if (!email) return;
 
     setIsLoading(true);
-    
+
     // Simulate API call
     setTimeout(() => {
       setIsSubscribed(true);
       setIsLoading(false);
-      setEmail('');
+      setEmail("");
     }, 1000);
   };
 
@@ -28,8 +28,12 @@ export default function NewsletterSignup() {
         <div className="flex items-center space-x-2">
           <Mail className="text-green-600" size={20} />
           <div>
-            <p className="text-green-800 font-medium">Thank you for subscribing!</p>
-            <p className="text-green-600 text-sm">You'll receive our latest updates and property listings.</p>
+            <p className="text-green-800 font-medium">
+              Thank you for subscribing!
+            </p>
+            <p className="text-green-600 text-sm">
+              You'll receive our latest updates and property listings.
+            </p>
           </div>
         </div>
       </div>
@@ -42,10 +46,12 @@ export default function NewsletterSignup() {
         <Mail className="text-primary-400" size={24} />
         <div>
           <h3 className="text-lg font-semibold text-white">Stay Updated</h3>
-          <p className="text-gray-300 text-sm">Get the latest property listings and rental tips</p>
+          <p className="text-gray-300 text-sm">
+            Get the latest property listings and rental tips
+          </p>
         </div>
       </div>
-      
+
       <form onSubmit={handleSubmit} className="space-y-3">
         <div className="flex space-x-2">
           <input
@@ -62,7 +68,7 @@ export default function NewsletterSignup() {
             className="px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors duration-200 flex items-center space-x-2"
           >
             <Send size={16} />
-            <span>{isLoading ? 'Subscribing...' : 'Subscribe'}</span>
+            <span>{isLoading ? "Subscribing..." : "Subscribe"}</span>
           </button>
         </div>
         <p className="text-gray-400 text-xs">
@@ -71,4 +77,4 @@ export default function NewsletterSignup() {
       </form>
     </div>
   );
-} 
+}

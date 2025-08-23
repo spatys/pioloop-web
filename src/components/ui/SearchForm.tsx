@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import DateRangePicker from './DateRangePicker';
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import React, { useState } from "react";
+import DateRangePicker from "./DateRangePicker";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 
 export interface SearchFormData {
   location: string;
@@ -16,14 +16,17 @@ interface SearchFormProps {
   className?: string;
 }
 
-const SearchForm: React.FC<SearchFormProps> = ({ 
-  onSearch, 
-  className = ''
+const SearchForm: React.FC<SearchFormProps> = ({
+  onSearch,
+  className = "",
 }) => {
-  const [location, setLocation] = useState('');
-  const [selectedDates, setSelectedDates] = useState<{ from: Date | undefined; to: Date | undefined }>({
+  const [location, setLocation] = useState("");
+  const [selectedDates, setSelectedDates] = useState<{
+    from: Date | undefined;
+    to: Date | undefined;
+  }>({
     from: undefined,
-    to: undefined
+    to: undefined,
   });
   const [adults, setAdults] = useState(0);
   const [children, setChildren] = useState(0);
@@ -35,7 +38,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
     const searchData: SearchFormData = {
       location,
       dates: selectedDates,
-      travelers: adults + children + babies
+      travelers: adults + children + babies,
     };
     onSearch?.(searchData);
   };
@@ -59,14 +62,31 @@ const SearchForm: React.FC<SearchFormProps> = ({
   };
 
   return (
-    <div className={`bg-white rounded-lg border border-gray-200 p-6 shadow-sm ${className}`}>
+    <div
+      className={`bg-white rounded-lg border border-gray-200 p-6 shadow-sm ${className}`}
+    >
       <div className="space-y-4">
         {/* Lieu */}
         <div className="relative">
           <div className="flex items-center space-x-3 bg-gray-50 rounded-lg p-4 h-12">
-            <svg className="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            <svg
+              className="w-5 h-5 text-gray-400 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+              />
             </svg>
             <input
               type="text"
@@ -80,28 +100,51 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
         {/* Date Range */}
         <div className="relative">
-          <div 
+          <div
             className="flex items-center space-x-3 bg-gray-50 rounded-lg p-4 h-12 cursor-pointer hover:bg-gray-100 transition-colors duration-200"
             onClick={() => setIsCalendarOpen(true)}
           >
-            <svg className="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <svg
+              className="w-5 h-5 text-gray-400 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
             </svg>
             <div className="flex-1">
               {selectedDates.from ? (
                 <div className="text-sm font-medium text-gray-700">
-                  {format(selectedDates.from, 'dd/MM/yyyy', { locale: fr })}
-                  {selectedDates.to && ` - ${format(selectedDates.to, 'dd/MM/yyyy', { locale: fr })}`}
+                  {format(selectedDates.from, "dd/MM/yyyy", { locale: fr })}
+                  {selectedDates.to &&
+                    ` - ${format(selectedDates.to, "dd/MM/yyyy", { locale: fr })}`}
                 </div>
               ) : (
-                <div className="text-sm text-gray-500">Sélectionner vos dates</div>
+                <div className="text-sm text-gray-500">
+                  Sélectionner vos dates
+                </div>
               )}
             </div>
-            <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <svg
+              className="w-4 h-4 text-gray-400 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </div>
-          
+
           {/* Calendar Modal */}
           {isCalendarOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -118,168 +161,276 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
         {/* Nombre de voyageurs */}
         <div className="relative">
-          <div 
+          <div
             className="flex items-center justify-between bg-gray-50 rounded-lg p-4 h-12 cursor-pointer hover:bg-gray-100 transition-colors duration-200"
             onClick={() => setIsTravelersOpen(!isTravelersOpen)}
           >
             <div className="flex items-center space-x-3">
-              <svg className="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              <svg
+                className="w-5 h-5 text-gray-400 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
               </svg>
-                                 <div className="flex-1">
-                  {adults + children + babies >= 1 ? (
-                    <div className="text-sm font-medium text-gray-700">
-                      {adults + children + babies === 1 ? '1 voyageur' : `${adults + children + babies} voyageurs`}
-                    </div>
-                  ) : (
-                    <div className="text-sm text-gray-500">Ajouter des voyageurs</div>
-                  )}
-                </div>
+              <div className="flex-1">
+                {adults + children + babies >= 1 ? (
+                  <div className="text-sm font-medium text-gray-700">
+                    {adults + children + babies === 1
+                      ? "1 voyageur"
+                      : `${adults + children + babies} voyageurs`}
+                  </div>
+                ) : (
+                  <div className="text-sm text-gray-500">
+                    Ajouter des voyageurs
+                  </div>
+                )}
+              </div>
             </div>
-            <svg className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 ${isTravelersOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <svg
+              className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 ${isTravelersOpen ? "rotate-180" : ""}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </div>
 
-            {/* Travelers Modal */}
-           {isTravelersOpen && (
-             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-               <div className="bg-white rounded-2xl w-full max-w-sm mx-4">
-                 {/* Header */}
-                 <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                   <h3 className="text-lg font-normal text-gray-700">Voyageurs</h3>
-                   <button
-                     onClick={() => setIsTravelersOpen(false)}
-                     className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-                   >
-                     <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                     </svg>
-                   </button>
-                 </div>
+          {/* Travelers Modal */}
+          {isTravelersOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-2xl w-full max-w-sm mx-4">
+                {/* Header */}
+                <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                  <h3 className="text-lg font-normal text-gray-700">
+                    Voyageurs
+                  </h3>
+                  <button
+                    onClick={() => setIsTravelersOpen(false)}
+                    className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                  >
+                    <svg
+                      className="w-5 h-5 text-gray-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
 
-                 {/* Content */}
-                 <div className="p-6">
-                   <div className="space-y-6">
-                     {/* Adultes */}
-                     <div className="flex items-center justify-between">
-                       <div>
-                         <div className="font-normal text-gray-700">Adultes</div>
-                       </div>
-                       <div className="flex items-center space-x-4">
-                                                   <button
-                            onClick={() => handleAdultChange(adults - 1)}
-                            disabled={adults <= 0}
-                            className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-purple-500 hover:text-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                {/* Content */}
+                <div className="p-6">
+                  <div className="space-y-6">
+                    {/* Adultes */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-normal text-gray-700">Adultes</div>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <button
+                          onClick={() => handleAdultChange(adults - 1)}
+                          disabled={adults <= 0}
+                          className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-purple-500 hover:text-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
                           >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                            </svg>
-                          </button>
-                          <span className="font-normal text-gray-700 min-w-[3rem] text-center">
-                            {adults}
-                          </span>
-                          <button
-                            onClick={() => handleAdultChange(adults + 1)}
-                            disabled={adults >= 10}
-                            className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-purple-500 hover:text-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M20 12H4"
+                            />
+                          </svg>
+                        </button>
+                        <span className="font-normal text-gray-700 min-w-[3rem] text-center">
+                          {adults}
+                        </span>
+                        <button
+                          onClick={() => handleAdultChange(adults + 1)}
+                          disabled={adults >= 10}
+                          className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-purple-500 hover:text-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
                           >
-                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                           </svg>
-                         </button>
-                       </div>
-                     </div>
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 4v16m8-8H4"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
 
-                     {/* Enfants */}
-                     <div className="flex items-center justify-between">
-                       <div>
-                         <div className="font-normal text-gray-700">Enfants</div>
-                       </div>
-                                               <div className="flex items-center space-x-4">
-                          <button
-                            onClick={() => handleChildrenChange(children - 1)}
-                            disabled={children <= 0}
-                            className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-purple-500 hover:text-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    {/* Enfants */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-normal text-gray-700">Enfants</div>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <button
+                          onClick={() => handleChildrenChange(children - 1)}
+                          disabled={children <= 0}
+                          className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-purple-500 hover:text-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
                           >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                            </svg>
-                          </button>
-                          <span className="font-normal text-gray-700 min-w-[3rem] text-center">{children}</span>
-                          <button
-                            onClick={() => handleChildrenChange(children + 1)}
-                            disabled={children >= 10}
-                            className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-purple-500 hover:text-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M20 12H4"
+                            />
+                          </svg>
+                        </button>
+                        <span className="font-normal text-gray-700 min-w-[3rem] text-center">
+                          {children}
+                        </span>
+                        <button
+                          onClick={() => handleChildrenChange(children + 1)}
+                          disabled={children >= 10}
+                          className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-purple-500 hover:text-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
                           >
-                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                           </svg>
-                         </button>
-                       </div>
-                     </div>
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 4v16m8-8H4"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
 
-                     {/* Bébés */}
-                     <div className="flex items-center justify-between">
-                       <div>
-                         <div className="font-normal text-gray-700">Bébés</div>
-                       </div>
-                                               <div className="flex items-center space-x-4">
-                          <button
-                            onClick={() => handleBabiesChange(babies - 1)}
-                            disabled={babies <= 0}
-                            className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-purple-500 hover:text-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    {/* Bébés */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-normal text-gray-700">Bébés</div>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <button
+                          onClick={() => handleBabiesChange(babies - 1)}
+                          disabled={babies <= 0}
+                          className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-purple-500 hover:text-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
                           >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                            </svg>
-                          </button>
-                          <span className="font-normal text-gray-700 min-w-[3rem] text-center">{babies}</span>
-                          <button
-                            onClick={() => handleBabiesChange(babies + 1)}
-                            disabled={babies >= 5}
-                            className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-purple-500 hover:text-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M20 12H4"
+                            />
+                          </svg>
+                        </button>
+                        <span className="font-normal text-gray-700 min-w-[3rem] text-center">
+                          {babies}
+                        </span>
+                        <button
+                          onClick={() => handleBabiesChange(babies + 1)}
+                          disabled={babies >= 5}
+                          className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-purple-500 hover:text-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
                           >
-                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                           </svg>
-                         </button>
-                       </div>
-                     </div>
-                   </div>
-                 </div>
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 4v16m8-8H4"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-                 {/* Footer */}
-                 <div className="p-6 border-t border-gray-200">
-                   <button
-                     onClick={() => setIsTravelersOpen(false)}
-                     className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-                   >
-                     Fermer
-                   </button>
-                 </div>
-               </div>
-             </div>
-           )}
+                {/* Footer */}
+                <div className="p-6 border-t border-gray-200">
+                  <button
+                    onClick={() => setIsTravelersOpen(false)}
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                  >
+                    Fermer
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Bouton de recherche */}
       <div className="mt-4">
-        <button 
+        <button
           onClick={handleSearch}
           className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
           </svg>
           <span>Rechercher</span>
         </button>
       </div>
-
-      
     </div>
   );
 };
 
-export default SearchForm; 
+export default SearchForm;

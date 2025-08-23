@@ -1,5 +1,5 @@
-import React from 'react';
-import Link from 'next/link';
+import React from "react";
+import Link from "next/link";
 
 interface LogoProps {
   showSubtitle?: boolean;
@@ -7,10 +7,7 @@ interface LogoProps {
   href?: string;
 }
 
-export const Logo: React.FC<LogoProps> = ({
-  className = '',
-  href = "/"
-}) => {
+export const Logo: React.FC<LogoProps> = ({ className = "", href = "/" }) => {
   const LogoContent = () => (
     <div className="flex items-center space-x-2">
       <div className="relative">
@@ -26,7 +23,10 @@ export const Logo: React.FC<LogoProps> = ({
 
   if (href) {
     return (
-      <Link href={href} className={`flex items-center space-x-3 group ${className}`}>
+      <Link
+        href={href}
+        className={`flex items-center space-x-3 group ${className}`}
+      >
         <LogoContent />
       </Link>
     );
@@ -37,4 +37,4 @@ export const Logo: React.FC<LogoProps> = ({
       <LogoContent />
     </div>
   );
-}; 
+};

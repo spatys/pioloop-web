@@ -5,4 +5,4 @@ export const devises: Devise[] = [
   { code: "EUR", symbol: "€", name: "Euro" },
   { code: "USD", symbol: "$", name: "Dollar" },
   { code: "GBP", symbol: "£", name: "Livre sterling" },
-]; 
+];

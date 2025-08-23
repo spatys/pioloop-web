@@ -1,20 +1,20 @@
-import 'reflect-metadata';
-import { Container } from 'inversify';
-import { TYPES } from './types';
+import "reflect-metadata";
+import { Container } from "inversify";
+import { TYPES } from "./types";
 
 // Repositories
-import { IAuthRepository } from '../repositories/interfaces/IAuthRepository';
-import { AuthRepository } from '../repositories/implementations/AuthRepository';
-import { IContractRepository } from '../repositories/interfaces/IContractRepository';
-import { ContractRepository } from '../repositories/implementations/ContractRepository';
+import { IAuthRepository } from "../repositories/interfaces/IAuthRepository";
+import { AuthRepository } from "../repositories/implementations/AuthRepository";
+import { IContractRepository } from "../repositories/interfaces/IContractRepository";
+import { ContractRepository } from "../repositories/implementations/ContractRepository";
 
 // Services
-import { IAuthService } from '../services/interfaces/IAuthService';
-import { AuthService } from '../services/implementations/AuthService';
-import { IContractService } from '../services/interfaces/IContractService';
-import { ContractService } from '../services/implementations/ContractService';
-import { IHttpClient } from '../repositories/interfaces/IHttpClient';
-import { HttpClient } from '../repositories/implementations/HttpClient';
+import { IAuthService } from "../services/interfaces/IAuthService";
+import { AuthService } from "../services/implementations/AuthService";
+import { IContractService } from "../services/interfaces/IContractService";
+import { ContractService } from "../services/implementations/ContractService";
+import { IHttpClient } from "../repositories/interfaces/IHttpClient";
+import { HttpClient } from "../repositories/implementations/HttpClient";
 
 // Container Inversify
 const container = new Container();
@@ -24,7 +24,9 @@ container.bind<IHttpClient>(TYPES.IHttpClient).to(HttpClient);
 
 // Enregistrement des repositories
 container.bind<IAuthRepository>(TYPES.IAuthRepository).to(AuthRepository);
-container.bind<IContractRepository>(TYPES.IContractRepository).to(ContractRepository);
+container
+  .bind<IContractRepository>(TYPES.IContractRepository)
+  .to(ContractRepository);
 
 // Enregistrement des services avec injection de dépendances
 container.bind<IAuthService>(TYPES.IAuthService).to(AuthService);
@@ -51,4 +53,4 @@ export const getAuthService = (): IAuthService => {
 
 export const getContractService = (): IContractService => {
   return container.get<IContractService>(TYPES.IContractService);
-}; 
+};

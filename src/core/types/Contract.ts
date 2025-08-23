@@ -1,16 +1,16 @@
-import { User } from './User';
-import { Property } from './Property';
-import { Reservation } from './Reservation';
-import { Payment } from './Payment';
-import { Money } from './Money';
+import { User } from "./User";
+import { Property } from "./Property";
+import { Reservation } from "./Reservation";
+import { Payment } from "./Payment";
+import { Money } from "./Money";
 
 export enum ContractStatus {
-  Draft = 'Draft',
-  Pending = 'Pending',
-  Active = 'Active',
-  Completed = 'Completed',
-  Cancelled = 'Cancelled',
-  Terminated = 'Terminated'
+  Draft = "Draft",
+  Pending = "Pending",
+  Active = "Active",
+  Completed = "Completed",
+  Cancelled = "Cancelled",
+  Terminated = "Terminated",
 }
 
 export interface Contract {
@@ -55,4 +55,4 @@ export interface UpdateContractForm {
   terms?: string;
   specialConditions?: string;
   status?: ContractStatus;
-} 
+}

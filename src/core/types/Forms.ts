@@ -1,5 +1,5 @@
-import { UserRole } from './User';
-import { PropertyType, PropertyAddress } from './Property';
+import { UserRole } from "./User";
+import { PropertyType, PropertyAddress } from "./Property";
 
 export interface LoginForm {
   email: string;
@@ -25,7 +25,7 @@ export interface CompleteRegister {
   confirmPassword: string;
 }
 
-export type CompleteRegisterForm = Omit<CompleteRegister, 'email'>;
+export type CompleteRegisterForm = Omit<CompleteRegister, "email">;
 
 export interface PropertySearchForm {
   location?: string;
@@ -65,4 +65,4 @@ export interface CreatePropertyForm {
   isFurnished: boolean;
   amenities: string[];
   images: File[];
-} 
+}

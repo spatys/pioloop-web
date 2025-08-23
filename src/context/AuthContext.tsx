@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useAuth as useAuthHook } from '../hooks/useAuth';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useAuth as useAuthHook } from "../hooks/useAuth";
 
 interface AuthContextType {
   user: any | null;
@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [registerEmail, setRegisterEmail] = useState<string | null>(null);
-  
+
   // Utiliser le hook useAuth pour la logique d'authentification
   const authHook = useAuthHook();
 
@@ -30,15 +30,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const checkAuthOnLoad = async () => {
       try {
         // Vérifier si on a un cookie JWT avant de faire l'appel API
-        const hasJwtCookie = document.cookie.includes('auth_token=');
-        
+        const hasJwtCookie = document.cookie.includes("auth_token=");
+
         if (hasJwtCookie && !authHook.user) {
           // Seulement faire l'appel si on a un cookie JWT et pas d'utilisateur
           await authHook.getCurrentUser();
         }
       } catch (error) {
         // User is not authenticated, that's fine
-        console.log('No authenticated user found on page load');
+        console.log("No authenticated user found on page load");
       }
     };
 
@@ -65,7 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-} 
+}
