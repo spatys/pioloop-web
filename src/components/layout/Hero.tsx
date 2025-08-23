@@ -57,7 +57,7 @@ export const Hero: React.FC<HeroProps> = ({ className = '' }) => {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <BoutonLink
-                href="/register"
+                href="/register-email"
                 variant="default"
                 size="lg"
               >

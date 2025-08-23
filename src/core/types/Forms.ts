@@ -17,7 +17,7 @@ export interface RegisterForm {
   address?: PropertyAddress;
 }
 
-export interface CompleteRegistration {
+export interface CompleteRegister {
   email: string;
   firstName: string;
   lastName: string;
@@ -25,7 +25,7 @@ export interface CompleteRegistration {
   confirmPassword: string;
 }
 
-export type CompleteRegistrationForm = Omit<CompleteRegistration, 'email'>;
+export type CompleteRegisterForm = Omit<CompleteRegister, 'email'>;
 
 export interface PropertySearchForm {
   location?: string;

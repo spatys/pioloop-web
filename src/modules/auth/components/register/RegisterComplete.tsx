@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import { Logo } from '@/components/ui/Logo';
 import { useAuth } from '@/hooks/useAuth';
 import { useAuth as useAuthContext } from '@/context/AuthContext';
-import { CompleteRegistrationForm } from '@/core/types/Forms';
+import { CompleteRegisterForm } from '@/core/types/Forms';
 import { Eye, EyeOff, Loader } from 'lucide-react';
 
 // Schema de validation
@@ -49,12 +49,12 @@ export const RegisterComplete: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<CompleteRegistrationForm>({
+  } = useForm<CompleteRegisterForm>({
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
 
-  const onSubmit = async (data: CompleteRegistrationForm) => {
+  const onSubmit = async (data: CompleteRegisterForm) => {
     if (!registerEmail) {
       console.error('Aucun email en cours de vérification');
       return;

@@ -6,7 +6,7 @@ import { container } from '@/core/di/container';
 import { TYPES } from '@/core/di/types';
 import { IAuthService } from '@/core/services/interfaces/IAuthService';
 import { ApiResponse } from '@/core/types';
-import { LoginForm, RegisterForm, CompleteRegistration } from '@/core/types/Forms';
+import { LoginForm, RegisterForm, CompleteRegister } from '@/core/types/Forms';
 import { User } from '@/core/types/User';
 import { LoginSuccessResponseDto } from '@/core/types/Auth';
 
@@ -21,10 +21,10 @@ interface UseAuthReturn {
 
   // Methods
   login: (credentials: LoginForm) => Promise<ApiResponse<LoginSuccessResponseDto>>;
-  registerEmail: (email: string) => Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>>;
+  registerEmail: (email: string) => Promise<ApiResponse<{ message: string; email: string }>>;
   registerVerifyEmailCode: (email: string, code: string) => Promise<ApiResponse<boolean>>;
-  registerComplete: (data: CompleteRegistration) => Promise<ApiResponse<any>>;
-  resendRegisterEmailVerification: (email: string) => Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>>;
+  registerComplete: (data: CompleteRegister) => Promise<ApiResponse<any>>;
+  resendRegisterEmailVerification: (email: string) => Promise<ApiResponse<{ message: string; email: string }>>;
   logout: () => Promise<void>;
   getCurrentUser: () => Promise<ApiResponse<any>>;
 
@@ -164,7 +164,7 @@ export const useAuth = (): UseAuthReturn => {
     );
   };
 
-  const registerComplete = async (data: CompleteRegistration) => {
+  const registerComplete = async (data: CompleteRegister) => {
     const result = await executeWithLoading(
       () => authService.registerComplete(data)
     );

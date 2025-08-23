@@ -7,9 +7,7 @@ interface AuthContextType {
   user: any | null;
   loading: boolean;
   registerEmail: string | null;
-  registerExpirationMinutes: number | null;
   setRegisterEmail: (email: string | null) => void;
-  setRegisterExpirationMinutes: (minutes: number | null) => void;
   login: (credentials: any) => Promise<any>;
   logout: () => Promise<void>;
   getCurrentUser: () => Promise<any>;
@@ -23,7 +21,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [registerEmail, setRegisterEmail] = useState<string | null>(null);
-  const [registerExpirationMinutes, setRegisterExpirationMinutes] = useState<number | null>(null);
   
   // Utiliser le hook useAuth pour la logique d'authentification
   const authHook = useAuthHook();
@@ -52,9 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user: authHook.user,
     loading: authHook.isLoading,
     registerEmail,
-    registerExpirationMinutes,
     setRegisterEmail,
-    setRegisterExpirationMinutes,
     login: authHook.login,
     logout: authHook.logout,
     getCurrentUser: authHook.getCurrentUser,

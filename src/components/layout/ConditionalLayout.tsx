@@ -8,10 +8,10 @@ import { Footer } from './Footer';
 // Pages d'authentification qui ne doivent pas avoir de header/footer
 const authPages = [
   '/login',
-  '/registration-email',
-  '/registration-verify-email',
-  '/registration-verify-code',
-  '/registration-complete'
+  '/register-email',
+  '/register-verify-email',
+  '/register-verify-code',
+  '/register-complete'
 ];
 
 interface ConditionalLayoutProps {

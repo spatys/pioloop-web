@@ -26,9 +26,8 @@ type VerifyCodeFormData = {
 export const RegisterVerifyEmail: React.FC = () => {
   const router = useRouter();
   const { registerVerifyEmailCode, resendRegisterEmailVerification, isLoading, error, fieldErrors, success, clearError, clearSuccess, clearFieldErrors } = useAuth();
-  const { registerEmail, registerExpirationMinutes } = useAuthContext();
-  const [timeLeft, setTimeLeft] = useState(registerExpirationMinutes ? registerExpirationMinutes * 60 : 60);
-  const [canResend, setCanResend] = useState(false);
+  const { registerEmail } = useAuthContext();
+
   const [codeDigits, setCodeDigits] = useState(['', '', '', '', '', '']);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -43,30 +42,7 @@ export const RegisterVerifyEmail: React.FC = () => {
     mode: 'onChange'
   });
 
-  // Initialize timer when component mounts or expiration changes
-  useEffect(() => {
-    if (registerExpirationMinutes) {
-      setTimeLeft(registerExpirationMinutes * 60);
-      setCanResend(false);
-    }
-  }, [registerExpirationMinutes]);
 
-  // Countdown logic
-  useEffect(() => {
-    if (timeLeft > 0) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-      return () => clearTimeout(timer);
-    } else {
-      setCanResend(true);
-    }
-  }, [timeLeft]);
-
-  // Time formatting
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-  };
 
   // Handle digit input
   const handleDigitChange = (index: number, value: string) => {
@@ -88,10 +64,10 @@ export const RegisterVerifyEmail: React.FC = () => {
     }
 
     // Auto-submit when all 6 digits are entered
-    if (fullCode.length === 6) {
-      // Submit immediately when all 6 digits are entered
-      onSubmit({ code: fullCode });
-    }
+    // if (fullCode.length === 6) {
+    //   // Submit immediately when all 6 digits are entered
+    //   onSubmit({ code: fullCode });
+    // }
   };
 
   // Handle backspace
@@ -133,7 +109,7 @@ export const RegisterVerifyEmail: React.FC = () => {
       
       // Attendre 2 secondes avant la redirection pour laisser le temps de voir le succès
       setTimeout(() => {
-        router.push('/registration-complete');
+        router.push('/register-complete');
       }, 1500);
     } else {
       // Masquer le loader en cas d'erreur
@@ -146,14 +122,7 @@ export const RegisterVerifyEmail: React.FC = () => {
   const handleResendCode = async () => {
     if (!registerEmail) return;
     
-    const response = await resendRegisterEmailVerification(registerEmail);
-    
-    if (response.success && response.data) {
-      // Reset timer with new expiration
-      const newExpiration = response.data.expirationMinutes * 60;
-      setTimeLeft(newExpiration);
-      setCanResend(false);
-    }
+    await resendRegisterEmailVerification(registerEmail);
   };
 
   // Si pas d'email dans le contexte, afficher une erreur
@@ -226,18 +195,24 @@ export const RegisterVerifyEmail: React.FC = () => {
               </div>
               
 
-              {/* Loading indicator */}
-              {isRedirecting && (
-                <div className="text-center py-2">
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={isLoading || isRedirecting}
+                className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:bg-purple-400 disabled:cursor-not-allowed flex items-center justify-center"
+              >
+                {isLoading || isRedirecting ? (
                   <Loader 
-                    className="h-5 w-5 text-purple-600 mx-auto" 
+                    className="h-5 w-5 text-white" 
                     style={{ 
                       animation: 'spin 1s linear infinite',
                       transformOrigin: 'center'
                     }} 
                   />
-                </div>
-              )}
+                ) : (
+                  'Vérifier le code'
+                )}
+              </button>
 
               {fieldErrors?.code && (
                 <p className="mt-1 text-sm text-red-600 text-center">{fieldErrors.code}</p>
@@ -252,27 +227,19 @@ export const RegisterVerifyEmail: React.FC = () => {
 
             </form>
 
-            {/* Resend Code Section */}
-            <div className="text-center">
-              {canResend ? (
-                <button
-                  onClick={handleResendCode}
-                  disabled={!canResend}
-                  className="text-purple-600 hover:text-purple-500 font-medium disabled:text-gray-400 disabled:cursor-not-allowed"
-                >
-                  Renvoyer le code
-                </button>
-              ) : (
-                <div className="text-gray-600">
-                  <p className="mb-2">Vous n'avez pas reçu un code ?</p>
-                  <p>Renvoyer de nouveau dans {formatTime(timeLeft)}</p>
-                </div>
-              )}
-            </div>
+                         {/* Resend Code Section */}
+             <div className="text-center">
+               <button
+                 onClick={handleResendCode}
+                 className="text-purple-600 hover:text-purple-500 font-medium"
+               >
+                 Renvoyer le code
+               </button>
+             </div>
 
-            {/* Back to Registration */}
+            {/* Back to Register */}
             <div className="text-center">
-              <Link href="/registration-email" className="text-purple-600 hover:text-purple-500 font-medium">
+              <Link href="/register-email" className="text-purple-600 hover:text-purple-500 font-medium">
                 ← Retour à l'inscription
               </Link>
             </div>

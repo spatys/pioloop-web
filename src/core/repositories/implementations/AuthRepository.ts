@@ -3,7 +3,7 @@ import { IAuthRepository } from '../interfaces/IAuthRepository';
 import type { IHttpClient } from '../interfaces/IHttpClient';
 import { TYPES } from '../../di/types';
 import { ApiResponse } from '../../types';
-import { LoginForm, CompleteRegistration } from '../../types/Forms';
+import { LoginForm, CompleteRegister } from '../../types/Forms';
 import { LoginSuccessResponseDto } from '../../types/Auth';
 
 @injectable()
@@ -19,8 +19,8 @@ export class AuthRepository implements IAuthRepository {
     return response;
   }
 
-  async registerEmail(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
-    const response = await this.httpClient.post<{ message: string; email: string; expirationMinutes: number }>('/api/auth/register/register-email', { email });
+  async registerEmail(email: string): Promise<ApiResponse<{ message: string; email: string }>> {
+    const response = await this.httpClient.post<{ message: string; email: string }>('/api/auth/register/register-email', { email });
     
     // Transformer toute erreur en fieldErrors pour l'email
     if (!response.success && response.message) {
@@ -49,12 +49,12 @@ export class AuthRepository implements IAuthRepository {
     return response;
   }
 
-  async registerComplete(data: CompleteRegistration): Promise<ApiResponse<any>> {
+  async registerComplete(data: CompleteRegister): Promise<ApiResponse<any>> {
     return await this.httpClient.post<any>('/api/auth/register/register-complete', data);
   }
 
-  async resendRegisterVerifyEmail(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
-    const response = await this.httpClient.post<{ message: string; email: string; expirationMinutes: number }>('/api/auth/register/register-email-resend-verification', { email });
+  async resendRegisterVerifyEmail(email: string): Promise<ApiResponse<{ message: string; email: string }>> {
+    const response = await this.httpClient.post<{ message: string; email: string }>('/api/auth/register/register-email-resend-verification', { email });
     
     // Transformer toute erreur en fieldErrors pour l'email
     if (!response.success && response.message) {

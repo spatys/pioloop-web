@@ -29,7 +29,7 @@ type RegisterFormData = {
 export const RegisterEmail: React.FC = () => {
   const router = useRouter();
   const { registerEmail, isLoading, error, fieldErrors, success, clearError, clearSuccess, clearFieldErrors } = useAuth();
-  const { setRegisterEmail, setRegisterExpirationMinutes } = useAuthContext();
+  const { setRegisterEmail } = useAuthContext();
 
   const {
     register,
@@ -47,9 +47,8 @@ export const RegisterEmail: React.FC = () => {
       // Nettoyer le message de succès pour ne pas l'afficher
       clearSuccess();
       
-      // Stocker l'email et l'expiration dans le contexte
+      // Stocker l'email dans le contexte
       setRegisterEmail(data.email);
-      setRegisterExpirationMinutes(response.data.expirationMinutes);
       
       // Redirection directe vers la page de vérification
       router.push('/register-verify-email');

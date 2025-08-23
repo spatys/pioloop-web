@@ -3,7 +3,7 @@ import type { IAuthRepository } from '../../repositories/interfaces/IAuthReposit
 import { IAuthService } from '../interfaces/IAuthService';
 import { TYPES } from '../../di/types';
 import { ApiResponse } from '../../types';
-import { LoginForm, RegisterForm, CompleteRegistration } from '../../types/Forms';
+import { LoginForm, RegisterForm, CompleteRegister } from '../../types/Forms';
 import { LoginSuccessResponseDto } from '../../types/Auth';
 
 @injectable()
@@ -20,7 +20,7 @@ export class AuthService implements IAuthService {
   //   return await this.authRepository.register(userData);
   // }
 
-  async registerEmail(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
+  async registerEmail(email: string): Promise<ApiResponse<{ message: string; email: string }>> {
     return await this.authRepository.registerEmail(email);
   }
 
@@ -28,11 +28,11 @@ export class AuthService implements IAuthService {
     return await this.authRepository.registerVerifyEmail(email, code);
   }
 
-  async registerComplete(data: CompleteRegistration): Promise<ApiResponse<any>> {
+  async registerComplete(data: CompleteRegister): Promise<ApiResponse<any>> {
     return await this.authRepository.registerComplete(data);
   }
 
-  async resendRegisterVerifyEmail(email: string): Promise<ApiResponse<{ message: string; email: string; expirationMinutes: number }>> {
+  async resendRegisterVerifyEmail(email: string): Promise<ApiResponse<{ message: string; email: string }>> {
     return await this.authRepository.resendRegisterVerifyEmail(email);
   }
 
