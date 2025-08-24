@@ -57,119 +57,98 @@ export interface PropertyAddress {
   longitude?: number;
 }
 
+// Types simplifiés pour correspondre au backend PropertyResponse
+
 export interface Property {
   id: string;
   title: string;
   description: string;
-  ownerId: string;
-  owner: User;
-  propertyType: PropertyType;
-  status: PropertyStatus;
-  address: PropertyAddress;
-  bedrooms: number;
-  bathrooms: number;
+  propertyType: string;
+  roomType: string;
   maxGuests: number;
-  squareFootage?: number;
-  pricePerNight: Money;
-  monthlyRent?: Money;
-  securityDeposit?: Money;
-  images: PropertyImage[];
-  amenities: PropertyAmenity[];
-  houseRules?: string[];
-  cancellationPolicy?: string;
-  checkInTime: string;
-  checkOutTime: string;
-  minimumStay: number;
-  maximumStay: number;
-  instantBookable: boolean;
-  petsAllowed: boolean;
-  smokingAllowed: boolean;
-  partiesAllowed: boolean;
-  wifi: boolean;
-  parking: boolean;
-  airConditioning: boolean;
-  heating: boolean;
-  kitchen: boolean;
-  washer: boolean;
-  dryer: boolean;
-  tv: boolean;
-  workspace: boolean;
-  pool?: boolean;
-  gym?: boolean;
-  spa?: boolean;
+  bedrooms: number;
+  beds: number;
+  bathrooms: number;
+  address: string;
+  city: string;
+  postalCode: string;
+  latitude?: number;
+  longitude?: number;
+  pricePerNight: number;
+  cleaningFee: number;
+  serviceFee: number;
+  isInstantBookable: boolean;
+  status: string;
+  ownerId: string;
+  ownerName: string;
+  ownerEmail: string;
+  imageUrls: string[];
+  amenities: string[];
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface CreatePropertyForm {
-  title: string;
-  description: string;
-  propertyType: PropertyType;
-  address: PropertyAddress;
-  bedrooms: number;
-  bathrooms: number;
-  maxGuests: number;
-  squareFootage?: number;
-  pricePerNight: number;
-  monthlyRent?: number;
-  securityDeposit?: number;
-  houseRules?: string[];
-  cancellationPolicy?: string;
-  checkInTime: string;
-  checkOutTime: string;
-  minimumStay: number;
-  maximumStay: number;
-  instantBookable: boolean;
-  petsAllowed: boolean;
-  smokingAllowed: boolean;
-  partiesAllowed: boolean;
-  wifi: boolean;
-  parking: boolean;
-  airConditioning: boolean;
-  heating: boolean;
-  kitchen: boolean;
-  washer: boolean;
-  dryer: boolean;
-  tv: boolean;
-  workspace: boolean;
-  pool?: boolean;
-  gym?: boolean;
-  spa?: boolean;
+// Types pour les requêtes de recherche
+export interface PropertySearchCriteria {
+  location?: string;
+  checkIn?: string;
+  checkOut?: string;
+  guests?: number;
+  page?: number;
+  pageSize?: number;
 }
 
-export interface UpdatePropertyForm {
+// Types pour les réponses de recherche
+export interface PropertySearchResponse {
+  properties: Property[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+// Types pour la création et mise à jour
+export interface CreatePropertyRequest {
+  title: string;
+  description: string;
+  propertyType: string;
+  roomType: string;
+  maxGuests: number;
+  bedrooms: number;
+  beds: number;
+  bathrooms: number;
+  address: string;
+  city: string;
+  postalCode: string;
+  latitude?: number;
+  longitude?: number;
+  pricePerNight: number;
+  cleaningFee: number;
+  serviceFee: number;
+  isInstantBookable: boolean;
+  ownerId: string;
+  imageUrls: string[];
+  amenities: string[];
+}
+
+export interface UpdatePropertyRequest {
   title?: string;
   description?: string;
-  propertyType?: PropertyType;
-  status?: PropertyStatus;
-  address?: PropertyAddress;
-  bedrooms?: number;
-  bathrooms?: number;
+  propertyType?: string;
+  roomType?: string;
   maxGuests?: number;
-  squareFootage?: number;
+  bedrooms?: number;
+  beds?: number;
+  bathrooms?: number;
+  address?: string;
+  city?: string;
+  postalCode?: string;
+  latitude?: number;
+  longitude?: number;
   pricePerNight?: number;
-  monthlyRent?: number;
-  securityDeposit?: number;
-  houseRules?: string[];
-  cancellationPolicy?: string;
-  checkInTime?: string;
-  checkOutTime?: string;
-  minimumStay?: number;
-  maximumStay?: number;
-  instantBookable?: boolean;
-  petsAllowed?: boolean;
-  smokingAllowed?: boolean;
-  partiesAllowed?: boolean;
-  wifi?: boolean;
-  parking?: boolean;
-  airConditioning?: boolean;
-  heating?: boolean;
-  kitchen?: boolean;
-  washer?: boolean;
-  dryer?: boolean;
-  tv?: boolean;
-  workspace?: boolean;
-  pool?: boolean;
-  gym?: boolean;
-  spa?: boolean;
+  cleaningFee?: number;
+  serviceFee?: number;
+  isInstantBookable?: boolean;
+  imageUrls?: string[];
+  amenities?: string[];
 }
