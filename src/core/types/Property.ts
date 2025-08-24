@@ -5,27 +5,15 @@ export enum PropertyStatus {
   Available = "Available",
   Rented = "Rented",
   UnderMaintenance = "UnderMaintenance",
-  Unavailable = "Unavailable",
-  Sold = "Sold",
+  Unavailable = "Unavailable"
 }
 
 export enum PropertyType {
   Apartment = "Apartment",
   House = "House",
-  Condo = "Condo",
   Villa = "Villa",
   Studio = "Studio",
-  Loft = "Loft",
-  Townhouse = "Townhouse",
-  Penthouse = "Penthouse",
-  Duplex = "Duplex",
-  Triplex = "Triplex",
-  MobileHome = "MobileHome",
-  Cabin = "Cabin",
-  Cottage = "Cottage",
-  Bungalow = "Bungalow",
-  Mansion = "Mansion",
-  Other = "Other",
+  Duplex = "Duplex"
 }
 
 export interface PropertyImage {
