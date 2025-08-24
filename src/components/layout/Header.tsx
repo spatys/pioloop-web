@@ -203,7 +203,7 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
 
             {/* Je propose mon bien button */}
             <BoutonLink
-              href="/propose-property"
+              href="/property/add"
               variant="default"
               size="md"
               className="hidden sm:inline-flex"
