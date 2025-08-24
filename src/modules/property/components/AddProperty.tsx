@@ -1,14 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { PropertyType, CreatePropertyRequest } from "@/core/types/Property";
 import { getPropertyService } from "@/core/di/container";
+import { Loader } from "lucide-react";
 
 export const AddProperty: React.FC = () => {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
   const [formData, setFormData] = useState<Partial<CreatePropertyRequest>>({
     title: "",
     description: "",
@@ -33,6 +36,65 @@ export const AddProperty: React.FC = () => {
 
   const handleInputChange = (field: keyof CreatePropertyRequest, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const fileArray = Array.from(files);
+      const imageFiles = fileArray.filter(file => 
+        file.type.startsWith('image/') && 
+        (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg')
+      );
+
+      if (imageFiles.length + (formData.imageUrls?.length || 0) > 10) {
+        alert("Vous ne pouvez pas ajouter plus de 10 images au total.");
+        return;
+      }
+
+      // Convertir les fichiers en URLs temporaires
+      const newImageUrls = imageFiles.map(file => URL.createObjectURL(file));
+      const updatedImageUrls = [...(formData.imageUrls || []), ...newImageUrls];
+      handleInputChange("imageUrls", updatedImageUrls);
+    }
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragOver(false);
+    const files = event.dataTransfer.files;
+    if (files) {
+      const fileArray = Array.from(files);
+      const imageFiles = fileArray.filter(file => 
+        file.type.startsWith('image/') && 
+        (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg')
+      );
+
+      if (imageFiles.length + (formData.imageUrls?.length || 0) > 10) {
+        alert("Vous ne pouvez pas ajouter plus de 10 images au total.");
+        return;
+      }
+
+      // Convertir les fichiers en URLs temporaires
+      const newImageUrls = imageFiles.map(file => URL.createObjectURL(file));
+      const updatedImageUrls = [...(formData.imageUrls || []), ...newImageUrls];
+      handleInputChange("imageUrls", updatedImageUrls);
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const removeImage = (index: number) => {
+    const newImages = formData.imageUrls?.filter((_, i) => i !== index) || [];
+    handleInputChange("imageUrls", newImages);
   };
 
   const nextStep = () => {
@@ -348,25 +410,102 @@ export const AddProperty: React.FC = () => {
           Photos de votre logement <span className="text-red-500">*</span>
         </label>
         <p className="text-sm text-gray-600 mb-4">
-          Ajoutez au moins 3 photos de votre logement. La première photo sera la photo principale.
+          Ajoutez entre 3 et 10 photos de votre logement. La première photo sera la photo principale.
         </p>
         
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-          <div className="space-y-4">
-            <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-              <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <div>
+        <div className="space-y-4">
+          {/* Zone de drop/upload avec aperçu intégré */}
+          <div 
+            className={`border-2 border-dashed rounded-lg p-6 transition-colors duration-200 ${
+              isDragOver 
+                ? "border-purple-500 bg-purple-50" 
+                : "border-gray-300"
+            }`}
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+          >
+            {/* Input file caché */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
+
+            {/* Aperçu des images sélectionnées */}
+            {formData.imageUrls && formData.imageUrls.length > 0 ? (
+              <div>
+                <p className="text-sm text-gray-600 mb-3">Aperçu des images ({formData.imageUrls.length}/10)</p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-4">
+                  {formData.imageUrls.map((imageUrl, index) => (
+                    <div key={index} className="aspect-video bg-gray-100 rounded-lg border border-gray-300 relative group">
+                      <img 
+                        src={imageUrl} 
+                        alt={`Image ${index + 1}`}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                      <button
+                        type="button"
+                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={() => removeImage(index)}
+                      >
+                        ×
+                      </button>
+                      {index === 0 && (
+                        <div className="absolute bottom-1 left-1 bg-purple-600 text-white text-xs px-2 py-1 rounded">
+                          Principale
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  
+                  {/* Emplacements vides */}
+                  {Array.from({ length: Math.max(3, 10 - formData.imageUrls.length) }, (_, index) => (
+                    <div key={`empty-${index}`} className="aspect-video bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                      <div className="text-center">
+                        <svg className="mx-auto h-6 w-6 text-gray-400 mb-1" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        <p className="text-xs text-gray-500">Ajouter</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="text-center">
+                <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                  <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+            )}
+
+            {/* Bouton pour sélectionner des fichiers */}
+            <div className="text-center">
               <button
                 type="button"
+                onClick={() => fileInputRef.current?.click()}
                 className="px-4 py-2 bg-purple-600 text-white rounded-md font-normal hover:bg-purple-700"
               >
                 Choisir des fichiers
               </button>
               <p className="text-xs text-gray-500 mt-2">
-                PNG, JPG jusqu'à 10MB
+                PNG, JPG jusqu'à 10MB - 3 à 10 images
+              </p>
+              <p className="text-xs text-gray-500">
+                Ou glissez-déposez vos images ici
               </p>
             </div>
+          </div>
+
+          {/* Message d'aide */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <p className="text-sm text-blue-800">
+              <strong>Conseil :</strong> Ajoutez des photos de qualité montrant les différentes pièces de votre logement pour attirer plus de voyageurs. La première image sera affichée en premier.
+            </p>
           </div>
         </div>
       </div>
@@ -470,16 +609,23 @@ export const AddProperty: React.FC = () => {
                 Suivant
               </button>
             ) : (
+              
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className={`px-4 py-2 rounded-md font-normal ${
-                  isSubmitting
-                    ? "bg-gray-400 text-white cursor-not-allowed"
-                    : "bg-purple-600 text-white hover:bg-purple-700"
-                }`}
+                className="w-24 bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:bg-purple-400 disabled:cursor-not-allowed flex items-center justify-center"
               >
-                {isSubmitting ? "Création..." : "Ajouter"}
+                {isSubmitting ? (
+                  <Loader
+                    className="h-5 w-5 text-white"
+                    style={{
+                      animation: "spin 1s linear infinite",
+                      transformOrigin: "center",
+                    }}
+                  />
+                ) : (
+                  "Ajouter"
+                )}
               </button>
             )}
           </div>
