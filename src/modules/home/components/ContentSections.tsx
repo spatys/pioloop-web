@@ -66,14 +66,15 @@ export const ContentSections: React.FC = () => {
                 >
                   Je propose mon bien
                 </ProtectedBoutonLink>
-                <BoutonLink 
+                <ProtectedBoutonLink 
                   href="/about" 
                   variant="outline" 
                   size="lg"
                   className="text-purple-600 hover:text-purple-700 font-medium"
+                  fallbackPath="/login"
                 >
                   Mon espace propriétaire
-                </BoutonLink>
+                </ProtectedBoutonLink>
               </div>
             </div>
           </div>
