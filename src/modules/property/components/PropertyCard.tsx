@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { Property } from "@/core/types/Property";
 
@@ -9,6 +9,15 @@ interface PropertyCardProps {
 }
 
 export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const toggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsFavorite(!isFavorite);
+    console.log('Toggle favoris pour:', property.id);
+  };
+
   return (
     <Link
       href={`/property/${property.id}`}
@@ -28,17 +37,18 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
         </div>
         <div className="absolute top-3 right-3">
           <button 
-            className="bg-white/90 backdrop-blur-sm p-2 rounded-full hover:bg-white transition-colors duration-200 group/fav"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              // TODO: Ajouter la logique pour ajouter/retirer des favoris
-              console.log('Toggle favoris pour:', property.id);
-            }}
+            className={`p-2 rounded-full transition-all duration-200 group/fav ${
+              isFavorite 
+                ? 'bg-red-500 text-white hover:bg-red-600' 
+                : 'bg-white/90 backdrop-blur-sm text-gray-600 hover:bg-white'
+            }`}
+            onClick={toggleFavorite}
           >
             <svg 
-              className="w-4 h-4 text-gray-600 group-hover/fav:text-red-500 transition-colors duration-200" 
-              fill="none" 
+              className={`w-4 h-4 transition-colors duration-200 ${
+                isFavorite ? 'text-white' : 'text-gray-600 group-hover/fav:text-red-500'
+              }`}
+              fill={isFavorite ? "currentColor" : "none"}
               stroke="currentColor" 
               viewBox="0 0 24 24"
             >
@@ -86,7 +96,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
         {/* Prix */}
         <div className="flex items-center justify-between">
           <div className="font-semibold text-purple-600">
-            {property.pricePerNight.toLocaleString('fr-FR')} FCFA
+            {property.pricePerNight.toLocaleString('fr-FR')} fcfa
           </div>
           <span className="text-xs text-gray-500">/nuit</span>
         </div>
