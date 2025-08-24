@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Hero } from "./Hero";
-import { LatestProperties } from "./LatestProperties";
+import { LatestProperties } from "@/modules/property/components/LatestProperties";
 import { ContentSections } from "./ContentSections";
 import { ServicesSection } from "./ServicesSection";
 

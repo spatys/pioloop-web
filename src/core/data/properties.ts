@@ -271,8 +271,8 @@ export const properties: Property[] = [
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
     ],
     amenities: ["Jardin zen", "Piscine à débordement", "WiFi", "Climatisation", "Parking sécurisé", "Cuisine équipée", "Terrasse", "Salle de sport", "Home cinéma"],
-    createdAt: new Date("2024-04-25"),
-    updatedAt: new Date("2024-08-20")
+    createdAt: new Date("2025-04-20"),
+    updatedAt: new Date("2025-04-20")
   },
   {
     id: "douala-10",
@@ -301,8 +301,8 @@ export const properties: Property[] = [
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
     ],
     amenities: ["Espace jeux enfants", "Jardin commun", "WiFi", "Climatisation", "Parking", "Cuisine équipée", "Balcon", "Proche écoles"],
-    createdAt: new Date("2024-05-01"),
-    updatedAt: new Date("2024-08-20")
+    createdAt: new Date("2025-04-20"),
+    updatedAt: new Date("2025-04-20")
   },
 
   // YAOUNDÉ PROPERTIES SUPPLEMENTAIRES (5 additional properties)
@@ -363,8 +363,8 @@ export const properties: Property[] = [
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
     ],
     amenities: ["Grand jardin", "Piscine", "WiFi", "Climatisation", "Parking sécurisé", "Cuisine équipée"],
-    createdAt: new Date("2024-01-18"),
-    updatedAt: new Date("2024-08-20")
+    createdAt: new Date("2025-04-20"),
+    updatedAt: new Date("2025-04-20")
   },
   {
     id: "yaounde-3",
@@ -423,8 +423,8 @@ export const properties: Property[] = [
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
     ],
     amenities: ["Terrasse", "WiFi", "Cuisine équipée", "Jardin"],
-    createdAt: new Date("2024-01-25"),
-    updatedAt: new Date("2024-08-20")
+    createdAt: new Date("2025-04-20"),
+    updatedAt: new Date("2025-04-20")
   },
   {
     id: "yaounde-5",
@@ -635,8 +635,8 @@ export const properties: Property[] = [
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
     ],
     amenities: ["Vue montagne", "WiFi", "Climatisation", "Parking", "Cuisine équipée", "Terrasse"],
-    createdAt: new Date("2024-02-20"),
-    updatedAt: new Date("2024-08-20")
+    createdAt: new Date("2025-04-20"),
+    updatedAt: new Date("2025-04-10")
   },
   {
     id: "bafoussam-2",
@@ -697,8 +697,8 @@ export const properties: Property[] = [
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
     ],
     amenities: ["Vue océan", "Plage privée", "WiFi", "Cuisine équipée", "Terrasse", "Hamac"],
-    createdAt: new Date("2024-03-01"),
-    updatedAt: new Date("2024-08-20")
+    createdAt: new Date("2025-04-10"),
+    updatedAt: new Date("2025-04-10")
   },
   {
     id: "kribi-2",
@@ -913,8 +913,8 @@ export const properties: Property[] = [
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
     ],
     amenities: ["Jardin tropical", "Vue océan", "Piscine", "WiFi", "Climatisation", "Parking sécurisé", "Cuisine équipée", "Terrasse"],
-    createdAt: new Date("2024-04-05"),
-    updatedAt: new Date("2024-08-20")
+    createdAt: new Date("2025-08-10"),
+    updatedAt: new Date("2025-04-10")
   }
 ];
 

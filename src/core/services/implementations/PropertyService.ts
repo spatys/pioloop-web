@@ -19,6 +19,11 @@ export class PropertyService {
     return this.propertyRepository.getPropertyById(id);
   }
 
+  // Get latest properties (most recently added)
+  async getLatestProperties(limit: number): Promise<Property[]> {
+    return this.propertyRepository.getLatestProperties(limit);
+  }
+
   // Create a new property
   async createProperty(createPropertyRequest: CreatePropertyRequest): Promise<Property> {
     return this.propertyRepository.createProperty(createPropertyRequest);

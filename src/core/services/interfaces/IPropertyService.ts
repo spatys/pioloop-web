@@ -7,6 +7,9 @@ export interface IPropertyService {
   // Get property by ID
   getPropertyById(id: string): Promise<Property | null>;
   
+  // Get latest properties (most recently added)
+  getLatestProperties(limit: number): Promise<Property[]>;
+  
   // Create a new property
   createProperty(createPropertyRequest: CreatePropertyRequest): Promise<Property>;
   

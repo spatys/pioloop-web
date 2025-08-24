@@ -87,6 +87,34 @@ export class PropertyRepository implements IPropertyRepository {
   //   }
   // }
   
+  // Get latest properties (most recently added)
+  async getLatestProperties(limit: number): Promise<Property[]> {
+    try {
+      // Appeler l'API Gateway
+      // En production, ceci serait un appel à l'endpoint /api/property/latest via l'API Gateway
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/property/latest?limit=${limit}`;
+      
+      const response = await fetch(apiUrl);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const properties: Property[] = await response.json();
+      return properties;
+      
+    } catch (error) {
+      console.error('Error getting latest properties:', error);
+      
+      // Fallback vers les données locales avec tri par date de création
+      const sortedProperties = [...properties]
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .slice(0, limit);
+      
+      return sortedProperties;
+    }
+  }
+
   // Get property by ID
   async getPropertyById(id: string): Promise<Property | null> {
     try {
