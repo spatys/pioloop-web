@@ -32,7 +32,7 @@ export const Hero: React.FC<HeroProps> = ({ className = "" }) => {
           {/* Content */}
           <div className="space-y-8">
             <div className="space-y-6">
-              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+              <h1 className="text-3xl lg:text-4xl font-normal text-gray-900 leading-tight">
                 <span className="inline text-gray-700">Votre expérience </span>
                 <span className="inline text-purple-600 transition-all duration-500 ease-in-out">
                   {roles[currentRole]}

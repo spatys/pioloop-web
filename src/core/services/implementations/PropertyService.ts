@@ -1,8 +1,13 @@
-import { IPropertyRepository } from "../../repositories/interfaces/IPropertyRepository";
+import { injectable, inject } from "inversify";
+import type { IPropertyRepository } from "../../repositories/interfaces/IPropertyRepository";
 import { Property, PropertySearchCriteria, PropertySearchResponse, CreatePropertyRequest, UpdatePropertyRequest } from "../../types/Property";
+import { TYPES } from "../../di/types";
 
+@injectable()
 export class PropertyService {
-  constructor(private propertyRepository: IPropertyRepository) {}
+  constructor(
+    @inject(TYPES.IPropertyRepository) private propertyRepository: IPropertyRepository
+  ) {}
 
   // Search properties with filters and pagination
   async searchProperties(searchCriteria: PropertySearchCriteria): Promise<PropertySearchResponse> {

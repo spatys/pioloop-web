@@ -14,7 +14,7 @@ export const ContentSections: React.FC = () => {
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-t-2xl"></div>
             
             <div className="relative z-10">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-normal text-gray-900 mb-4">
                 Locataires
               </h2>
               <p className="text-gray-700 leading-relaxed mb-6">
@@ -48,7 +48,7 @@ export const ContentSections: React.FC = () => {
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-400 to-purple-400 rounded-t-2xl"></div>
             
             <div className="relative z-10">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-normal text-gray-900 mb-4">
                 Propriétaires
               </h2>
               <p className="text-gray-700 leading-relaxed mb-6">
