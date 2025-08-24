@@ -2,6 +2,7 @@
 
 import React from "react";
 import { BoutonLink } from "@/components/ui/BoutonLink";
+import { ProtectedBoutonLink } from "@/components/ui/ProtectedBoutonLink";
 
 export const ContentSections: React.FC = () => {
   return (
@@ -56,14 +57,15 @@ export const ContentSections: React.FC = () => {
                 immobilier avec des locataires de qualité.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <BoutonLink
-                  href="/register-email"
+                <ProtectedBoutonLink
+                  href="/property/add"
                   variant="default"
                   size="lg"
                   className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
+                  fallbackPath="/login"
                 >
-                  Je proposer mon bien
-                </BoutonLink>
+                  Je propose mon bien
+                </ProtectedBoutonLink>
                 <BoutonLink 
                   href="/about" 
                   variant="outline" 

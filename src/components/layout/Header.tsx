@@ -9,6 +9,7 @@ import { OwnerOnly } from "@/components/shared/RoleGuard";
 import { languages } from "@/core/data/languages";
 import { devises } from "@/core/data/devises";
 import { BoutonLink } from "@/components/ui/BoutonLink";
+import { ProtectedBoutonLink } from "@/components/ui/ProtectedBoutonLink";
 import { Logo } from "@/components/ui/Logo";
 import useSWR from "swr";
 import type { Language } from "@/core/types/Language";
@@ -202,14 +203,15 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
             </div>
 
             {/* Je propose mon bien button */}
-            <BoutonLink
+            <ProtectedBoutonLink
               href="/property/add"
               variant="default"
               size="md"
               className="hidden sm:inline-flex"
+              fallbackPath="/login"
             >
               Je propose mon bien
-            </BoutonLink>
+            </ProtectedBoutonLink>
 
             {/* User Profile */}
             <div className="relative user-menu-container">
