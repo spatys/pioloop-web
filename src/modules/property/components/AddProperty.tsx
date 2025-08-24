@@ -147,7 +147,7 @@ export const AddProperty: React.FC = () => {
           onChange={(e) => handleInputChange("description", e.target.value)}
           rows={4}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
-          placeholder="Décrivez votre propriété..."
+          placeholder="Décrivez votre logement..."
           required
         />
       </div>
@@ -340,15 +340,15 @@ export const AddProperty: React.FC = () => {
   const renderStep5 = () => (
     <div className="space-y-6">
       <h2 className="text-xl font-normal text-gray-900 mb-4">
-        Images de la propriété
+        Images du logement
       </h2>
       
       <div>
         <label className="block text-sm font-normal text-gray-700 mb-2">
-          Photos de votre propriété <span className="text-red-500">*</span>
+          Photos de votre logement <span className="text-red-500">*</span>
         </label>
         <p className="text-sm text-gray-600 mb-4">
-          Ajoutez au moins 3 photos de votre propriété. La première photo sera la photo principale.
+          Ajoutez au moins 3 photos de votre logement. La première photo sera la photo principale.
         </p>
         
         <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
@@ -479,7 +479,7 @@ export const AddProperty: React.FC = () => {
                     : "bg-purple-600 text-white hover:bg-purple-700"
                 }`}
               >
-                {isSubmitting ? "Création..." : "Créer la propriété"}
+                {isSubmitting ? "Création..." : "Ajouter"}
               </button>
             )}
           </div>

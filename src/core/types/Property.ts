@@ -9,11 +9,12 @@ export enum PropertyStatus {
 }
 
 export enum PropertyType {
-  Apartment = "Apartment",
-  House = "House",
-  Villa = "Villa",
+  Room = "Chambre",
   Studio = "Studio",
-  Duplex = "Duplex"
+  Apartment = "Appartement",
+  House = "Maison",
+  Duplex = "Duplex",
+  Villa = "Villa"
 }
 
 export interface PropertyImage {
