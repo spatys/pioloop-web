@@ -141,3 +141,32 @@ export interface UpdatePropertyRequest {
   imageUrls?: string[];
   amenities?: string[];
 }
+
+export interface PropertyResponse {
+  id: string;
+  title: string;
+  description: string;
+  propertyType: string;
+  roomType: string;
+  maxGuests: number;
+  bedrooms: number;
+  beds: number;
+  bathrooms: number;
+  address: string;
+  city: string;
+  postalCode: string;
+  latitude?: number;
+  longitude?: number;
+  pricePerNight: number;
+  cleaningFee: number;
+  serviceFee: number;
+  isInstantBookable: boolean;
+  status: string;
+  ownerId: string;
+  ownerName: string;
+  ownerEmail: string;
+  imageUrls: string[];
+  amenities: string[];
+  createdAt: string;
+  updatedAt: string;
+}

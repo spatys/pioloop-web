@@ -1,18 +1,12 @@
-import { Property, PropertySearchCriteria, PropertySearchResponse, CreatePropertyRequest, UpdatePropertyRequest } from "../../types/Property";
+import type { PropertySearchCriteria } from "@/core/types/Property";
+import type { PropertySearchResponse } from "@/core/types/Property";
+import type { CreatePropertyRequest } from "@/core/types/Property";
+import type { PropertyResponse } from "@/core/types/Property";
 
 export interface IPropertyRepository {
-  // Search properties with filters and pagination
-  searchProperties(searchCriteria: PropertySearchCriteria): Promise<PropertySearchResponse>;
-  
-  // Get property by ID
-  getPropertyById(id: string): Promise<Property | null>;
-  
-  // Get latest properties (most recently added)
-  getLatestProperties(limit: number): Promise<Property[]>;
-  
-  // Create a new property
-  createProperty(createPropertyRequest: CreatePropertyRequest): Promise<Property>;
-  
-  // Update an existing property
-  updateProperty(id: string, updatePropertyRequest: UpdatePropertyRequest): Promise<Property>;
+  searchProperties(criteria: PropertySearchCriteria): Promise<PropertySearchResponse>;
+  getPropertyById(id: string): Promise<PropertyResponse | null>;
+  createProperty(request: CreatePropertyRequest): Promise<PropertyResponse>;
+  updateProperty(id: string, request: Partial<CreatePropertyRequest>): Promise<PropertyResponse | null>;
+  getLatestProperties(limit: number): Promise<PropertyResponse[]>;
 }

@@ -110,23 +110,23 @@ export const AddProperty: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    try {
+   
       setIsSubmitting(true);
       const propertyService = getPropertyService();
       
       const createRequest: CreatePropertyRequest = {
-        ...formData as CreatePropertyRequest,
-        ownerId: "current-user-id",
+        ...formData as CreatePropertyRequest
       };
 
-      await propertyService.createProperty(createRequest);
-      router.push("/properties");
-    } catch (error) {
-      console.error("Erreur lors de la création:", error);
-      alert("Erreur lors de la création de la propriété");
-    } finally {
+      const response = await propertyService.createProperty(createRequest);
+
+      if(response) {
+        router.push("/properties");
+      } else {
+        console.log(response);
+      }
+    
       setIsSubmitting(false);
-    }
   };
 
   const renderStepIndicator = () => (

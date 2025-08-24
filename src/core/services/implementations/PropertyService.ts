@@ -1,36 +1,80 @@
+import type { IPropertyService } from "../interfaces/IPropertyService";
+import type { IPropertyRepository } from "@/core/repositories/interfaces/IPropertyRepository";
+import type { PropertySearchCriteria } from "@/core/types/Property";
+import type { PropertySearchResponse } from "@/core/types/Property";
+import type { CreatePropertyRequest } from "@/core/types/Property";
+import type { PropertyResponse } from "@/core/types/Property";
 import { injectable, inject } from "inversify";
-import type { IPropertyRepository } from "../../repositories/interfaces/IPropertyRepository";
-import { Property, PropertySearchCriteria, PropertySearchResponse, CreatePropertyRequest, UpdatePropertyRequest } from "../../types/Property";
-import { TYPES } from "../../di/types";
+import { TYPES } from "@/core/di/types";
 
 @injectable()
-export class PropertyService {
+export class PropertyService implements IPropertyService {
   constructor(
     @inject(TYPES.IPropertyRepository) private propertyRepository: IPropertyRepository
   ) {}
 
-  // Search properties with filters and pagination
-  async searchProperties(searchCriteria: PropertySearchCriteria): Promise<PropertySearchResponse> {
-    return this.propertyRepository.searchProperties(searchCriteria);
+  async searchProperties(criteria: PropertySearchCriteria): Promise<PropertySearchResponse> {
+    return await this.propertyRepository.searchProperties(criteria);
   }
 
-  // Get property by ID
-  async getPropertyById(id: string): Promise<Property | null> {
-    return this.propertyRepository.getPropertyById(id);
+  async getPropertyById(id: string): Promise<PropertyResponse | null> {
+    return await this.propertyRepository.getPropertyById(id);
   }
 
-  // Get latest properties (most recently added)
-  async getLatestProperties(limit: number): Promise<Property[]> {
-    return this.propertyRepository.getLatestProperties(limit);
+  async createProperty(request: CreatePropertyRequest): Promise<PropertyResponse> {
+    // Simuler la création d'une propriété avec un ID généré
+    const newProperty: PropertyResponse = {
+      id: crypto.randomUUID(),
+      title: request.title,
+      description: request.description,
+      propertyType: request.propertyType,
+      roomType: request.roomType || "",
+      maxGuests: request.maxGuests,
+      bedrooms: request.bedrooms,
+      beds: request.beds,
+      bathrooms: request.bathrooms,
+      address: request.address,
+      city: request.city,
+      postalCode: request.postalCode || "",
+      latitude: undefined,
+      longitude: undefined,
+      pricePerNight: request.pricePerNight,
+      cleaningFee: request.cleaningFee,
+      serviceFee: request.serviceFee,
+      isInstantBookable: request.isInstantBookable,
+      status: "Available",
+      ownerId: request.ownerId,
+      ownerName: "Current User", // À remplacer par les vraies données utilisateur
+      ownerEmail: "user@example.com", // À remplacer par les vraies données utilisateur
+      imageUrls: request.imageUrls || [],
+      amenities: request.amenities || [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    // Ici, vous appelleriez normalement le repository pour sauvegarder
+    // await this.propertyRepository.createProperty(newProperty);
+    
+    return newProperty;
   }
 
-  // Create a new property
-  async createProperty(createPropertyRequest: CreatePropertyRequest): Promise<Property> {
-    return this.propertyRepository.createProperty(createPropertyRequest);
+  async updateProperty(id: string, request: Partial<CreatePropertyRequest>): Promise<PropertyResponse | null> {
+    // Simuler la mise à jour
+    const existingProperty = await this.getPropertyById(id);
+    if (!existingProperty) {
+      return null;
+    }
+
+    const updatedProperty: PropertyResponse = {
+      ...existingProperty,
+      ...request,
+      updatedAt: new Date().toISOString()
+    };
+
+    return updatedProperty;
   }
 
-  // Update an existing property
-  async updateProperty(id: string, updatePropertyRequest: UpdatePropertyRequest): Promise<Property> {
-    return this.propertyRepository.updateProperty(id, updatePropertyRequest);
+  async getLatestProperties(limit: number): Promise<PropertyResponse[]> {
+    return await this.propertyRepository.getLatestProperties(limit);
   }
 }
