@@ -8,13 +8,8 @@ import { ServicesSection } from "./ServicesSection";
 export const Home: React.FC = () => {
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
       <Hero />
-
-      {/* Content Sections */}
       <ContentSections />
-
-      {/* Services Section */}
       <ServicesSection />
     </div>
   );

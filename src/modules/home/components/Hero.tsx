@@ -67,7 +67,7 @@ export const Hero: React.FC<HeroProps> = ({ className = "" }) => {
 
                   {/* Property Cards */}
                   <div className="space-y-4">
-                    <div className="bg-yellow-50 rounded-lg p-4 border-l-4 border-yellow-400">
+                    <div className="bg-amber-50 rounded-lg p-4 border-l-4 border-yellow-400">
                       <div className="flex items-center space-x-3">
                         <div className="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center">
                           <svg
