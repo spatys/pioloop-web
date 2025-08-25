@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { PropertyType, CreatePropertyRequest } from "@/core/types/Property";
+import { PropertyType, CreatePropertyRequest, PropertyAmenityRequest, PropertyImageRequest } from "@/core/types/Property";
 import { getPropertyService } from "@/core/di/container";
 import { Loader } from "lucide-react";
 
@@ -16,20 +16,19 @@ export const AddProperty: React.FC = () => {
     title: "",
     description: "",
     propertyType: "",
-    roomType: "",
     maxGuests: 1,
     bedrooms: 1,
     beds: 1,
     bathrooms: 1,
+    squareMeters: 0,
     address: "",
     city: "",
     postalCode: "",
     pricePerNight: 0,
     cleaningFee: 0,
     serviceFee: 0,
-    isInstantBookable: false,
-    imageUrls: [],
     amenities: [],
+    images: [],
   });
 
   const totalSteps = 5;
@@ -47,15 +46,20 @@ export const AddProperty: React.FC = () => {
         (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg')
       );
 
-      if (imageFiles.length + (formData.imageUrls?.length || 0) > 10) {
+      if (imageFiles.length + (formData.images?.length || 0) > 10) {
         alert("Vous ne pouvez pas ajouter plus de 10 images au total.");
         return;
       }
 
-      // Convertir les fichiers en URLs temporaires
-      const newImageUrls = imageFiles.map(file => URL.createObjectURL(file));
-      const updatedImageUrls = [...(formData.imageUrls || []), ...newImageUrls];
-      handleInputChange("imageUrls", updatedImageUrls);
+      // Convertir les fichiers en objets PropertyImageRequest
+      const newImages: PropertyImageRequest[] = imageFiles.map((file, index) => ({
+        imageUrl: URL.createObjectURL(file),
+        altText: file.name,
+        isMainImage: (formData.images?.length || 0) === 0 && index === 0,
+        displayOrder: (formData.images?.length || 0) + index + 1
+      }));
+      const updatedImages = [...(formData.images || []), ...newImages];
+      handleInputChange("images", updatedImages);
     }
   };
 
@@ -70,15 +74,20 @@ export const AddProperty: React.FC = () => {
         (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg')
       );
 
-      if (imageFiles.length + (formData.imageUrls?.length || 0) > 10) {
+      if (imageFiles.length + (formData.images?.length || 0) > 10) {
         alert("Vous ne pouvez pas ajouter plus de 10 images au total.");
         return;
       }
 
-      // Convertir les fichiers en URLs temporaires
-      const newImageUrls = imageFiles.map(file => URL.createObjectURL(file));
-      const updatedImageUrls = [...(formData.imageUrls || []), ...newImageUrls];
-      handleInputChange("imageUrls", updatedImageUrls);
+      // Convertir les fichiers en objets PropertyImageRequest
+      const newImages: PropertyImageRequest[] = imageFiles.map((file, index) => ({
+        imageUrl: URL.createObjectURL(file),
+        altText: file.name,
+        isMainImage: (formData.images?.length || 0) === 0 && index === 0,
+        displayOrder: (formData.images?.length || 0) + index + 1
+      }));
+      const updatedImages = [...(formData.images || []), ...newImages];
+      handleInputChange("images", updatedImages);
     }
   };
 
@@ -93,8 +102,8 @@ export const AddProperty: React.FC = () => {
   };
 
   const removeImage = (index: number) => {
-    const newImages = formData.imageUrls?.filter((_, i) => i !== index) || [];
-    handleInputChange("imageUrls", newImages);
+    const newImages = formData.images?.filter((_, i) => i !== index) || [];
+    handleInputChange("images", newImages);
   };
 
   const nextStep = () => {
@@ -110,23 +119,22 @@ export const AddProperty: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-   
-      setIsSubmitting(true);
-      const propertyService = getPropertyService();
-      
-      const createRequest: CreatePropertyRequest = {
-        ...formData as CreatePropertyRequest
-      };
-
-      const response = await propertyService.createProperty(createRequest);
-
-      if(response) {
-        router.push("/properties");
-      } else {
-        console.log(response);
-      }
+    setIsSubmitting(true);
+    const propertyService = getPropertyService();
     
-      setIsSubmitting(false);
+    const createRequest: CreatePropertyRequest = {
+      ...formData as CreatePropertyRequest
+    };
+
+    const response = await propertyService.createProperty(createRequest);
+
+    if(response) {
+      router.push("/properties");
+    } else {
+      console.log(response);
+    }
+  
+    setIsSubmitting(false);
   };
 
   const renderStepIndicator = () => (
@@ -279,6 +287,21 @@ export const AddProperty: React.FC = () => {
           />
         </div>
       </div>
+
+      <div>
+        <label className="block text-sm font-normal text-gray-700 mb-2">
+          Surface (m²) <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="number"
+          min="1"
+          value={formData.squareMeters}
+          onChange={(e) => handleInputChange("squareMeters", parseInt(e.target.value))}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
+          placeholder="120"
+          required
+        />
+      </div>
     </div>
   );
 
@@ -383,19 +406,6 @@ export const AddProperty: React.FC = () => {
           />
         </div>
       </div>
-
-      <div className="flex items-center">
-        <input
-          type="checkbox"
-          id="instantBookable"
-          checked={formData.isInstantBookable}
-          onChange={(e) => handleInputChange("isInstantBookable", e.target.checked)}
-          className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-        />
-        <label htmlFor="instantBookable" className="ml-2 text-sm text-gray-700">
-          Réservation instantanée disponible
-        </label>
-      </div>
     </div>
   );
 
@@ -436,15 +446,15 @@ export const AddProperty: React.FC = () => {
             />
 
             {/* Aperçu des images sélectionnées */}
-            {formData.imageUrls && formData.imageUrls.length > 0 ? (
+            {formData.images && formData.images.length > 0 ? (
               <div>
-                <p className="text-sm text-gray-600 mb-3">Aperçu des images ({formData.imageUrls.length}/10)</p>
+                <p className="text-sm text-gray-600 mb-3">Aperçu des images ({formData.images.length}/10)</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-4">
-                  {formData.imageUrls.map((imageUrl, index) => (
+                  {formData.images.map((image, index) => (
                     <div key={index} className="aspect-video bg-gray-100 rounded-lg border border-gray-300 relative group">
                       <img 
-                        src={imageUrl} 
-                        alt={`Image ${index + 1}`}
+                        src={image.imageUrl} 
+                        alt={image.altText}
                         className="w-full h-full object-cover rounded-lg"
                       />
                       <button
@@ -454,7 +464,7 @@ export const AddProperty: React.FC = () => {
                       >
                         ×
                       </button>
-                      {index === 0 && (
+                      {image.isMainImage && (
                         <div className="absolute bottom-1 left-1 bg-purple-600 text-white text-xs px-2 py-1 rounded">
                           Principale
                         </div>
@@ -463,7 +473,7 @@ export const AddProperty: React.FC = () => {
                   ))}
                   
                   {/* Emplacements vides */}
-                  {Array.from({ length: Math.max(3, 10 - formData.imageUrls.length) }, (_, index) => (
+                  {Array.from({ length: Math.max(3, 10 - formData.images.length) }, (_, index) => (
                     <div key={`empty-${index}`} className="aspect-video bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
                       <div className="text-center">
                         <svg className="mx-auto h-6 w-6 text-gray-400 mb-1" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -516,23 +526,44 @@ export const AddProperty: React.FC = () => {
         </label>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {[
-            "Wi-Fi", "Climatisation", "Cuisine", "Parking", "Piscine", "Balcon",
-            "Ascenseur", "Sécurité", "Ménage", "Petit-déjeuner", "Animaux", "Fumeur"
+            { name: "Wi-Fi", type: 2, category: 2 },
+            { name: "Climatisation", type: 1, category: 1 },
+            { name: "Cuisine", type: 1, category: 1 },
+            { name: "Parking", type: 1, category: 3 },
+            { name: "Piscine", type: 1, category: 4 },
+            { name: "Balcon", type: 1, category: 1 },
+            { name: "Ascenseur", type: 1, category: 1 },
+            { name: "Sécurité", type: 1, category: 3 },
+            { name: "Ménage", type: 2, category: 2 },
+            { name: "Petit-déjeuner", type: 2, category: 2 },
+            { name: "Animaux", type: 2, category: 2 },
+            { name: "Fumeur", type: 2, category: 2 }
           ].map((amenity) => (
-            <label key={amenity} className="flex items-center">
+            <label key={amenity.name} className="flex items-center">
               <input
                 type="checkbox"
                 className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                 onChange={(e) => {
                   const currentAmenities = formData.amenities || [];
                   if (e.target.checked) {
-                    handleInputChange("amenities", [...currentAmenities, amenity]);
+                    const newAmenity: PropertyAmenityRequest = {
+                      name: amenity.name,
+                      description: amenity.name,
+                      type: amenity.type,
+                      category: amenity.category,
+                      isAvailable: true,
+                      isIncludedInRent: true,
+                      additionalCost: 0,
+                      icon: amenity.name.toLowerCase(),
+                      priority: 1
+                    };
+                    handleInputChange("amenities", [...currentAmenities, newAmenity]);
                   } else {
-                    handleInputChange("amenities", currentAmenities.filter(a => a !== amenity));
+                    handleInputChange("amenities", currentAmenities.filter(a => a.name !== amenity.name));
                   }
                 }}
               />
-              <span className="ml-2 text-sm text-gray-700">{amenity}</span>
+              <span className="ml-2 text-sm text-gray-700">{amenity.name}</span>
             </label>
           ))}
         </div>
@@ -609,7 +640,6 @@ export const AddProperty: React.FC = () => {
                 Suivant
               </button>
             ) : (
-              
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}

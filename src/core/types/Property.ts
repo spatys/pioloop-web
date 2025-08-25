@@ -53,11 +53,11 @@ export interface Property {
   title: string;
   description: string;
   propertyType: string;
-  roomType: string;
   maxGuests: number;
   bedrooms: number;
   beds: number;
   bathrooms: number;
+  squareMeters: number;
   address: string;
   city: string;
   postalCode: string;
@@ -66,7 +66,6 @@ export interface Property {
   pricePerNight: number;
   cleaningFee: number;
   serviceFee: number;
-  isInstantBookable: boolean;
   status: string;
   ownerId: string;
   ownerName: string;
@@ -89,7 +88,7 @@ export interface PropertySearchCriteria {
 
 // Types pour les réponses de recherche
 export interface PropertySearchResponse {
-  properties: Property[];
+  properties: PropertyResponse[];
   totalCount: number;
   page: number;
   pageSize: number;
@@ -101,11 +100,11 @@ export interface CreatePropertyRequest {
   title: string;
   description: string;
   propertyType: string;
-  roomType: string;
   maxGuests: number;
   bedrooms: number;
   beds: number;
   bathrooms: number;
+  squareMeters: number;
   address: string;
   city: string;
   postalCode: string;
@@ -114,21 +113,39 @@ export interface CreatePropertyRequest {
   pricePerNight: number;
   cleaningFee: number;
   serviceFee: number;
-  isInstantBookable: boolean;
-  ownerId: string;
-  imageUrls: string[];
-  amenities: string[];
+  ownerId?: string; // Optionnel, sera récupéré automatiquement depuis le token JWT
+  amenities: PropertyAmenityRequest[];
+  images: PropertyImageRequest[];
+}
+
+export interface PropertyAmenityRequest {
+  name: string;
+  description: string;
+  type: number;
+  category: number;
+  isAvailable: boolean;
+  isIncludedInRent: boolean;
+  additionalCost?: number;
+  icon: string;
+  priority: number;
+}
+
+export interface PropertyImageRequest {
+  imageUrl: string;
+  altText: string;
+  isMainImage: boolean;
+  displayOrder: number;
 }
 
 export interface UpdatePropertyRequest {
   title?: string;
   description?: string;
   propertyType?: string;
-  roomType?: string;
   maxGuests?: number;
   bedrooms?: number;
   beds?: number;
   bathrooms?: number;
+  squareMeters?: number;
   address?: string;
   city?: string;
   postalCode?: string;
@@ -137,9 +154,8 @@ export interface UpdatePropertyRequest {
   pricePerNight?: number;
   cleaningFee?: number;
   serviceFee?: number;
-  isInstantBookable?: boolean;
-  imageUrls?: string[];
-  amenities?: string[];
+  amenities?: PropertyAmenityRequest[];
+  images?: PropertyImageRequest[];
 }
 
 export interface PropertyResponse {
@@ -147,11 +163,11 @@ export interface PropertyResponse {
   title: string;
   description: string;
   propertyType: string;
-  roomType: string;
   maxGuests: number;
   bedrooms: number;
   beds: number;
   bathrooms: number;
+  squareMeters: number;
   address: string;
   city: string;
   postalCode: string;
@@ -160,7 +176,6 @@ export interface PropertyResponse {
   pricePerNight: number;
   cleaningFee: number;
   serviceFee: number;
-  isInstantBookable: boolean;
   status: string;
   ownerId: string;
   ownerName: string;

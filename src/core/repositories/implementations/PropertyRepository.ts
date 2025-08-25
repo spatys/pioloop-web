@@ -9,26 +9,28 @@ export class PropertyRepository implements IPropertyRepository {
   async searchProperties(criteria: PropertySearchCriteria): Promise<PropertySearchResponse> {
     // Simulation d'une recherche avec filtres
     let filteredProperties = [...properties];
-
+    
     if (criteria.location) {
       filteredProperties = filteredProperties.filter(p => 
         p.city.toLowerCase().includes(criteria.location!.toLowerCase())
       );
     }
 
-    if (criteria.dateRange?.startDate && criteria.dateRange?.endDate) {
+    if (criteria.checkIn && criteria.checkOut) {
       // Logique de filtrage par date (simplifiée)
-      filteredProperties = filteredProperties.filter(p => p.isAvailable);
+      filteredProperties = filteredProperties.filter(p => p.status === "Available");
     }
 
-    if (criteria.travelers) {
-      filteredProperties = filteredProperties.filter(p => p.maxGuests >= criteria.travelers!);
+    if (criteria.guests) {
+      filteredProperties = filteredProperties.filter(p => p.maxGuests >= criteria.guests!);
     }
-
-    // Pagination
+    
+    // Pagination avec valeurs par défaut
     const total = filteredProperties.length;
-    const startIndex = (criteria.page - 1) * criteria.pageSize;
-    const endIndex = startIndex + criteria.pageSize;
+    const page = criteria.page || 1;
+    const pageSize = criteria.pageSize || 10;
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
     const paginatedProperties = filteredProperties.slice(startIndex, endIndex);
 
     // Conversion vers PropertyResponse
@@ -37,11 +39,11 @@ export class PropertyRepository implements IPropertyRepository {
       title: p.title,
       description: p.description,
       propertyType: p.propertyType,
-      roomType: p.roomType,
       maxGuests: p.maxGuests,
       bedrooms: p.bedrooms,
       beds: p.beds,
       bathrooms: p.bathrooms,
+      squareMeters: p.squareMeters,
       address: p.address,
       city: p.city,
       postalCode: p.postalCode,
@@ -50,8 +52,7 @@ export class PropertyRepository implements IPropertyRepository {
       pricePerNight: p.pricePerNight,
       cleaningFee: p.cleaningFee,
       serviceFee: p.serviceFee,
-      isInstantBookable: p.isInstantBookable,
-      status: p.isAvailable ? "Available" : "Unavailable",
+      status: p.status,
       ownerId: p.ownerId,
       ownerName: p.ownerName,
       ownerEmail: p.ownerEmail,
@@ -60,13 +61,13 @@ export class PropertyRepository implements IPropertyRepository {
       createdAt: p.createdAt.toISOString(),
       updatedAt: p.updatedAt.toISOString()
     }));
-
+    
     return {
       properties: propertyResponses,
-      total,
-      page: criteria.page,
-      pageSize: criteria.pageSize,
-      totalPages: Math.ceil(total / criteria.pageSize)
+      totalCount: total,
+      page: page,
+      pageSize: pageSize,
+      totalPages: Math.ceil(total / pageSize)
     };
   }
 
@@ -79,11 +80,11 @@ export class PropertyRepository implements IPropertyRepository {
       title: property.title,
       description: property.description,
       propertyType: property.propertyType,
-      roomType: property.roomType,
       maxGuests: property.maxGuests,
       bedrooms: property.bedrooms,
       beds: property.beds,
       bathrooms: property.bathrooms,
+      squareMeters: property.squareMeters,
       address: property.address,
       city: property.city,
       postalCode: property.postalCode,
@@ -92,8 +93,7 @@ export class PropertyRepository implements IPropertyRepository {
       pricePerNight: property.pricePerNight,
       cleaningFee: property.cleaningFee,
       serviceFee: property.serviceFee,
-      isInstantBookable: property.isInstantBookable,
-      status: property.isAvailable ? "Available" : "Unavailable",
+      status: property.status,
       ownerId: property.ownerId,
       ownerName: property.ownerName,
       ownerEmail: property.ownerEmail,
@@ -111,26 +111,25 @@ export class PropertyRepository implements IPropertyRepository {
       title: request.title,
       description: request.description,
       propertyType: request.propertyType,
-      roomType: request.roomType || "",
       maxGuests: request.maxGuests,
       bedrooms: request.bedrooms,
       beds: request.beds,
       bathrooms: request.bathrooms,
+      squareMeters: request.squareMeters,
       address: request.address,
       city: request.city,
-      postalCode: request.postalCode || "",
-      latitude: undefined,
-      longitude: undefined,
+      postalCode: request.postalCode,
+      latitude: request.latitude,
+      longitude: request.longitude,
       pricePerNight: request.pricePerNight,
       cleaningFee: request.cleaningFee,
       serviceFee: request.serviceFee,
-      isInstantBookable: request.isInstantBookable,
       status: "Available",
-      ownerId: request.ownerId,
+      ownerId: request.ownerId || "",
       ownerName: "Current User", // À remplacer par les vraies données utilisateur
       ownerEmail: "user@example.com", // À remplacer par les vraies données utilisateur
-      imageUrls: request.imageUrls || [],
-      amenities: request.amenities || [],
+      imageUrls: request.images?.map(img => img.imageUrl) || [],
+      amenities: request.amenities?.map(amenity => amenity.name) || [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
@@ -149,7 +148,24 @@ export class PropertyRepository implements IPropertyRepository {
 
     const updatedProperty: PropertyResponse = {
       ...existingProperty,
-      ...request,
+      title: request.title || existingProperty.title,
+      description: request.description || existingProperty.description,
+      propertyType: request.propertyType || existingProperty.propertyType,
+      maxGuests: request.maxGuests || existingProperty.maxGuests,
+      bedrooms: request.bedrooms || existingProperty.bedrooms,
+      beds: request.beds || existingProperty.beds,
+      bathrooms: request.bathrooms || existingProperty.bathrooms,
+      squareMeters: request.squareMeters || existingProperty.squareMeters,
+      address: request.address || existingProperty.address,
+      city: request.city || existingProperty.city,
+      postalCode: request.postalCode || existingProperty.postalCode,
+      latitude: request.latitude || existingProperty.latitude,
+      longitude: request.longitude || existingProperty.longitude,
+      pricePerNight: request.pricePerNight || existingProperty.pricePerNight,
+      cleaningFee: request.cleaningFee || existingProperty.cleaningFee,
+      serviceFee: request.serviceFee || existingProperty.serviceFee,
+      imageUrls: request.images?.map(img => img.imageUrl) || existingProperty.imageUrls,
+      amenities: request.amenities?.map(amenity => amenity.name) || existingProperty.amenities,
       updatedAt: new Date().toISOString()
     };
 
@@ -168,11 +184,11 @@ export class PropertyRepository implements IPropertyRepository {
       title: p.title,
       description: p.description,
       propertyType: p.propertyType,
-      roomType: p.roomType,
       maxGuests: p.maxGuests,
       bedrooms: p.bedrooms,
       beds: p.beds,
       bathrooms: p.bathrooms,
+      squareMeters: p.squareMeters,
       address: p.address,
       city: p.city,
       postalCode: p.postalCode,
@@ -181,8 +197,7 @@ export class PropertyRepository implements IPropertyRepository {
       pricePerNight: p.pricePerNight,
       cleaningFee: p.cleaningFee,
       serviceFee: p.serviceFee,
-      isInstantBookable: p.isInstantBookable,
-      status: p.isAvailable ? "Available" : "Unavailable",
+      status: p.status,
       ownerId: p.ownerId,
       ownerName: p.ownerName,
       ownerEmail: p.ownerEmail,
