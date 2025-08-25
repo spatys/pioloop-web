@@ -59,6 +59,7 @@ export interface Property {
   bathrooms: number;
   squareMeters: number;
   address: string;
+  neighborhood: string;
   city: string;
   postalCode: string;
   latitude?: number;
@@ -106,6 +107,7 @@ export interface CreatePropertyRequest {
   bathrooms: number;
   squareMeters: number;
   address: string;
+  neighborhood: string;
   city: string;
   postalCode: string;
   latitude?: number;
@@ -147,6 +149,7 @@ export interface UpdatePropertyRequest {
   bathrooms?: number;
   squareMeters?: number;
   address?: string;
+  neighborhood?: string;
   city?: string;
   postalCode?: string;
   latitude?: number;
@@ -169,6 +172,7 @@ export interface PropertyResponse {
   bathrooms: number;
   squareMeters: number;
   address: string;
+  neighborhood: string;
   city: string;
   postalCode: string;
   latitude?: number;

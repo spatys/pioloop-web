@@ -11,7 +11,7 @@ export class PropertyRepository implements IPropertyRepository {
   ): Promise<PropertySearchResponse> {
     // Simulation d'une recherche avec filtres
     let filteredProperties = [...properties];
-
+    
     if (criteria.location) {
       filteredProperties = filteredProperties.filter((p) =>
         p.city.toLowerCase().includes(criteria.location!.toLowerCase()),
@@ -69,7 +69,7 @@ export class PropertyRepository implements IPropertyRepository {
         updatedAt: p.updatedAt.toISOString(),
       }),
     );
-
+    
     return {
       properties: propertyResponses,
       totalCount: total,

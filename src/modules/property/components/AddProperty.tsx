@@ -17,6 +17,7 @@ export const AddProperty: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState<Partial<CreatePropertyRequest>>({
     title: "",
     description: "",
@@ -27,6 +28,7 @@ export const AddProperty: React.FC = () => {
     bathrooms: 1,
     squareMeters: 0,
     address: "",
+    neighborhood: "",
     city: "",
     postalCode: "",
     pricePerNight: 0,
@@ -43,6 +45,15 @@ export const AddProperty: React.FC = () => {
     value: any,
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    
+    // Effacer l'erreur du champ dès que l'utilisateur commence à saisir
+    if (errors[field]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
   };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,11 +133,83 @@ export const AddProperty: React.FC = () => {
   const removeImage = (index: number) => {
     const newImages = formData.images?.filter((_, i) => i !== index) || [];
     handleInputChange("images", newImages);
+    
+    // Ajouter l'erreur des images si on a moins de 3 images
+    if (newImages.length < 3 && !errors.images) {
+      setErrors((prev) => ({
+        ...prev,
+        images: "Vous devez ajouter au moins 3 images"
+      }));
+    }
+  };
+
+  // Fonctions de validation
+  const validateStep = (step: number): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    switch (step) {
+      case 1:
+        if (!formData.propertyType?.trim()) {
+          newErrors.propertyType = "Le type de logement est requis";
+        }
+        if (!formData.title?.trim()) {
+          newErrors.title = "Le titre de l'annonce est requis";
+        }
+        if (!formData.description?.trim()) {
+          newErrors.description = "La description est requise";
+        }
+        break;
+
+      case 2:
+        if (!formData.bedrooms || formData.bedrooms < 1) {
+          newErrors.bedrooms = "Le nombre de chambres doit être au moins 1";
+        }
+        if (!formData.beds || formData.beds < 1) {
+          newErrors.beds = "Le nombre de lits doit être au moins 1";
+        }
+        if (!formData.bathrooms || formData.bathrooms < 1) {
+          newErrors.bathrooms = "Le nombre de salles de bain doit être au moins 1";
+        }
+        if (!formData.maxGuests || formData.maxGuests < 1) {
+          newErrors.maxGuests = "La capacité maximale doit être au moins 1";
+        }
+        if (!formData.squareMeters || formData.squareMeters < 1) {
+          newErrors.squareMeters = "La surface doit être au moins 1 m²";
+        }
+        break;
+
+      case 3:
+        if (!formData.neighborhood?.trim()) {
+          newErrors.neighborhood = "Le quartier est requis";
+        }
+        if (!formData.city?.trim()) {
+          newErrors.city = "La ville est requise";
+        }
+        break;
+
+      case 4:
+        if (!formData.pricePerNight || formData.pricePerNight < 1) {
+          newErrors.pricePerNight = "Le prix par nuit doit être au moins 1 fcfa";
+        }
+        break;
+
+      case 5:
+        if (!formData.images || formData.images.length < 3) {
+          newErrors.images = "Vous devez ajouter au moins 3 images";
+        }
+        break;
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const nextStep = () => {
-    if (currentStep < totalSteps) {
-      setCurrentStep(currentStep + 1);
+    if (validateStep(currentStep)) {
+      if (currentStep < totalSteps) {
+        setCurrentStep(currentStep + 1);
+        setErrors({}); // Réinitialiser les erreurs
+      }
     }
   };
 
@@ -137,6 +220,11 @@ export const AddProperty: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    // Validation finale avant soumission
+    if (!validateStep(5)) {
+      return;
+    }
+
     setIsSubmitting(true);
     const propertyService = getPropertyService();
 
@@ -147,7 +235,8 @@ export const AddProperty: React.FC = () => {
     const response = await propertyService.createProperty(createRequest);
 
     if (response) {
-      router.push("/properties");
+      // Redirection vers une page de succès avec l'ID de la propriété créée
+      router.push(`/property/created/${response.id}`);
     } else {
       console.log(response);
     }
@@ -200,8 +289,21 @@ export const AddProperty: React.FC = () => {
           </label>
           <select
             value={formData.propertyType}
-            onChange={(e) => handleInputChange("propertyType", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
+            onChange={(e) => {
+            handleInputChange("propertyType", e.target.value);
+            
+            // Validation en temps réel pour les champs texte
+            if (e.target.value.trim() && errors.propertyType) {
+              setErrors((prev) => {
+                const newErrors = { ...prev };
+                delete newErrors.propertyType;
+                return newErrors;
+              });
+            }
+          }}
+            className={`w-full px-3 py-2 border rounded-md focus:border-purple-500 ${
+              errors.propertyType ? "border-red-500" : "border-gray-300"
+            }`}
             required
           >
             <option value="">Sélectionnez un type</option>
@@ -211,6 +313,9 @@ export const AddProperty: React.FC = () => {
               </option>
             ))}
           </select>
+          {errors.propertyType && (
+            <p className="mt-1 text-sm text-red-600">{errors.propertyType}</p>
+          )}
         </div>
       </div>
 
@@ -221,11 +326,27 @@ export const AddProperty: React.FC = () => {
         <input
           type="text"
           value={formData.title}
-          onChange={(e) => handleInputChange("title", e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
+          onChange={(e) => {
+            handleInputChange("title", e.target.value);
+            
+            // Validation en temps réel pour les champs texte
+            if (e.target.value.trim() && errors.title) {
+              setErrors((prev) => {
+                const newErrors = { ...prev };
+                delete newErrors.title;
+                return newErrors;
+              });
+            }
+          }}
+          className={`w-full px-3 py-2 border rounded-md focus:border-purple-500 ${
+            errors.title ? "border-red-500" : "border-gray-300"
+          }`}
           placeholder="Ex: Appartement moderne au cœur de Douala"
           required
         />
+        {errors.title && (
+          <p className="mt-1 text-sm text-red-600">{errors.title}</p>
+        )}
       </div>
 
       <div>
@@ -234,12 +355,28 @@ export const AddProperty: React.FC = () => {
         </label>
         <textarea
           value={formData.description}
-          onChange={(e) => handleInputChange("description", e.target.value)}
+          onChange={(e) => {
+            handleInputChange("description", e.target.value);
+            
+            // Validation en temps réel pour les champs texte
+            if (e.target.value.trim() && errors.description) {
+              setErrors((prev) => {
+                const newErrors = { ...prev };
+                delete newErrors.description;
+                return newErrors;
+              });
+            }
+          }}
           rows={4}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
+          className={`w-full px-3 py-2 border rounded-md focus:border-purple-500 ${
+            errors.description ? "border-red-500" : "border-gray-300"
+          }`}
           placeholder="Décrivez votre logement..."
           required
         />
+        {errors.description && (
+          <p className="mt-1 text-sm text-red-600">{errors.description}</p>
+        )}
       </div>
     </div>
   );
@@ -263,10 +400,24 @@ export const AddProperty: React.FC = () => {
               const value =
                 e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
               handleInputChange("bedrooms", value);
+              
+              // Validation en temps réel pour les champs numériques
+              if (value >= 1 && errors.bedrooms) {
+                setErrors((prev) => {
+                  const newErrors = { ...prev };
+                  delete newErrors.bedrooms;
+                  return newErrors;
+                });
+              }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500 text-center"
+            className={`w-full px-3 py-2 border rounded-md focus:border-purple-500 text-center ${
+              errors.bedrooms ? "border-red-500" : "border-gray-300"
+            }`}
             required
           />
+          {errors.bedrooms && (
+            <p className="mt-1 text-sm text-red-600">{errors.bedrooms}</p>
+          )}
         </div>
 
         <div>
@@ -281,10 +432,24 @@ export const AddProperty: React.FC = () => {
               const value =
                 e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
               handleInputChange("beds", value);
+              
+              // Validation en temps réel pour les champs numériques
+              if (value >= 1 && errors.beds) {
+                setErrors((prev) => {
+                  const newErrors = { ...prev };
+                  delete newErrors.beds;
+                  return newErrors;
+                });
+              }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500 text-center"
+            className={`w-full px-3 py-2 border rounded-md focus:border-purple-500 text-center ${
+              errors.beds ? "border-red-500" : "border-gray-300"
+            }`}
             required
           />
+          {errors.beds && (
+            <p className="mt-1 text-sm text-red-600">{errors.beds}</p>
+          )}
         </div>
 
         <div>
@@ -299,10 +464,24 @@ export const AddProperty: React.FC = () => {
               const value =
                 e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
               handleInputChange("bathrooms", value);
+              
+              // Validation en temps réel pour les champs numériques
+              if (value >= 1 && errors.bathrooms) {
+                setErrors((prev) => {
+                  const newErrors = { ...prev };
+                  delete newErrors.bathrooms;
+                  return newErrors;
+                });
+              }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500 text-center"
+            className={`w-full px-3 py-2 border rounded-md focus:border-purple-500 text-center ${
+              errors.bathrooms ? "border-red-500" : "border-gray-300"
+            }`}
             required
           />
+          {errors.bathrooms && (
+            <p className="mt-1 text-sm text-red-600">{errors.bathrooms}</p>
+          )}
         </div>
 
         <div>
@@ -317,10 +496,24 @@ export const AddProperty: React.FC = () => {
               const value =
                 e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
               handleInputChange("maxGuests", value);
+              
+              // Validation en temps réel pour les champs numériques
+              if (value >= 1 && errors.maxGuests) {
+                setErrors((prev) => {
+                  const newErrors = { ...prev };
+                  delete newErrors.maxGuests;
+                  return newErrors;
+                });
+              }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500 text-center"
+            className={`w-full px-3 py-2 border rounded-md focus:border-purple-500 text-center ${
+              errors.maxGuests ? "border-red-500" : "border-gray-300"
+            }`}
             required
           />
+          {errors.maxGuests && (
+            <p className="mt-1 text-sm text-red-600">{errors.maxGuests}</p>
+          )}
         </div>
       </div>
 
@@ -336,11 +529,25 @@ export const AddProperty: React.FC = () => {
             const value =
               e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
             handleInputChange("squareMeters", value);
+            
+            // Validation en temps réel pour les champs numériques
+            if (value >= 1 && errors.squareMeters) {
+              setErrors((prev) => {
+                const newErrors = { ...prev };
+                delete newErrors.squareMeters;
+                return newErrors;
+              });
+            }
           }}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
+          className={`w-full px-3 py-2 border rounded-md focus:border-purple-500 ${
+            errors.squareMeters ? "border-red-500" : "border-gray-300"
+          }`}
           placeholder="120"
           required
         />
+        {errors.squareMeters && (
+          <p className="mt-1 text-sm text-red-600">{errors.squareMeters}</p>
+        )}
       </div>
     </div>
   );
@@ -349,33 +556,80 @@ export const AddProperty: React.FC = () => {
     <div className="space-y-6">
       <h2 className="text-xl font-normal text-gray-900 mb-4">Localisation</h2>
 
-      <div>
-        <label className="block text-sm font-normal text-gray-700 mb-2">
-          Adresse complète
-        </label>
-        <input
-          type="text"
-          value={formData.address}
-          onChange={(e) => handleInputChange("address", e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
-          placeholder="123 Rue de la Paix"
-          required
-        />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-normal text-gray-700 mb-2">
+            Adresse complète (optionnel)
+          </label>
+          <input
+            type="text"
+            value={formData.address}
+            onChange={(e) => handleInputChange("address", e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
+            placeholder="123 Rue de la Paix"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-normal text-gray-700 mb-2">
+            Quartier <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            value={formData.neighborhood}
+            onChange={(e) => {
+              handleInputChange("neighborhood", e.target.value);
+              
+              // Validation en temps réel pour les champs texte
+              if (e.target.value.trim() && errors.neighborhood) {
+                setErrors((prev) => {
+                  const newErrors = { ...prev };
+                  delete newErrors.neighborhood;
+                  return newErrors;
+                });
+              }
+            }}
+            className={`w-full px-3 py-2 border rounded-md focus:border-purple-500 ${
+              errors.neighborhood ? "border-red-500" : "border-gray-300"
+            }`}
+            placeholder="Akwa, Bali, etc."
+            required
+          />
+          {errors.neighborhood && (
+            <p className="mt-1 text-sm text-red-600">{errors.neighborhood}</p>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-normal text-gray-700 mb-2">
-            Ville
+            Ville <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             value={formData.city}
-            onChange={(e) => handleInputChange("city", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
+            onChange={(e) => {
+              handleInputChange("city", e.target.value);
+              
+              // Validation en temps réel pour les champs texte
+              if (e.target.value.trim() && errors.city) {
+                setErrors((prev) => {
+                  const newErrors = { ...prev };
+                  delete newErrors.city;
+                  return newErrors;
+                });
+              }
+            }}
+            className={`w-full px-3 py-2 border rounded-md focus:border-purple-500 ${
+              errors.city ? "border-red-500" : "border-gray-300"
+            }`}
             placeholder="Douala"
             required
           />
+          {errors.city && (
+            <p className="mt-1 text-sm text-red-600">{errors.city}</p>
+          )}
         </div>
 
         <div>
@@ -410,11 +664,25 @@ export const AddProperty: React.FC = () => {
             const value =
               e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
             handleInputChange("pricePerNight", value);
+            
+            // Validation en temps réel pour les champs numériques
+            if (value >= 1 && errors.pricePerNight) {
+              setErrors((prev) => {
+                const newErrors = { ...prev };
+                delete newErrors.pricePerNight;
+                return newErrors;
+              });
+            }
           }}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
+          className={`w-full px-3 py-2 border rounded-md focus:border-purple-500 ${
+            errors.pricePerNight ? "border-red-500" : "border-gray-300"
+          }`}
           placeholder="25000"
           required
         />
+        {errors.pricePerNight && (
+          <p className="mt-1 text-sm text-red-600">{errors.pricePerNight}</p>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -589,14 +857,21 @@ export const AddProperty: React.FC = () => {
             </div>
           </div>
 
-          {/* Message d'aide */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-            <p className="text-sm text-blue-800">
-              <strong>Conseil :</strong> Ajoutez des photos de qualité montrant
-              les différentes pièces de votre logement pour attirer plus de
-              voyageurs. La première image sera affichée en premier.
-            </p>
-          </div>
+                      {/* Message d'aide */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <p className="text-sm text-blue-800">
+                <strong>Conseil :</strong> Ajoutez des photos de qualité montrant
+                les différentes pièces de votre logement pour attirer plus de
+                voyageurs. La première image sera affichée en premier.
+              </p>
+            </div>
+
+            {/* Affichage de l'erreur pour les images */}
+            {errors.images && (
+              <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-600">{errors.images}</p>
+              </div>
+            )}
         </div>
       </div>
 
@@ -676,7 +951,7 @@ export const AddProperty: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* En-tête simple */}
         <div className="text-center mb-8">
           <h1 className="text-2xl font-normal text-gray-900 mb-2">
