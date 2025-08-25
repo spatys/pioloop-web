@@ -17,9 +17,7 @@ export const LatestProperties: React.FC = () => {
             <h2 className="text-3xl font-normal text-gray-700 mb-4">
               Erreur de chargement
             </h2>
-            <p className="text-lg text-gray-600">
-              {error}
-            </p>
+            <p className="text-lg text-gray-600">{error}</p>
           </div>
         </div>
       </section>
@@ -38,7 +36,7 @@ export const LatestProperties: React.FC = () => {
               Découvrez nos nouvelles propriétés disponibles
             </p>
           </div>
-          
+
           <PropertySkeleton count={5} />
         </div>
       </section>
@@ -54,7 +52,8 @@ export const LatestProperties: React.FC = () => {
             Derniers logements
           </h2>
           <p className="text-lg text-gray-600">
-            Découvrez nos nouvelles propriétés disponibles, triées par date d'ajout
+            Découvrez nos nouvelles propriétés disponibles, triées par date
+            d'ajout
           </p>
         </div>
 
@@ -67,14 +66,20 @@ export const LatestProperties: React.FC = () => {
 
         {/* Bouton "Voir plus" */}
         <div className="text-center mt-12">
-          <BoutonLink
-            href="/properties"
-            variant="default"
-            size="md"
-          >
+          <BoutonLink href="/properties" variant="default" size="md">
             Voir Tous les Logements
-            <svg className="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            <svg
+              className="ml-2 -mr-1 w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              />
             </svg>
           </BoutonLink>
         </div>

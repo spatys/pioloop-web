@@ -31,7 +31,9 @@ container.bind<IAuthRepository>(TYPES.IAuthRepository).to(AuthRepository);
 container
   .bind<IContractRepository>(TYPES.IContractRepository)
   .to(ContractRepository);
-container.bind<IPropertyRepository>(TYPES.IPropertyRepository).to(PropertyRepository);
+container
+  .bind<IPropertyRepository>(TYPES.IPropertyRepository)
+  .to(PropertyRepository);
 
 // Enregistrement des services avec injection de dépendances
 container.bind<IAuthService>(TYPES.IAuthService).to(AuthService);

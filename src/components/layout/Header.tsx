@@ -99,28 +99,32 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
             <Link
               href="/"
               className={`font-medium relative group transition-all duration-200 ${
-                pathname === "/" 
-                  ? "text-purple-600" 
+                pathname === "/"
+                  ? "text-purple-600"
                   : "text-gray-700 hover:text-purple-600"
               }`}
             >
               Logements
-              <span className={`absolute -bottom-1 left-0 h-0.5 bg-purple-600 transition-all duration-200 ${
-                pathname === "/" ? "w-full" : "w-0 group-hover:w-full"
-              }`}></span>
+              <span
+                className={`absolute -bottom-1 left-0 h-0.5 bg-purple-600 transition-all duration-200 ${
+                  pathname === "/" ? "w-full" : "w-0 group-hover:w-full"
+                }`}
+              ></span>
             </Link>
             <Link
               href="/about"
               className={`font-medium relative group transition-all duration-200 ${
-                pathname === "/about" 
-                  ? "text-purple-600" 
+                pathname === "/about"
+                  ? "text-purple-600"
                   : "text-gray-700 hover:text-purple-600"
               }`}
             >
               À propos
-              <span className={`absolute -bottom-1 left-0 h-0.5 bg-purple-600 transition-all duration-200 ${
-                pathname === "/about" ? "w-full" : "w-0 group-hover:w-full"
-              }`}></span>
+              <span
+                className={`absolute -bottom-1 left-0 h-0.5 bg-purple-600 transition-all duration-200 ${
+                  pathname === "/about" ? "w-full" : "w-0 group-hover:w-full"
+                }`}
+              ></span>
             </Link>
           </nav>
 

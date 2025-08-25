@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-inter: 'Inter', system-ui, sans-serif;
-  --font-poppins: 'Poppins', system-ui, sans-serif;
+  --font-inter: "Inter", system-ui, sans-serif;
+  --font-poppins: "Poppins", system-ui, sans-serif;
 }
 
 * {
@@ -25,11 +25,16 @@ body {
 }
 
 @layer base {
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-poppins);
     font-weight: 600;
   }
-  
+
   p {
     line-height: 1.7;
   }
@@ -39,19 +44,19 @@ body {
   .btn-primary {
     @apply bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200;
   }
-  
+
   .btn-secondary {
     @apply border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold py-3 px-6 rounded-lg transition-colors duration-200;
   }
-  
+
   .input-field {
     @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-200;
   }
-  
+
   .card {
     @apply bg-white rounded-lg shadow-soft border border-gray-200 p-6;
   }
-  
+
   .card-hover {
     @apply hover:shadow-medium transition-all duration-200;
   }
@@ -74,19 +79,19 @@ body {
     box-shadow: none !important;
     border-color: #9333ea !important; /* purple-600 */
   }
-  
+
   input:focus-visible {
     outline: none !important;
     box-shadow: none !important;
     border-color: #9333ea !important;
   }
-  
+
   /* Supprimer tous les styles de focus par défaut */
   *:focus {
     outline: none !important;
   }
-  
+
   *:focus-visible {
     outline: none !important;
   }
-} 
+}

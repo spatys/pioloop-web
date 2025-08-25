@@ -5,7 +5,8 @@ export const properties: Property[] = [
   {
     id: "douala-1",
     title: "Appartement moderne Akwa",
-    description: "Magnifique appartement 3 chambres au cœur du quartier Akwa, proche des commerces et de la plage.",
+    description:
+      "Magnifique appartement 3 chambres au cœur du quartier Akwa, proche des commerces et de la plage.",
     propertyType: "Appartement",
     maxGuests: 6,
     bedrooms: 3,
@@ -25,16 +26,17 @@ export const properties: Property[] = [
     ownerName: "Marie Akwa",
     ownerEmail: "marie.akwa@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
     amenities: ["WiFi", "Climatisation", "Parking", "Cuisine équipée"],
     createdAt: new Date("2024-01-10"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "douala-2",
     title: "Villa luxueuse Bonanjo",
-    description: "Villa 4 chambres avec piscine privée dans le quartier huppé de Bonanjo.",
+    description:
+      "Villa 4 chambres avec piscine privée dans le quartier huppé de Bonanjo.",
     propertyType: "Villa",
     maxGuests: 8,
     bedrooms: 4,
@@ -54,16 +56,23 @@ export const properties: Property[] = [
     ownerName: "Jean Bonanjo",
     ownerEmail: "jean.bonanjo@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
-    amenities: ["Piscine", "WiFi", "Climatisation", "Parking sécurisé", "Cuisine équipée"],
+    amenities: [
+      "Piscine",
+      "WiFi",
+      "Climatisation",
+      "Parking sécurisé",
+      "Cuisine équipée",
+    ],
     createdAt: new Date("2024-01-15"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "douala-3",
     title: "Studio moderne Deido",
-    description: "Studio meublé idéal pour voyageur solo ou couple, proche du centre-ville.",
+    description:
+      "Studio meublé idéal pour voyageur solo ou couple, proche du centre-ville.",
     propertyType: "Studio",
     maxGuests: 2,
     bedrooms: 1,
@@ -83,16 +92,17 @@ export const properties: Property[] = [
     ownerName: "Sophie Deido",
     ownerEmail: "sophie.deido@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
     amenities: ["WiFi", "Climatisation", "Cuisine équipée"],
     createdAt: new Date("2024-02-01"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "douala-4",
     title: "Maison traditionnelle Akwa",
-    description: "Maison 2 chambres avec jardin, style traditionnel camerounais.",
+    description:
+      "Maison 2 chambres avec jardin, style traditionnel camerounais.",
     propertyType: "Maison",
     maxGuests: 4,
     bedrooms: 2,
@@ -112,11 +122,11 @@ export const properties: Property[] = [
     ownerName: "Pierre Akwa",
     ownerEmail: "pierre.akwa@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
     amenities: ["Jardin", "WiFi", "Cuisine équipée"],
     createdAt: new Date("2024-01-20"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "douala-5",
@@ -141,18 +151,25 @@ export const properties: Property[] = [
     ownerName: "Lucie Bonanjo",
     ownerEmail: "lucie.bonanjo@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
-    amenities: ["Terrasse", "WiFi", "Climatisation", "Parking", "Cuisine équipée"],
+    amenities: [
+      "Terrasse",
+      "WiFi",
+      "Climatisation",
+      "Parking",
+      "Cuisine équipée",
+    ],
     createdAt: new Date("2024-02-15"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
 
   // YAOUNDE PROPERTIES (5 properties)
   {
     id: "yaounde-1",
     title: "Appartement moderne Centre-ville",
-    description: "Appartement 2 chambres au cœur de Yaoundé, proche des administrations.",
+    description:
+      "Appartement 2 chambres au cœur de Yaoundé, proche des administrations.",
     propertyType: "Appartement",
     maxGuests: 4,
     bedrooms: 2,
@@ -162,7 +179,7 @@ export const properties: Property[] = [
     address: "123 Avenue Kennedy",
     city: "Yaoundé",
     postalCode: "237",
-    latitude: 3.8480,
+    latitude: 3.848,
     longitude: 11.5021,
     pricePerNight: 40000,
     cleaningFee: 12000,
@@ -172,16 +189,17 @@ export const properties: Property[] = [
     ownerName: "Marie Yaoundé",
     ownerEmail: "marie.yaounde@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
     amenities: ["WiFi", "Climatisation", "Parking", "Cuisine équipée"],
     createdAt: new Date("2024-01-20"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "yaounde-2",
     title: "Villa avec piscine Bastos",
-    description: "Villa 5 chambres avec piscine dans le quartier diplomatique de Bastos.",
+    description:
+      "Villa 5 chambres avec piscine dans le quartier diplomatique de Bastos.",
     propertyType: "Villa",
     maxGuests: 10,
     bedrooms: 5,
@@ -191,7 +209,7 @@ export const properties: Property[] = [
     address: "456 Rue de Bastos",
     city: "Yaoundé",
     postalCode: "237",
-    latitude: 3.8480,
+    latitude: 3.848,
     longitude: 11.5021,
     pricePerNight: 120000,
     cleaningFee: 30000,
@@ -201,16 +219,24 @@ export const properties: Property[] = [
     ownerName: "Jean Bastos",
     ownerEmail: "jean.bastos@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
-    amenities: ["Piscine", "WiFi", "Climatisation", "Parking sécurisé", "Cuisine équipée", "Jardin"],
+    amenities: [
+      "Piscine",
+      "WiFi",
+      "Climatisation",
+      "Parking sécurisé",
+      "Cuisine équipée",
+      "Jardin",
+    ],
     createdAt: new Date("2024-01-25"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "yaounde-3",
     title: "Studio moderne Centre-ville",
-    description: "Studio meublé au centre de Yaoundé, idéal pour voyageur d'affaires.",
+    description:
+      "Studio meublé au centre de Yaoundé, idéal pour voyageur d'affaires.",
     propertyType: "Studio",
     maxGuests: 2,
     bedrooms: 1,
@@ -220,7 +246,7 @@ export const properties: Property[] = [
     address: "789 Boulevard de l'Indépendance",
     city: "Yaoundé",
     postalCode: "237",
-    latitude: 3.8480,
+    latitude: 3.848,
     longitude: 11.5021,
     pricePerNight: 30000,
     cleaningFee: 8000,
@@ -230,16 +256,17 @@ export const properties: Property[] = [
     ownerName: "Sophie Centre",
     ownerEmail: "sophie.centre@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
     amenities: ["WiFi", "Climatisation", "Cuisine équipée"],
     createdAt: new Date("2024-02-05"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "yaounde-4",
     title: "Maison traditionnelle Etoudi",
-    description: "Maison 3 chambres avec jardin dans le quartier résidentiel d'Etoudi.",
+    description:
+      "Maison 3 chambres avec jardin dans le quartier résidentiel d'Etoudi.",
     propertyType: "Maison",
     maxGuests: 6,
     bedrooms: 3,
@@ -249,7 +276,7 @@ export const properties: Property[] = [
     address: "321 Rue d'Etoudi",
     city: "Yaoundé",
     postalCode: "237",
-    latitude: 3.8480,
+    latitude: 3.848,
     longitude: 11.5021,
     pricePerNight: 50000,
     cleaningFee: 15000,
@@ -259,16 +286,17 @@ export const properties: Property[] = [
     ownerName: "Pierre Etoudi",
     ownerEmail: "pierre.etoudi@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
     amenities: ["Jardin", "WiFi", "Cuisine équipée", "Parking"],
     createdAt: new Date("2024-02-12"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "yaounde-5",
     title: "Duplex moderne Centre-ville",
-    description: "Duplex 4 chambres avec terrasse, vue panoramique sur Yaoundé.",
+    description:
+      "Duplex 4 chambres avec terrasse, vue panoramique sur Yaoundé.",
     propertyType: "Duplex",
     maxGuests: 8,
     bedrooms: 4,
@@ -278,7 +306,7 @@ export const properties: Property[] = [
     address: "654 Avenue Kennedy",
     city: "Yaoundé",
     postalCode: "237",
-    latitude: 3.8480,
+    latitude: 3.848,
     longitude: 11.5021,
     pricePerNight: 80000,
     cleaningFee: 20000,
@@ -288,18 +316,25 @@ export const properties: Property[] = [
     ownerName: "Lucie Centre",
     ownerEmail: "lucie.centre@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
-    amenities: ["Terrasse", "WiFi", "Climatisation", "Parking", "Cuisine équipée"],
+    amenities: [
+      "Terrasse",
+      "WiFi",
+      "Climatisation",
+      "Parking",
+      "Cuisine équipée",
+    ],
     createdAt: new Date("2024-02-18"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
 
   // AUTRES VILLES (10 properties)
   {
     id: "bamenda-1",
     title: "Appartement moderne Bamenda",
-    description: "Appartement 2 chambres au cœur de Bamenda, proche des commerces.",
+    description:
+      "Appartement 2 chambres au cœur de Bamenda, proche des commerces.",
     propertyType: "Appartement",
     maxGuests: 4,
     bedrooms: 2,
@@ -310,7 +345,7 @@ export const properties: Property[] = [
     city: "Bamenda",
     postalCode: "237",
     latitude: 5.9597,
-    longitude: 10.1460,
+    longitude: 10.146,
     pricePerNight: 35000,
     cleaningFee: 10000,
     serviceFee: 3500,
@@ -319,11 +354,11 @@ export const properties: Property[] = [
     ownerName: "Marie Bamenda",
     ownerEmail: "marie.bamenda@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
     amenities: ["WiFi", "Climatisation", "Cuisine équipée"],
     createdAt: new Date("2024-01-30"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "buea-1",
@@ -348,11 +383,17 @@ export const properties: Property[] = [
     ownerName: "Jean Buea",
     ownerEmail: "jean.buea@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
-    amenities: ["Vue montagne", "WiFi", "Climatisation", "Parking", "Cuisine équipée"],
+    amenities: [
+      "Vue montagne",
+      "WiFi",
+      "Climatisation",
+      "Parking",
+      "Cuisine équipée",
+    ],
     createdAt: new Date("2024-02-20"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "kribi-1",
@@ -377,11 +418,17 @@ export const properties: Property[] = [
     ownerName: "Sophie Kribi",
     ownerEmail: "sophie.kribi@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
-    amenities: ["Plage privée", "WiFi", "Climatisation", "Parking", "Cuisine équipée"],
+    amenities: [
+      "Plage privée",
+      "WiFi",
+      "Climatisation",
+      "Parking",
+      "Cuisine équipée",
+    ],
     createdAt: new Date("2024-02-25"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "garoua-1",
@@ -406,11 +453,11 @@ export const properties: Property[] = [
     ownerName: "Pierre Garoua",
     ownerEmail: "pierre.garoua@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
     amenities: ["WiFi", "Climatisation", "Cuisine équipée"],
     createdAt: new Date("2024-03-01"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "maroua-1",
@@ -425,7 +472,7 @@ export const properties: Property[] = [
     address: "456 Rue centrale",
     city: "Maroua",
     postalCode: "237",
-    latitude: 10.5910,
+    latitude: 10.591,
     longitude: 14.3159,
     pricePerNight: 25000,
     cleaningFee: 8000,
@@ -435,11 +482,11 @@ export const properties: Property[] = [
     ownerName: "Lucie Maroua",
     ownerEmail: "lucie.maroua@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
     amenities: ["WiFi", "Climatisation", "Cuisine équipée"],
     createdAt: new Date("2024-03-05"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "bertoua-1",
@@ -464,11 +511,11 @@ export const properties: Property[] = [
     ownerName: "Marie Bertoua",
     ownerEmail: "marie.bertoua@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
     amenities: ["Jardin", "WiFi", "Cuisine équipée"],
     createdAt: new Date("2024-03-10"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "ebolowa-1",
@@ -483,8 +530,8 @@ export const properties: Property[] = [
     address: "123 Boulevard central",
     city: "Ebolowa",
     postalCode: "237",
-    latitude: 2.9000,
-    longitude: 11.1500,
+    latitude: 2.9,
+    longitude: 11.15,
     pricePerNight: 22000,
     cleaningFee: 7000,
     serviceFee: 2500,
@@ -493,11 +540,11 @@ export const properties: Property[] = [
     ownerName: "Jean Ebolowa",
     ownerEmail: "jean.ebolowa@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
     amenities: ["WiFi", "Climatisation", "Cuisine équipée"],
     createdAt: new Date("2024-03-15"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "ngaoundere-1",
@@ -522,11 +569,11 @@ export const properties: Property[] = [
     ownerName: "Sophie Ngaoundere",
     ownerEmail: "sophie.ngaoundere@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
     amenities: ["WiFi", "Climatisation", "Cuisine équipée"],
     createdAt: new Date("2024-03-20"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "kousseri-1",
@@ -551,11 +598,11 @@ export const properties: Property[] = [
     ownerName: "Pierre Kousseri",
     ownerEmail: "pierre.kousseri@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
     amenities: ["WiFi", "Climatisation", "Cuisine équipée", "Parking"],
     createdAt: new Date("2024-03-25"),
-    updatedAt: new Date("2024-08-20")
+    updatedAt: new Date("2024-08-20"),
   },
   {
     id: "bafoussam-1",
@@ -580,12 +627,18 @@ export const properties: Property[] = [
     ownerName: "Lucie Bafoussam",
     ownerEmail: "lucie.bafoussam@example.com",
     imageUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
     ],
-    amenities: ["Terrasse", "WiFi", "Climatisation", "Parking", "Cuisine équipée"],
+    amenities: [
+      "Terrasse",
+      "WiFi",
+      "Climatisation",
+      "Parking",
+      "Cuisine équipée",
+    ],
     createdAt: new Date("2024-03-30"),
-    updatedAt: new Date("2024-08-20")
-  }
+    updatedAt: new Date("2024-08-20"),
+  },
 ];
 
 export default properties;

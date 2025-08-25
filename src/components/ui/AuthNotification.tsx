@@ -25,7 +25,9 @@ export const AuthNotification: React.FC<AuthNotificationProps> = ({
   };
 
   return (
-    <div className={`bg-blue-50 border border-blue-200 rounded-lg p-4 ${className}`}>
+    <div
+      className={`bg-blue-50 border border-blue-200 rounded-lg p-4 ${className}`}
+    >
       <div className="flex items-start">
         <div className="flex-shrink-0">
           <AlertCircle className="h-5 w-5 text-blue-400" />

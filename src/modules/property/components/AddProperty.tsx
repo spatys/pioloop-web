@@ -2,7 +2,12 @@
 
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { PropertyType, CreatePropertyRequest, PropertyAmenityRequest, PropertyImageRequest } from "@/core/types/Property";
+import {
+  PropertyType,
+  CreatePropertyRequest,
+  PropertyAmenityRequest,
+  PropertyImageRequest,
+} from "@/core/types/Property";
 import { getPropertyService } from "@/core/di/container";
 import { Loader } from "lucide-react";
 
@@ -33,17 +38,23 @@ export const AddProperty: React.FC = () => {
 
   const totalSteps = 5;
 
-  const handleInputChange = (field: keyof CreatePropertyRequest, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleInputChange = (
+    field: keyof CreatePropertyRequest,
+    value: any,
+  ) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
       const fileArray = Array.from(files);
-      const imageFiles = fileArray.filter(file => 
-        file.type.startsWith('image/') && 
-        (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg')
+      const imageFiles = fileArray.filter(
+        (file) =>
+          file.type.startsWith("image/") &&
+          (file.type === "image/jpeg" ||
+            file.type === "image/png" ||
+            file.type === "image/jpg"),
       );
 
       if (imageFiles.length + (formData.images?.length || 0) > 10) {
@@ -52,12 +63,14 @@ export const AddProperty: React.FC = () => {
       }
 
       // Convertir les fichiers en objets PropertyImageRequest
-      const newImages: PropertyImageRequest[] = imageFiles.map((file, index) => ({
-        imageUrl: URL.createObjectURL(file),
-        altText: file.name,
-        isMainImage: (formData.images?.length || 0) === 0 && index === 0,
-        displayOrder: (formData.images?.length || 0) + index + 1
-      }));
+      const newImages: PropertyImageRequest[] = imageFiles.map(
+        (file, index) => ({
+          imageUrl: URL.createObjectURL(file),
+          altText: file.name,
+          isMainImage: (formData.images?.length || 0) === 0 && index === 0,
+          displayOrder: (formData.images?.length || 0) + index + 1,
+        }),
+      );
       const updatedImages = [...(formData.images || []), ...newImages];
       handleInputChange("images", updatedImages);
     }
@@ -69,9 +82,12 @@ export const AddProperty: React.FC = () => {
     const files = event.dataTransfer.files;
     if (files) {
       const fileArray = Array.from(files);
-      const imageFiles = fileArray.filter(file => 
-        file.type.startsWith('image/') && 
-        (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg')
+      const imageFiles = fileArray.filter(
+        (file) =>
+          file.type.startsWith("image/") &&
+          (file.type === "image/jpeg" ||
+            file.type === "image/png" ||
+            file.type === "image/jpg"),
       );
 
       if (imageFiles.length + (formData.images?.length || 0) > 10) {
@@ -80,12 +96,14 @@ export const AddProperty: React.FC = () => {
       }
 
       // Convertir les fichiers en objets PropertyImageRequest
-      const newImages: PropertyImageRequest[] = imageFiles.map((file, index) => ({
-        imageUrl: URL.createObjectURL(file),
-        altText: file.name,
-        isMainImage: (formData.images?.length || 0) === 0 && index === 0,
-        displayOrder: (formData.images?.length || 0) + index + 1
-      }));
+      const newImages: PropertyImageRequest[] = imageFiles.map(
+        (file, index) => ({
+          imageUrl: URL.createObjectURL(file),
+          altText: file.name,
+          isMainImage: (formData.images?.length || 0) === 0 && index === 0,
+          displayOrder: (formData.images?.length || 0) + index + 1,
+        }),
+      );
       const updatedImages = [...(formData.images || []), ...newImages];
       handleInputChange("images", updatedImages);
     }
@@ -121,19 +139,19 @@ export const AddProperty: React.FC = () => {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     const propertyService = getPropertyService();
-    
+
     const createRequest: CreatePropertyRequest = {
-      ...formData as CreatePropertyRequest
+      ...(formData as CreatePropertyRequest),
     };
 
     const response = await propertyService.createProperty(createRequest);
 
-    if(response) {
+    if (response) {
       router.push("/properties");
     } else {
       console.log(response);
     }
-  
+
     setIsSubmitting(false);
   };
 
@@ -147,8 +165,8 @@ export const AddProperty: React.FC = () => {
                 index + 1 === currentStep
                   ? "bg-purple-600 text-white"
                   : index + 1 < currentStep
-                  ? "bg-green-500 text-white"
-                  : "bg-gray-200 text-gray-600"
+                    ? "bg-green-500 text-white"
+                    : "bg-gray-200 text-gray-600"
               }`}
             >
               {index + 1 < currentStep ? "✓" : index + 1}
@@ -174,7 +192,7 @@ export const AddProperty: React.FC = () => {
       <h2 className="text-xl font-normal text-gray-900 mb-4">
         Informations générales
       </h2>
-      
+
       <div className="grid grid-cols-1 gap-4">
         <div>
           <label className="block text-sm font-normal text-gray-700 mb-2">
@@ -188,7 +206,9 @@ export const AddProperty: React.FC = () => {
           >
             <option value="">Sélectionnez un type</option>
             {Object.values(PropertyType).map((type) => (
-              <option key={type} value={type}>{type}</option>
+              <option key={type} value={type}>
+                {type}
+              </option>
             ))}
           </select>
         </div>
@@ -229,7 +249,7 @@ export const AddProperty: React.FC = () => {
       <h2 className="text-xl font-normal text-gray-900 mb-4">
         Capacité et équipements
       </h2>
-      
+
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div>
           <label className="block text-sm font-normal text-gray-700 mb-2">
@@ -240,7 +260,8 @@ export const AddProperty: React.FC = () => {
             min="1"
             value={formData.bedrooms}
             onChange={(e) => {
-              const value = e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+              const value =
+                e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
               handleInputChange("bedrooms", value);
             }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500 text-center"
@@ -257,7 +278,8 @@ export const AddProperty: React.FC = () => {
             min="1"
             value={formData.beds}
             onChange={(e) => {
-              const value = e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+              const value =
+                e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
               handleInputChange("beds", value);
             }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500 text-center"
@@ -274,7 +296,8 @@ export const AddProperty: React.FC = () => {
             min="1"
             value={formData.bathrooms}
             onChange={(e) => {
-              const value = e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+              const value =
+                e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
               handleInputChange("bathrooms", value);
             }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500 text-center"
@@ -291,7 +314,8 @@ export const AddProperty: React.FC = () => {
             min="1"
             value={formData.maxGuests}
             onChange={(e) => {
-              const value = e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+              const value =
+                e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
               handleInputChange("maxGuests", value);
             }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500 text-center"
@@ -308,10 +332,11 @@ export const AddProperty: React.FC = () => {
           type="number"
           min="1"
           value={formData.squareMeters}
-                      onChange={(e) => {
-              const value = e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
-              handleInputChange("squareMeters", value);
-            }}
+          onChange={(e) => {
+            const value =
+              e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+            handleInputChange("squareMeters", value);
+          }}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
           placeholder="120"
           required
@@ -322,10 +347,8 @@ export const AddProperty: React.FC = () => {
 
   const renderStep3 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-normal text-gray-900 mb-4">
-        Localisation
-      </h2>
-      
+      <h2 className="text-xl font-normal text-gray-900 mb-4">Localisation</h2>
+
       <div>
         <label className="block text-sm font-normal text-gray-700 mb-2">
           Adresse complète
@@ -373,10 +396,8 @@ export const AddProperty: React.FC = () => {
 
   const renderStep4 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-normal text-gray-900 mb-4">
-        Tarification
-      </h2>
-      
+      <h2 className="text-xl font-normal text-gray-900 mb-4">Tarification</h2>
+
       <div>
         <label className="block text-sm font-normal text-gray-700 mb-2">
           Prix par nuit (FCFA) <span className="text-red-500">*</span>
@@ -385,10 +406,11 @@ export const AddProperty: React.FC = () => {
           type="number"
           min="0"
           value={formData.pricePerNight}
-                      onChange={(e) => {
-              const value = e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
-              handleInputChange("pricePerNight", value);
-            }}
+          onChange={(e) => {
+            const value =
+              e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+            handleInputChange("pricePerNight", value);
+          }}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
           placeholder="25000"
           required
@@ -405,7 +427,8 @@ export const AddProperty: React.FC = () => {
             min="0"
             value={formData.cleaningFee}
             onChange={(e) => {
-              const value = e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+              const value =
+                e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
               handleInputChange("cleaningFee", value);
             }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
@@ -422,7 +445,8 @@ export const AddProperty: React.FC = () => {
             min="0"
             value={formData.serviceFee}
             onChange={(e) => {
-              const value = e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+              const value =
+                e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
               handleInputChange("serviceFee", value);
             }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
@@ -438,22 +462,21 @@ export const AddProperty: React.FC = () => {
       <h2 className="text-xl font-normal text-gray-900 mb-4">
         Images du logement
       </h2>
-      
+
       <div>
         <label className="block text-sm font-normal text-gray-700 mb-2">
           Photos de votre logement <span className="text-red-500">*</span>
         </label>
         <p className="text-sm text-gray-600 mb-4">
-          Ajoutez entre 3 et 10 photos de votre logement. La première photo sera la photo principale.
+          Ajoutez entre 3 et 10 photos de votre logement. La première photo sera
+          la photo principale.
         </p>
-        
+
         <div className="space-y-4">
           {/* Zone de drop/upload avec aperçu intégré */}
-          <div 
+          <div
             className={`border-2 border-dashed rounded-lg p-6 transition-colors duration-200 ${
-              isDragOver 
-                ? "border-purple-500 bg-purple-50" 
-                : "border-gray-300"
+              isDragOver ? "border-purple-500 bg-purple-50" : "border-gray-300"
             }`}
             onDrop={handleDrop}
             onDragOver={handleDragOver}
@@ -472,12 +495,17 @@ export const AddProperty: React.FC = () => {
             {/* Aperçu des images sélectionnées */}
             {formData.images && formData.images.length > 0 ? (
               <div>
-                <p className="text-sm text-gray-600 mb-3">Aperçu des images ({formData.images.length}/10)</p>
+                <p className="text-sm text-gray-600 mb-3">
+                  Aperçu des images ({formData.images.length}/10)
+                </p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-4">
                   {formData.images.map((image, index) => (
-                    <div key={index} className="aspect-video bg-gray-100 rounded-lg border border-gray-300 relative group">
-                      <img 
-                        src={image.imageUrl} 
+                    <div
+                      key={index}
+                      className="aspect-video bg-gray-100 rounded-lg border border-gray-300 relative group"
+                    >
+                      <img
+                        src={image.imageUrl}
                         alt={image.altText}
                         className="w-full h-full object-cover rounded-lg"
                       />
@@ -495,24 +523,50 @@ export const AddProperty: React.FC = () => {
                       )}
                     </div>
                   ))}
-                  
+
                   {/* Emplacements vides */}
-                  {Array.from({ length: Math.max(3, 10 - formData.images.length) }, (_, index) => (
-                    <div key={`empty-${index}`} className="aspect-video bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
-                      <div className="text-center">
-                        <svg className="mx-auto h-6 w-6 text-gray-400 mb-1" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                        <p className="text-xs text-gray-500">Ajouter</p>
+                  {Array.from(
+                    { length: Math.max(3, 10 - formData.images.length) },
+                    (_, index) => (
+                      <div
+                        key={`empty-${index}`}
+                        className="aspect-video bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center"
+                      >
+                        <div className="text-center">
+                          <svg
+                            className="mx-auto h-6 w-6 text-gray-400 mb-1"
+                            stroke="currentColor"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                            />
+                          </svg>
+                          <p className="text-xs text-gray-500">Ajouter</p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </div>
               </div>
             ) : (
               <div className="text-center">
-                <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                  <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                <svg
+                  className="mx-auto h-12 w-12 text-gray-400"
+                  stroke="currentColor"
+                  fill="none"
+                  viewBox="0 0 48 48"
+                >
+                  <path
+                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </div>
             )}
@@ -538,7 +592,9 @@ export const AddProperty: React.FC = () => {
           {/* Message d'aide */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
             <p className="text-sm text-blue-800">
-              <strong>Conseil :</strong> Ajoutez des photos de qualité montrant les différentes pièces de votre logement pour attirer plus de voyageurs. La première image sera affichée en premier.
+              <strong>Conseil :</strong> Ajoutez des photos de qualité montrant
+              les différentes pièces de votre logement pour attirer plus de
+              voyageurs. La première image sera affichée en premier.
             </p>
           </div>
         </div>
@@ -561,7 +617,7 @@ export const AddProperty: React.FC = () => {
             { name: "Ménage", type: 2, category: 2 },
             { name: "Petit-déjeuner", type: 2, category: 2 },
             { name: "Animaux", type: 2, category: 2 },
-            { name: "Fumeur", type: 2, category: 2 }
+            { name: "Fumeur", type: 2, category: 2 },
           ].map((amenity) => (
             <label key={amenity.name} className="flex items-center">
               <input
@@ -579,11 +635,17 @@ export const AddProperty: React.FC = () => {
                       isIncludedInRent: true,
                       additionalCost: 0,
                       icon: amenity.name.toLowerCase(),
-                      priority: 1
+                      priority: 1,
                     };
-                    handleInputChange("amenities", [...currentAmenities, newAmenity]);
+                    handleInputChange("amenities", [
+                      ...currentAmenities,
+                      newAmenity,
+                    ]);
                   } else {
-                    handleInputChange("amenities", currentAmenities.filter(a => a.name !== amenity.name));
+                    handleInputChange(
+                      "amenities",
+                      currentAmenities.filter((a) => a.name !== amenity.name),
+                    );
                   }
                 }}
               />

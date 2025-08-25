@@ -5,7 +5,7 @@ export enum PropertyStatus {
   Available = "Available",
   Rented = "Rented",
   UnderMaintenance = "UnderMaintenance",
-  Unavailable = "Unavailable"
+  Unavailable = "Unavailable",
 }
 
 export enum PropertyType {
@@ -14,7 +14,7 @@ export enum PropertyType {
   Apartment = "Appartement",
   House = "Maison",
   Duplex = "Duplex",
-  Villa = "Villa"
+  Villa = "Villa",
 }
 
 export interface PropertyImage {

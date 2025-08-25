@@ -42,8 +42,8 @@ export const ServicesSection: React.FC = () => {
             Location. Confiance. Simplicité.
           </h3>
           <p className="text-gray-700 leading-relaxed text-light max-w-3xl mx-auto mb-8">
-            Avec Pioloop, découvrez une nouvelle façon de louer : 100%
-            digital, 100% sécurisé, 100% transparent.
+            Avec Pioloop, découvrez une nouvelle façon de louer : 100% digital,
+            100% sécurisé, 100% transparent.
           </p>
         </div>
 

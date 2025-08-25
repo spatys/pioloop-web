@@ -53,7 +53,7 @@ const ProtectedBoutonLink: React.FC<ProtectedBoutonLinkProps> = ({
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    
+
     if (loading) {
       // Attendre que l'authentification soit vérifiée
       return;

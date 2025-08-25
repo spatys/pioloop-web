@@ -14,7 +14,11 @@ export const useLatestProperties = (limit: number = 5) => {
       const properties = await propertyService.getLatestProperties(limit);
       setLatestProperties(properties);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur lors de la récupération des logements');
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Erreur lors de la récupération des logements",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -32,6 +36,6 @@ export const useLatestProperties = (limit: number = 5) => {
       setIsLoading(true);
       setError(null);
       fetchLatestProperties();
-    }
+    },
   };
 };

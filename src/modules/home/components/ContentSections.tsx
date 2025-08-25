@@ -13,7 +13,7 @@ export const ContentSections: React.FC = () => {
           <div className="relative bg-amber-50 rounded-2xl p-8 shadow-soft overflow-hidden">
             {/* Bande de gradient en haut - Style OpenClassrooms */}
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-t-2xl"></div>
-            
+
             <div className="relative z-10">
               <h2 className="text-2xl font-normal text-gray-900 mb-4">
                 Locataires
@@ -31,9 +31,9 @@ export const ContentSections: React.FC = () => {
                 >
                   Démarrer mon inscription
                 </BoutonLink>
-                <BoutonLink 
-                  href="/properties" 
-                  variant="outline" 
+                <BoutonLink
+                  href="/properties"
+                  variant="outline"
                   size="lg"
                   className="text-purple-600 hover:text-purple-700 font-medium"
                 >
@@ -47,7 +47,7 @@ export const ContentSections: React.FC = () => {
           <div className="relative bg-purple-50 rounded-2xl p-8 shadow-soft overflow-hidden">
             {/* Bande de gradient en haut - Style OpenClassrooms */}
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-400 to-purple-400 rounded-t-2xl"></div>
-            
+
             <div className="relative z-10">
               <h2 className="text-2xl font-normal text-gray-900 mb-4">
                 Propriétaires
@@ -66,9 +66,9 @@ export const ContentSections: React.FC = () => {
                 >
                   Je propose mon bien
                 </ProtectedBoutonLink>
-                <ProtectedBoutonLink 
-                  href="/about" 
-                  variant="outline" 
+                <ProtectedBoutonLink
+                  href="/about"
+                  variant="outline"
                   size="lg"
                   className="text-purple-600 hover:text-purple-700 font-medium"
                   fallbackPath="/login"

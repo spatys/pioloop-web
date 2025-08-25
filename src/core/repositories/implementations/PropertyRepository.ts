@@ -6,25 +6,31 @@ import type { PropertyResponse } from "@/core/types/Property";
 import { properties } from "@/core/data/properties";
 
 export class PropertyRepository implements IPropertyRepository {
-  async searchProperties(criteria: PropertySearchCriteria): Promise<PropertySearchResponse> {
+  async searchProperties(
+    criteria: PropertySearchCriteria,
+  ): Promise<PropertySearchResponse> {
     // Simulation d'une recherche avec filtres
     let filteredProperties = [...properties];
-    
+
     if (criteria.location) {
-      filteredProperties = filteredProperties.filter(p => 
-        p.city.toLowerCase().includes(criteria.location!.toLowerCase())
+      filteredProperties = filteredProperties.filter((p) =>
+        p.city.toLowerCase().includes(criteria.location!.toLowerCase()),
       );
     }
 
     if (criteria.checkIn && criteria.checkOut) {
       // Logique de filtrage par date (simplifiée)
-      filteredProperties = filteredProperties.filter(p => p.status === "Available");
+      filteredProperties = filteredProperties.filter(
+        (p) => p.status === "Available",
+      );
     }
 
     if (criteria.guests) {
-      filteredProperties = filteredProperties.filter(p => p.maxGuests >= criteria.guests!);
+      filteredProperties = filteredProperties.filter(
+        (p) => p.maxGuests >= criteria.guests!,
+      );
     }
-    
+
     // Pagination avec valeurs par défaut
     const total = filteredProperties.length;
     const page = criteria.page || 1;
@@ -34,45 +40,47 @@ export class PropertyRepository implements IPropertyRepository {
     const paginatedProperties = filteredProperties.slice(startIndex, endIndex);
 
     // Conversion vers PropertyResponse
-    const propertyResponses: PropertyResponse[] = paginatedProperties.map(p => ({
-      id: p.id,
-      title: p.title,
-      description: p.description,
-      propertyType: p.propertyType,
-      maxGuests: p.maxGuests,
-      bedrooms: p.bedrooms,
-      beds: p.beds,
-      bathrooms: p.bathrooms,
-      squareMeters: p.squareMeters,
-      address: p.address,
-      city: p.city,
-      postalCode: p.postalCode,
-      latitude: p.latitude,
-      longitude: p.longitude,
-      pricePerNight: p.pricePerNight,
-      cleaningFee: p.cleaningFee,
-      serviceFee: p.serviceFee,
-      status: p.status,
-      ownerId: p.ownerId,
-      ownerName: p.ownerName,
-      ownerEmail: p.ownerEmail,
-      imageUrls: p.imageUrls,
-      amenities: p.amenities,
-      createdAt: p.createdAt.toISOString(),
-      updatedAt: p.updatedAt.toISOString()
-    }));
-    
+    const propertyResponses: PropertyResponse[] = paginatedProperties.map(
+      (p) => ({
+        id: p.id,
+        title: p.title,
+        description: p.description,
+        propertyType: p.propertyType,
+        maxGuests: p.maxGuests,
+        bedrooms: p.bedrooms,
+        beds: p.beds,
+        bathrooms: p.bathrooms,
+        squareMeters: p.squareMeters,
+        address: p.address,
+        city: p.city,
+        postalCode: p.postalCode,
+        latitude: p.latitude,
+        longitude: p.longitude,
+        pricePerNight: p.pricePerNight,
+        cleaningFee: p.cleaningFee,
+        serviceFee: p.serviceFee,
+        status: p.status,
+        ownerId: p.ownerId,
+        ownerName: p.ownerName,
+        ownerEmail: p.ownerEmail,
+        imageUrls: p.imageUrls,
+        amenities: p.amenities,
+        createdAt: p.createdAt.toISOString(),
+        updatedAt: p.updatedAt.toISOString(),
+      }),
+    );
+
     return {
       properties: propertyResponses,
       totalCount: total,
       page: page,
       pageSize: pageSize,
-      totalPages: Math.ceil(total / pageSize)
+      totalPages: Math.ceil(total / pageSize),
     };
   }
 
   async getPropertyById(id: string): Promise<PropertyResponse | null> {
-    const property = properties.find(p => p.id === id);
+    const property = properties.find((p) => p.id === id);
     if (!property) return null;
 
     return {
@@ -100,11 +108,13 @@ export class PropertyRepository implements IPropertyRepository {
       imageUrls: property.imageUrls,
       amenities: property.amenities,
       createdAt: property.createdAt.toISOString(),
-      updatedAt: property.updatedAt.toISOString()
+      updatedAt: property.updatedAt.toISOString(),
     };
   }
 
-  async createProperty(request: CreatePropertyRequest): Promise<PropertyResponse> {
+  async createProperty(
+    request: CreatePropertyRequest,
+  ): Promise<PropertyResponse> {
     // Simulation de la création d'une propriété
     const newProperty: PropertyResponse = {
       id: crypto.randomUUID(),
@@ -128,19 +138,22 @@ export class PropertyRepository implements IPropertyRepository {
       ownerId: request.ownerId || "",
       ownerName: "Current User", // À remplacer par les vraies données utilisateur
       ownerEmail: "user@example.com", // À remplacer par les vraies données utilisateur
-      imageUrls: request.images?.map(img => img.imageUrl) || [],
-      amenities: request.amenities?.map(amenity => amenity.name) || [],
+      imageUrls: request.images?.map((img) => img.imageUrl) || [],
+      amenities: request.amenities?.map((amenity) => amenity.name) || [],
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     // Ici, vous ajouteriez normalement la propriété à la base de données
     // properties.push(newProperty);
-    
+
     return newProperty;
   }
 
-  async updateProperty(id: string, request: Partial<CreatePropertyRequest>): Promise<PropertyResponse | null> {
+  async updateProperty(
+    id: string,
+    request: Partial<CreatePropertyRequest>,
+  ): Promise<PropertyResponse | null> {
     const existingProperty = await this.getPropertyById(id);
     if (!existingProperty) {
       return null;
@@ -164,9 +177,13 @@ export class PropertyRepository implements IPropertyRepository {
       pricePerNight: request.pricePerNight || existingProperty.pricePerNight,
       cleaningFee: request.cleaningFee || existingProperty.cleaningFee,
       serviceFee: request.serviceFee || existingProperty.serviceFee,
-      imageUrls: request.images?.map(img => img.imageUrl) || existingProperty.imageUrls,
-      amenities: request.amenities?.map(amenity => amenity.name) || existingProperty.amenities,
-      updatedAt: new Date().toISOString()
+      imageUrls:
+        request.images?.map((img) => img.imageUrl) ||
+        existingProperty.imageUrls,
+      amenities:
+        request.amenities?.map((amenity) => amenity.name) ||
+        existingProperty.amenities,
+      updatedAt: new Date().toISOString(),
     };
 
     return updatedProperty;
@@ -179,7 +196,7 @@ export class PropertyRepository implements IPropertyRepository {
       .slice(0, limit);
 
     // Conversion vers PropertyResponse
-    return sortedProperties.map(p => ({
+    return sortedProperties.map((p) => ({
       id: p.id,
       title: p.title,
       description: p.description,
@@ -204,7 +221,7 @@ export class PropertyRepository implements IPropertyRepository {
       imageUrls: p.imageUrls,
       amenities: p.amenities,
       createdAt: p.createdAt.toISOString(),
-      updatedAt: p.updatedAt.toISOString()
+      updatedAt: p.updatedAt.toISOString(),
     }));
   }
 }

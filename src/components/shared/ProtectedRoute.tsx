@@ -32,7 +32,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <LoadingSpinner />
-          <p className="mt-4 text-gray-600">Vérification de l'authentification...</p>
+          <p className="mt-4 text-gray-600">
+            Vérification de l'authentification...
+          </p>
         </div>
       </div>
     );

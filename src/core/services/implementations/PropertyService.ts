@@ -10,10 +10,13 @@ import { TYPES } from "@/core/di/types";
 @injectable()
 export class PropertyService implements IPropertyService {
   constructor(
-    @inject(TYPES.IPropertyRepository) private propertyRepository: IPropertyRepository
+    @inject(TYPES.IPropertyRepository)
+    private propertyRepository: IPropertyRepository,
   ) {}
 
-  async searchProperties(criteria: PropertySearchCriteria): Promise<PropertySearchResponse> {
+  async searchProperties(
+    criteria: PropertySearchCriteria,
+  ): Promise<PropertySearchResponse> {
     return await this.propertyRepository.searchProperties(criteria);
   }
 
@@ -21,7 +24,9 @@ export class PropertyService implements IPropertyService {
     return await this.propertyRepository.getPropertyById(id);
   }
 
-  async createProperty(request: CreatePropertyRequest): Promise<PropertyResponse> {
+  async createProperty(
+    request: CreatePropertyRequest,
+  ): Promise<PropertyResponse> {
     // Simuler la création d'une propriété avec un ID généré
     const newProperty: PropertyResponse = {
       id: crypto.randomUUID(),
@@ -45,19 +50,22 @@ export class PropertyService implements IPropertyService {
       ownerId: request.ownerId || "",
       ownerName: "Current User", // À remplacer par les vraies données utilisateur
       ownerEmail: "user@example.com", // À remplacer par les vraies données utilisateur
-      imageUrls: request.images?.map(img => img.imageUrl) || [],
-      amenities: request.amenities?.map(amenity => amenity.name) || [],
+      imageUrls: request.images?.map((img) => img.imageUrl) || [],
+      amenities: request.amenities?.map((amenity) => amenity.name) || [],
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     // Ici, vous appelleriez normalement le repository pour sauvegarder
     // await this.propertyRepository.createProperty(newProperty);
-    
+
     return newProperty;
   }
 
-  async updateProperty(id: string, request: Partial<CreatePropertyRequest>): Promise<PropertyResponse | null> {
+  async updateProperty(
+    id: string,
+    request: Partial<CreatePropertyRequest>,
+  ): Promise<PropertyResponse | null> {
     // Simuler la mise à jour
     const existingProperty = await this.getPropertyById(id);
     if (!existingProperty) {
@@ -82,9 +90,13 @@ export class PropertyService implements IPropertyService {
       pricePerNight: request.pricePerNight || existingProperty.pricePerNight,
       cleaningFee: request.cleaningFee || existingProperty.cleaningFee,
       serviceFee: request.serviceFee || existingProperty.serviceFee,
-      imageUrls: request.images?.map(img => img.imageUrl) || existingProperty.imageUrls,
-      amenities: request.amenities?.map(amenity => amenity.name) || existingProperty.amenities,
-      updatedAt: new Date().toISOString()
+      imageUrls:
+        request.images?.map((img) => img.imageUrl) ||
+        existingProperty.imageUrls,
+      amenities:
+        request.amenities?.map((amenity) => amenity.name) ||
+        existingProperty.amenities,
+      updatedAt: new Date().toISOString(),
     };
 
     return updatedProperty;
