@@ -239,7 +239,10 @@ export const AddProperty: React.FC = () => {
             type="number"
             min="1"
             value={formData.bedrooms}
-            onChange={(e) => handleInputChange("bedrooms", parseInt(e.target.value))}
+            onChange={(e) => {
+              const value = e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+              handleInputChange("bedrooms", value);
+            }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500 text-center"
             required
           />
@@ -253,7 +256,10 @@ export const AddProperty: React.FC = () => {
             type="number"
             min="1"
             value={formData.beds}
-            onChange={(e) => handleInputChange("beds", parseInt(e.target.value))}
+            onChange={(e) => {
+              const value = e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+              handleInputChange("beds", value);
+            }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500 text-center"
             required
           />
@@ -267,7 +273,10 @@ export const AddProperty: React.FC = () => {
             type="number"
             min="1"
             value={formData.bathrooms}
-            onChange={(e) => handleInputChange("bathrooms", parseInt(e.target.value))}
+            onChange={(e) => {
+              const value = e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+              handleInputChange("bathrooms", value);
+            }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500 text-center"
             required
           />
@@ -281,7 +290,10 @@ export const AddProperty: React.FC = () => {
             type="number"
             min="1"
             value={formData.maxGuests}
-            onChange={(e) => handleInputChange("maxGuests", parseInt(e.target.value))}
+            onChange={(e) => {
+              const value = e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+              handleInputChange("maxGuests", value);
+            }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500 text-center"
             required
           />
@@ -296,7 +308,10 @@ export const AddProperty: React.FC = () => {
           type="number"
           min="1"
           value={formData.squareMeters}
-          onChange={(e) => handleInputChange("squareMeters", parseInt(e.target.value))}
+                      onChange={(e) => {
+              const value = e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+              handleInputChange("squareMeters", value);
+            }}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
           placeholder="120"
           required
@@ -370,7 +385,10 @@ export const AddProperty: React.FC = () => {
           type="number"
           min="0"
           value={formData.pricePerNight}
-          onChange={(e) => handleInputChange("pricePerNight", parseInt(e.target.value))}
+                      onChange={(e) => {
+              const value = e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+              handleInputChange("pricePerNight", value);
+            }}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
           placeholder="25000"
           required
@@ -386,7 +404,10 @@ export const AddProperty: React.FC = () => {
             type="number"
             min="0"
             value={formData.cleaningFee}
-            onChange={(e) => handleInputChange("cleaningFee", parseInt(e.target.value))}
+            onChange={(e) => {
+              const value = e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+              handleInputChange("cleaningFee", value);
+            }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
             placeholder="5000"
           />
@@ -400,7 +421,10 @@ export const AddProperty: React.FC = () => {
             type="number"
             min="0"
             value={formData.serviceFee}
-            onChange={(e) => handleInputChange("serviceFee", parseInt(e.target.value))}
+            onChange={(e) => {
+              const value = e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+              handleInputChange("serviceFee", value);
+            }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
             placeholder="2000"
           />

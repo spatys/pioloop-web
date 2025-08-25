@@ -190,9 +190,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ className = "" }) => {
                   type="date"
                   defaultValue={
                     user.profile?.dateOfBirth
-                      ? new Date(user.profile.dateOfBirth)
-                          .toISOString()
-                          .split("T")[0]
+                      ? new Date(user.profile.dateOfBirth).toISOString().split("T")[0]
                       : ""
                   }
                   disabled={!isEditing}

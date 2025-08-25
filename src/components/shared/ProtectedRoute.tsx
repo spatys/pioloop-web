@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { LoadingSpinner } from "@/modules/shared/components/LoadingSpinner";
+import LoadingSpinner from "@/modules/shared/components/LoadingSpinner";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -31,7 +31,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <LoadingSpinner size="lg" />
+          <LoadingSpinner />
           <p className="mt-4 text-gray-600">Vérification de l'authentification...</p>
         </div>
       </div>
