@@ -236,8 +236,8 @@ export const AddProperty: React.FC = () => {
     const response = await propertyService.createProperty(createRequest);
 
     if (response) {
-      // Redirection vers une page de succès avec l'ID de la propriété créée
-      router.push(`/property/created/${response.id}`);
+      // Redirection vers le dashboard du propriétaire
+      router.push("/dashboard");
     } else {
       console.log(response);
     }
@@ -294,7 +294,7 @@ export const AddProperty: React.FC = () => {
 
   const renderStep1 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-normal text-gray-900 mb-4">
+      <h2 className="text-xl font-medium text-gray-900 mb-4">
         Informations générales
       </h2>
 
@@ -390,7 +390,7 @@ export const AddProperty: React.FC = () => {
 
   const renderStep2 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-normal text-gray-900 mb-4">
+      <h2 className="text-xl font-medium text-gray-900 mb-4">
         Capacité et équipements
       </h2>
 
@@ -561,7 +561,7 @@ export const AddProperty: React.FC = () => {
 
   const renderStep3 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-normal text-gray-900 mb-4">Localisation</h2>
+      <h2 className="text-xl font-medium text-gray-900 mb-4">Localisation</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -657,8 +657,7 @@ export const AddProperty: React.FC = () => {
 
   const renderStep4 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-normal text-gray-900 mb-4">Tarification</h2>
-
+      <h2 className="text-xl font-medium text-gray-900 mb-4">Tarification</h2>
       <div>
         <label className="block text-sm font-normal text-gray-700 mb-2">
           Prix par nuit (FCFA) <span className="text-red-500">*</span>
@@ -734,7 +733,7 @@ export const AddProperty: React.FC = () => {
 
   const renderStep5 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-normal text-gray-900 mb-4">
+      <h2 className="text-xl font-medium text-gray-900 mb-4">
         Images du logement
       </h2>
 
@@ -941,14 +940,14 @@ export const AddProperty: React.FC = () => {
 
   const renderStep6 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-normal text-gray-900 mb-4">
+      <h2 className="text-xl font-medium text-gray-900 mb-4">
         Récapitulatif
       </h2>
       
       <div className="bg-gray-50 rounded-lg p-6 space-y-6">
         {/* Informations générales */}
         <div>
-          <h3 className="text-lg font-medium text-gray-900 mb-3 flex items-center">
+          <h3 className="text-lg font-medium text-gray-700 mb-3 flex items-center">
             <span className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm mr-3">1</span>
             Informations générales
           </h3>
@@ -970,7 +969,7 @@ export const AddProperty: React.FC = () => {
 
         {/* Capacité et équipements */}
         <div>
-          <h3 className="text-lg font-medium text-gray-900 mb-3 flex items-center">
+          <h3 className="text-lg font-medium text-gray-700 mb-3 flex items-center">
             <span className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm mr-3">2</span>
             Capacité et équipements
           </h3>
@@ -1013,7 +1012,7 @@ export const AddProperty: React.FC = () => {
 
         {/* Localisation */}
         <div>
-          <h3 className="text-lg font-medium text-gray-900 mb-3 flex items-center">
+          <h3 className="text-lg font-medium text-gray-700 mb-3 flex items-center">
             <span className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm mr-3">3</span>
             Localisation
           </h3>
@@ -1039,7 +1038,7 @@ export const AddProperty: React.FC = () => {
 
         {/* Tarification */}
         <div>
-          <h3 className="text-lg font-medium text-gray-900 mb-3 flex items-center">
+          <h3 className="text-lg font-normal text-gray-700 mb-3 flex items-center">
             <span className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm mr-3">4</span>
             Tarification
           </h3>
@@ -1061,7 +1060,7 @@ export const AddProperty: React.FC = () => {
 
         {/* Images */}
         <div>
-          <h3 className="text-lg font-medium text-gray-900 mb-3 flex items-center">
+          <h3 className="text-lg font-medium text-gray-700 mb-3 flex items-center">
             <span className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm mr-3">5</span>
             Images du logement
           </h3>
