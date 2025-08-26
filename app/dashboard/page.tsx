@@ -1,216 +1,21 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/shared/ProtectedRoute";
 import { OwnerOnly } from "@/components/shared/RoleGuard";
 import Dashboard from "@/modules/dashboard/components/Dashboard";
-import { container } from "@/core/di/container";
-import { TYPES } from "@/core/di/types";
-import { IPropertyService } from "@/core/services/interfaces/IPropertyService";
-
-interface Property {
-  id: string;
-  title: string;
-  description: string;
-  propertyType: string;
-  address: string;
-  city: string;
-  pricePerNight: number;
-  status: string;
-  maxGuests: number;
-  bedrooms: number;
-  images: Array<{ imageUrl: string; altText: string }>;
-  createdAt: string;
-  rating?: number;
-  reviewCount?: number;
-  lastBooking?: string;
-  occupancyRate?: number;
-  monthlyRevenue?: number;
-}
-
-interface DashboardStats {
-  totalProperties: number;
-  pendingApprovals: number;
-  publishedProperties: number;
-  rentedProperties: number;
-  totalRevenue: number;
-  monthlyRevenue: number;
-  revenueGrowth: number;
-  totalBookings: number;
-  activeBookings: number;
-  averageRating: number;
-  totalReviews: number;
-  occupancyRate: number;
-}
-
-interface RecentActivity {
-  id: string;
-  type: "booking" | "review" | "payment" | "maintenance";
-  title: string;
-  description: string;
-  timestamp: string;
-  propertyId: string;
-  propertyTitle: string;
-  amount?: number;
-  rating?: number;
-}
-
-interface RevenueData {
-  month: string;
-  revenue: number;
-  bookings: number;
-}
+import { useDashboard } from "@/hooks/useDashboard";
 
 export default function DashboardPage() {
   const { user } = useAuth();
   const [selectedStatus, setSelectedStatus] = useState("all");
-  const [properties, setProperties] = useState<Property[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { properties, stats, recentActivity, revenueData, loading, error } = useDashboard();
 
   // Rediriger si pas d'utilisateur connecté
   if (!user) {
     return null; // ProtectedRoute gère la redirection
   }
-
-  // Récupérer les propriétés du propriétaire connecté
-  useEffect(() => {
-    const fetchOwnerProperties = async () => {
-      if (!user?.id) return;
-      
-      const propertyService = container.get<IPropertyService>(TYPES.IPropertyService);
-      const ownerProperties = await propertyService.getPropertiesByOwnerId(user.id);
-      
-      // Convertir PropertyResponse[] en Property[] pour le dashboard
-      const convertedProperties: Property[] = ownerProperties.map(prop => ({
-        id: prop.id,
-        title: prop.title,
-        description: prop.description,
-        propertyType: prop.propertyType,
-        address: prop.address,
-        city: prop.city,
-        pricePerNight: prop.pricePerNight,
-        status: prop.status,
-        maxGuests: prop.maxGuests,
-        bedrooms: prop.bedrooms,
-        images: prop.imageUrls.map((url, index) => ({
-          imageUrl: url,
-          altText: `${prop.title} - Image ${index + 1}`
-        })),
-        createdAt: prop.createdAt,
-        rating: 4.5 + Math.random() * 0.5, // Mock rating
-        reviewCount: Math.floor(Math.random() * 20) + 5, // Mock review count
-        occupancyRate: Math.floor(Math.random() * 30) + 70, // Mock occupancy rate
-        monthlyRevenue: Math.floor(Math.random() * 3000) + 1500 // Mock monthly revenue
-      }));
-      
-      setProperties(convertedProperties);
-      setLoading(false);
-    };
-
-    fetchOwnerProperties();
-  }, [user?.id]);
-
-  // Calculer les statistiques à partir des propriétés
-  const calculateStats = (): DashboardStats => {
-    const totalProperties = properties.length;
-    const pendingApprovals = properties.filter(p => p.status === "PendingApproval").length;
-    const publishedProperties = properties.filter(p => p.status === "Published").length;
-    const rentedProperties = properties.filter(p => p.status === "Rented").length;
-    
-    const totalRevenue = properties.reduce((sum, p) => sum + (p.monthlyRevenue || 0), 0);
-    const monthlyRevenue = totalRevenue;
-    const revenueGrowth = 12.5; // Mock data
-    
-    const totalBookings = 45; // Mock data
-    const activeBookings = 8; // Mock data
-    
-    const averageRating = properties.length > 0 
-      ? properties.reduce((sum, p) => sum + (p.rating || 0), 0) / properties.length 
-      : 0;
-    const totalReviews = properties.reduce((sum, p) => sum + (p.reviewCount || 0), 0);
-    
-    const occupancyRate = properties.length > 0 
-      ? Math.round(properties.reduce((sum, p) => sum + (p.occupancyRate || 0), 0) / properties.length)
-      : 0;
-
-    return {
-      totalProperties,
-      pendingApprovals,
-      publishedProperties,
-      rentedProperties,
-      totalRevenue,
-      monthlyRevenue,
-      revenueGrowth,
-      totalBookings,
-      activeBookings,
-      averageRating: Math.round(averageRating * 10) / 10,
-      totalReviews,
-      occupancyRate
-    };
-  };
-
-  // Données d'activité récente mockées
-  const recentActivity: RecentActivity[] = [
-    {
-      id: "1",
-      type: "booking",
-      title: "Nouvelle réservation",
-      description: "Réservation pour 4 personnes du 15 au 20 janvier",
-      timestamp: "Il y a 2 heures",
-      propertyId: "1",
-      propertyTitle: "Appartement moderne au cœur de Paris",
-      amount: 750
-    },
-    {
-      id: "2",
-      type: "review",
-      title: "Nouvel avis 5 étoiles",
-      description: "Excellent séjour, très propre et bien situé",
-      timestamp: "Il y a 1 jour",
-      propertyId: "2",
-      propertyTitle: "Maison de campagne avec piscine",
-      rating: 5
-    },
-    {
-      id: "3",
-      type: "payment",
-      title: "Paiement reçu",
-      description: "Paiement pour réservation du 10 au 15 janvier",
-      timestamp: "Il y a 2 jours",
-      propertyId: "3",
-      propertyTitle: "Studio cosy près de la plage",
-      amount: 600
-    },
-    {
-      id: "4",
-      type: "maintenance",
-      title: "Maintenance programmée",
-      description: "Nettoyage de la piscine prévu demain",
-      timestamp: "Il y a 3 jours",
-      propertyId: "2",
-      propertyTitle: "Maison de campagne avec piscine"
-    },
-    {
-      id: "5",
-      type: "booking",
-      title: "Réservation annulée",
-      description: "Annulation pour le week-end du 20 janvier",
-      timestamp: "Il y a 4 jours",
-      propertyId: "1",
-      propertyTitle: "Appartement moderne au cœur de Paris"
-    }
-  ];
-
-  // Données de revenus mockées
-  const revenueData: RevenueData[] = [
-    { month: "Août", revenue: 2800, bookings: 12 },
-    { month: "Sept", revenue: 3200, bookings: 15 },
-    { month: "Oct", revenue: 2900, bookings: 13 },
-    { month: "Nov", revenue: 3500, bookings: 16 },
-    { month: "Déc", revenue: 4200, bookings: 18 },
-    { month: "Jan", revenue: 3800, bookings: 17 }
-  ];
 
   const handleFilterChange = (status: string) => {
     setSelectedStatus(status);
@@ -231,6 +36,21 @@ export default function DashboardPage() {
     );
   }
 
+  if (error) {
+    return (
+      <ProtectedRoute>
+        <OwnerOnly>
+          <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-red-600 text-lg font-medium mb-2">Erreur</div>
+              <p className="text-gray-600">{error}</p>
+            </div>
+          </div>
+        </OwnerOnly>
+      </ProtectedRoute>
+    );
+  }
+
   return (
     <ProtectedRoute>
       <OwnerOnly>
@@ -238,7 +58,20 @@ export default function DashboardPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <Dashboard
               properties={properties}
-              stats={calculateStats()}
+              stats={stats || {
+                totalProperties: 0,
+                pendingApprovals: 0,
+                publishedProperties: 0,
+                rentedProperties: 0,
+                totalRevenue: 0,
+                monthlyRevenue: 0,
+                revenueGrowth: 0,
+                totalBookings: 0,
+                activeBookings: 0,
+                averageRating: 0,
+                totalReviews: 0,
+                occupancyRate: 0
+              }}
               recentActivity={recentActivity}
               revenueData={revenueData}
               onFilterChange={handleFilterChange}

@@ -17,6 +17,12 @@ import { IContractService } from "../services/interfaces/IContractService";
 import { ContractService } from "../services/implementations/ContractService";
 import { IPropertyService } from "../services/interfaces/IPropertyService";
 import { PropertyService } from "../services/implementations/PropertyService";
+import { IDashboardService } from "../services/interfaces/IDashboardService";
+import { DashboardService } from "../services/implementations/DashboardService";
+import { IActivityService } from "../services/interfaces/IActivityService";
+import { ActivityService } from "../services/implementations/ActivityService";
+import { IRevenueService } from "../services/interfaces/IRevenueService";
+import { RevenueService } from "../services/implementations/RevenueService";
 import { IHttpClient } from "../repositories/interfaces/IHttpClient";
 import { HttpClient } from "../repositories/implementations/HttpClient";
 
@@ -39,6 +45,9 @@ container
 container.bind<IAuthService>(TYPES.IAuthService).to(AuthService);
 container.bind<IContractService>(TYPES.IContractService).to(ContractService);
 container.bind<IPropertyService>(TYPES.IPropertyService).to(PropertyService);
+container.bind<IDashboardService>(TYPES.IDashboardService).to(DashboardService);
+container.bind<IActivityService>(TYPES.IActivityService).to(ActivityService);
+container.bind<IRevenueService>(TYPES.IRevenueService).to(RevenueService);
 
 export { container };
 
@@ -69,4 +78,16 @@ export const getPropertyRepository = (): IPropertyRepository => {
 
 export const getPropertyService = (): IPropertyService => {
   return container.get<IPropertyService>(TYPES.IPropertyService);
+};
+
+export const getDashboardService = (): IDashboardService => {
+  return container.get<IDashboardService>(TYPES.IDashboardService);
+};
+
+export const getActivityService = (): IActivityService => {
+  return container.get<IActivityService>(TYPES.IActivityService);
+};
+
+export const getRevenueService = (): IRevenueService => {
+  return container.get<IRevenueService>(TYPES.IRevenueService);
 };
