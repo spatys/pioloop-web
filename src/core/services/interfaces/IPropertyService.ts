@@ -14,4 +14,5 @@ export interface IPropertyService {
     request: Partial<CreatePropertyRequest>,
   ): Promise<PropertyResponse | null>;
   getLatestProperties(limit: number): Promise<PropertyResponse[]>;
+  getPropertiesByOwnerId(ownerId: string): Promise<PropertyResponse[]>;
 }

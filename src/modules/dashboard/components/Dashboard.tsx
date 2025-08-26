@@ -124,7 +124,7 @@ const getStatusInfo = (status: string) => {
 };
 
 interface DashboardProps {
-  properties: Property[];
+  properties: Property[]; // Doit être filtré par ownerId
   stats: DashboardStats;
   recentActivity: RecentActivity[];
   revenueData: RevenueData[];
