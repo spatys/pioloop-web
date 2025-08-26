@@ -39,7 +39,7 @@ export const AddProperty: React.FC = () => {
     images: [],
   });
 
-  const totalSteps = 5;
+  const totalSteps = 6;
 
   const handleInputChange = (
     field: keyof CreatePropertyRequest,
@@ -245,34 +245,49 @@ export const AddProperty: React.FC = () => {
     setIsSubmitting(false);
   };
 
+  const stepTitles = [
+    "Informations générales",
+    "Capacité et équipements", 
+    "Localisation",
+    "Tarification",
+    "Images du logement",
+    "Récapitulatif"
+  ];
+
   const renderStepIndicator = () => (
     <div className="mb-8">
-      <div className="flex items-center justify-center space-x-1">
+      <div className="flex items-center justify-center space-x-12">
         {Array.from({ length: totalSteps }, (_, index) => (
-          <div key={index} className="flex items-center">
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-normal ${
-                index + 1 === currentStep
-                  ? "bg-purple-600 text-white"
-                  : index + 1 < currentStep
-                    ? "bg-green-500 text-white"
-                    : "bg-gray-200 text-gray-600"
-              }`}
-            >
-              {index + 1 < currentStep ? "✓" : index + 1}
-            </div>
-            {index < totalSteps - 1 && (
+          <div key={index} className="flex flex-col items-center w-36">
+            <div className="flex items-center justify-center w-full h-10 mb-3">
               <div
-                className={`w-12 h-0.5 mx-2 ${
-                  index + 1 < currentStep ? "bg-green-500" : "bg-gray-200"
+                className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-200 ${
+                  index + 1 === currentStep
+                    ? "bg-purple-600 text-white shadow-lg"
+                    : index + 1 < currentStep
+                      ? "bg-green-500 text-white"
+                      : "bg-gray-200 text-gray-600"
                 }`}
-              />
-            )}
+              >
+                {index + 1 < currentStep ? "✓" : index + 1}
+              </div>
+            </div>
+            
+            <div className="text-center h-12 flex items-center justify-center">
+              <div
+                className={`text-xs font-medium transition-colors duration-200 leading-tight text-center ${
+                  index + 1 === currentStep
+                    ? "text-purple-600"
+                    : index + 1 < currentStep
+                      ? "text-green-600"
+                      : "text-gray-500"
+                }`}
+              >
+                {stepTitles[index]}
+              </div>
+            </div>
           </div>
         ))}
-      </div>
-      <div className="text-center mt-3 text-sm text-gray-600">
-        Étape {currentStep} sur {totalSteps}
       </div>
     </div>
   );
@@ -924,6 +939,166 @@ export const AddProperty: React.FC = () => {
     </div>
   );
 
+  const renderStep6 = () => (
+    <div className="space-y-6">
+      <h2 className="text-xl font-normal text-gray-900 mb-4">
+        Récapitulatif
+      </h2>
+      
+      <div className="bg-gray-50 rounded-lg p-6 space-y-6">
+        {/* Informations générales */}
+        <div>
+          <h3 className="text-lg font-medium text-gray-900 mb-3 flex items-center">
+            <span className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm mr-3">1</span>
+            Informations générales
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <span className="text-sm font-medium text-gray-600">Type de logement</span>
+              <p className="text-gray-900">{formData.propertyType || "Non renseigné"}</p>
+            </div>
+            <div>
+              <span className="text-sm font-medium text-gray-600">Titre</span>
+              <p className="text-gray-900">{formData.title || "Non renseigné"}</p>
+            </div>
+            <div className="md:col-span-2">
+              <span className="text-sm font-medium text-gray-600">Description</span>
+              <p className="text-gray-900">{formData.description || "Non renseigné"}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Capacité et équipements */}
+        <div>
+          <h3 className="text-lg font-medium text-gray-900 mb-3 flex items-center">
+            <span className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm mr-3">2</span>
+            Capacité et équipements
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <span className="text-sm font-medium text-gray-600">Voyageurs max</span>
+              <p className="text-gray-900">{formData.maxGuests || 0}</p>
+            </div>
+            <div>
+              <span className="text-sm font-medium text-gray-600">Chambres</span>
+              <p className="text-gray-900">{formData.bedrooms || 0}</p>
+            </div>
+            <div>
+              <span className="text-sm font-medium text-gray-600">Lits</span>
+              <p className="text-gray-900">{formData.beds || 0}</p>
+            </div>
+            <div>
+              <span className="text-sm font-medium text-gray-600">Salles de bain</span>
+              <p className="text-gray-900">{formData.bathrooms || 0}</p>
+            </div>
+            <div>
+              <span className="text-sm font-medium text-gray-600">Surface (m²)</span>
+              <p className="text-gray-900">{formData.squareMeters || 0}</p>
+            </div>
+          </div>
+          
+          {formData.amenities && formData.amenities.length > 0 && (
+            <div className="mt-4">
+              <span className="text-sm font-medium text-gray-600">Équipements</span>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {formData.amenities.map((amenity, index) => (
+                  <span key={index} className="bg-purple-100 text-purple-800 px-2 py-1 rounded-md text-sm">
+                    {amenity.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Localisation */}
+        <div>
+          <h3 className="text-lg font-medium text-gray-900 mb-3 flex items-center">
+            <span className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm mr-3">3</span>
+            Localisation
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <span className="text-sm font-medium text-gray-600">Adresse</span>
+              <p className="text-gray-900">{formData.address || "Non renseigné"}</p>
+            </div>
+            <div>
+              <span className="text-sm font-medium text-gray-600">Quartier</span>
+              <p className="text-gray-900">{formData.neighborhood || "Non renseigné"}</p>
+            </div>
+            <div>
+              <span className="text-sm font-medium text-gray-600">Ville</span>
+              <p className="text-gray-900">{formData.city || "Non renseigné"}</p>
+            </div>
+            <div>
+              <span className="text-sm font-medium text-gray-600">Code postal</span>
+              <p className="text-gray-900">{formData.postalCode || "Non renseigné"}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Tarification */}
+        <div>
+          <h3 className="text-lg font-medium text-gray-900 mb-3 flex items-center">
+            <span className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm mr-3">4</span>
+            Tarification
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <span className="text-sm font-medium text-gray-600">Prix par nuit</span>
+              <p className="text-gray-900">{formData.pricePerNight || 0} €</p>
+            </div>
+            <div>
+              <span className="text-sm font-medium text-gray-600">Frais de ménage</span>
+              <p className="text-gray-900">{formData.cleaningFee || 0} €</p>
+            </div>
+            <div>
+              <span className="text-sm font-medium text-gray-600">Frais de service</span>
+              <p className="text-gray-900">{formData.serviceFee || 0} €</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Images */}
+        <div>
+          <h3 className="text-lg font-medium text-gray-900 mb-3 flex items-center">
+            <span className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm mr-3">5</span>
+            Images du logement
+          </h3>
+          <div>
+            <span className="text-sm font-medium text-gray-600">Nombre d'images</span>
+            <p className="text-gray-900">{formData.images?.length || 0} image(s)</p>
+            {formData.images && formData.images.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mt-3">
+                {formData.images.slice(0, 4).map((image, index) => (
+                  <div key={index} className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                    <img
+                      src={image.imageUrl}
+                      alt={image.altText}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+                {formData.images.length > 4 && (
+                  <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
+                    <span className="text-sm text-gray-600">+{formData.images.length - 4} autres</span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <p className="text-sm text-blue-800">
+          <strong>Vérifiez attentivement</strong> toutes les informations avant de valider l'ajout de votre logement. 
+          Vous pourrez modifier ces informations ultérieurement depuis votre tableau de bord.
+        </p>
+      </div>
+    </div>
+  );
+
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 1:
@@ -936,6 +1111,8 @@ export const AddProperty: React.FC = () => {
         return renderStep4();
       case 5:
         return renderStep5();
+      case 6:
+        return renderStep6();
       default:
         return null;
     }
@@ -943,7 +1120,7 @@ export const AddProperty: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* En-tête simple */}
         <div className="text-center mb-8">
           <h1 className="text-2xl font-normal text-gray-900 mb-2">
