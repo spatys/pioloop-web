@@ -1173,7 +1173,7 @@ export const AddProperty: React.FC = () => {
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="w-24 bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:bg-purple-400 disabled:cursor-not-allowed flex items-center justify-center"
+                className="px-4 py-2 bg-purple-600 text-white rounded-md font-normal hover:bg-purple-700"
               >
                 {isSubmitting ? (
                   <Loader
@@ -1184,7 +1184,7 @@ export const AddProperty: React.FC = () => {
                     }}
                   />
                 ) : (
-                  "Ajouter"
+                  "Valider"
                 )}
               </button>
             )}
