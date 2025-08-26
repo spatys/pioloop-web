@@ -1192,4 +1192,4 @@ export const AddProperty: React.FC = () => {
       </div>
     </div>
   );
-};
+}
