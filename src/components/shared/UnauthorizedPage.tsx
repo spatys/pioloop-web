@@ -2,7 +2,8 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Home, Plus, ArrowRight, Shield, Users, DollarSign } from "lucide-react";
+import { Plus, ArrowRight, Users, DollarSign } from "lucide-react";
+import { useRoles } from "@/hooks/useRoles";
 
 interface UnauthorizedPageProps {
   requiredRole: string;
@@ -18,53 +19,46 @@ export const UnauthorizedPage: React.FC<UnauthorizedPageProps> = ({
   upgradePath = "/property/add"
 }) => {
   const router = useRouter();
+  const { translateRole } = useRoles();
 
-  const getRoleInfo = () => {
+    const getRoleInfo = () => {
     switch (requiredRole) {
-      case "Owner":
-        return {
-          title: "Accès réservé aux propriétaires",
-          description: "Cette section est réservée aux propriétaires de logements. Ajoutez votre premier logement pour devenir propriétaire et accéder à toutes les fonctionnalités.",
-          icon: Home,
-          benefits: [
-            "Gérez vos propriétés et réservations",
-            "Suivez vos revenus et performances",
-            "Accédez aux outils de gestion avancés",
-            "Recevez des notifications en temps réel"
-          ]
-        };
-      case "Admin":
-        return {
-          title: "Accès administrateur requis",
-          description: "Cette section nécessite des privilèges administrateur.",
-          icon: Shield,
-          benefits: []
-        };
-      default:
-        return {
-          title: "Accès non autorisé",
-          description: "Vous n'avez pas les permissions nécessaires pour accéder à cette page.",
-          icon: Shield,
-          benefits: []
-        };
-    }
-  };
+             case "Owner":
+       return {
+         title: "Accès réservé aux propriétaires",
+         description: "Cette section est réservée aux propriétaires de logements. Ajoutez votre premier logement pour devenir propriétaire et accéder à toutes les fonctionnalités.",
+         benefits: [
+           "Gérez vos propriétés et réservations",
+           "Suivez vos revenus et performances",
+           "Accédez aux outils de gestion avancés",
+           "Recevez des notifications en temps réel"
+         ]
+       };
+     case "Admin":
+       return {
+         title: "Accès administrateur requis",
+         description: "Cette section nécessite des privilèges administrateur.",
+         benefits: []
+       };
+     default:
+       return {
+         title: "Accès non autorisé",
+         description: "Vous n'avez pas les permissions nécessaires pour accéder à cette page.",
+         benefits: []
+       };
+   }
+ };
 
   const roleInfo = getRoleInfo();
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          {/* Icône */}
-          <div className="mx-auto h-16 w-16 bg-red-100 rounded-full flex items-center justify-center">
-            <roleInfo.icon className="h-8 w-8 text-red-600" />
-          </div>
-          
-          {/* Titre */}
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">
-            {roleInfo.title}
-          </h2>
+                 <div className="text-center">
+           {/* Titre */}
+           <h2 className="text-2xl font-medium text-gray-700">
+             {roleInfo.title}
+           </h2>
           
           {/* Description */}
           <p className="mt-2 text-sm text-gray-600">
@@ -72,20 +66,20 @@ export const UnauthorizedPage: React.FC<UnauthorizedPageProps> = ({
           </p>
         </div>
 
-        {/* Informations sur le rôle actuel */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <div className="flex items-center">
-            <Users className="h-5 w-5 text-gray-400 mr-2" />
-            <span className="text-sm text-gray-600">
-              Votre rôle actuel : <span className="font-medium text-gray-900">{currentRole}</span>
-            </span>
-          </div>
-        </div>
+                 {/* Informations sur le rôle actuel */}
+         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+           <div className="flex items-center">
+             <Users className="h-5 w-5 text-gray-400 mr-2" />
+             <span className="text-sm text-gray-600">
+               Votre rôle actuel : <span className="font-medium text-gray-900">{translateRole(currentRole)}</span>
+             </span>
+           </div>
+         </div>
 
         {/* Avantages si c'est pour devenir propriétaire */}
         {requiredRole === "Owner" && roleInfo.benefits.length > 0 && (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
               Avantages d'être propriétaire
             </h3>
             <ul className="space-y-3">

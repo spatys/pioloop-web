@@ -1,5 +1,6 @@
 import { useAuth } from "./useAuth";
 import useSWR from "swr";
+import { translateRole, translateRoles } from "@/core/constants/roleTranslations";
 
 // Types pour les rôles (dynamiques depuis l'API)
 export type UserRole = string;
@@ -105,5 +106,9 @@ export const useRoles = () => {
     canManageProperties,
     canViewAnalytics,
     canManageUsers,
+
+    // Traductions
+    translateRole,
+    translateRoles,
   };
 };
