@@ -295,7 +295,7 @@ export const RegisterComplete: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading || isRedirecting}
-              className="w-full bg-purple-600 text-white py-4 px-6 rounded-xl font-normal hover:bg-purple-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg hover:shadow-xl"
+              className="w-full bg-purple-600 text-white py-4 px-6 rounded-xl font-normal hover:bg-purple-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg"
             >
               {isLoading || isRedirecting ? (
                 <Loader

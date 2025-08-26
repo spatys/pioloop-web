@@ -12,11 +12,11 @@ export const Logo: React.FC<LogoProps> = ({ className = "", href = "/" }) => {
     <div className="flex items-center space-x-2">
       <div className="relative">
         <div className="w-12 h-12 bg-gradient-to-br from-purple-600 via-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
-          <span className="text-white text-2xl font-bold">P</span>
+          <span className="text-white text-2xl font-bold">PL</span>
         </div>
       </div>
       <div className="flex flex-col">
-        <span className="text-2xl font-bold text-purple-700">Pioloop</span>
+        <span className="text-2xl font-bold text-purple-700">PioLoop</span>
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import {
 } from "@/core/types/Property";
 import { getPropertyService } from "@/core/di/container";
 import { Loader } from "lucide-react";
+import { Dropdown } from "@/components/ui/Dropdown";
 
 export const AddProperty: React.FC = () => {
   const router = useRouter();
@@ -284,38 +285,29 @@ export const AddProperty: React.FC = () => {
 
       <div className="grid grid-cols-1 gap-4">
         <div>
-          <label className="block text-sm font-normal text-gray-700 mb-2">
-            Type de logement <span className="text-red-500">*</span>
-          </label>
-          <select
-            value={formData.propertyType}
-            onChange={(e) => {
-            handleInputChange("propertyType", e.target.value);
-            
-            // Validation en temps réel pour les champs texte
-            if (e.target.value.trim() && errors.propertyType) {
-              setErrors((prev) => {
-                const newErrors = { ...prev };
-                delete newErrors.propertyType;
-                return newErrors;
-              });
-            }
-          }}
-            className={`w-full px-3 py-2 border rounded-md focus:border-purple-500 ${
-              errors.propertyType ? "border-red-500" : "border-gray-300"
-            }`}
+          <Dropdown
+            label="Type de logement"
             required
-          >
-            <option value="">Sélectionnez un type</option>
-            {Object.values(PropertyType).map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-          {errors.propertyType && (
-            <p className="mt-1 text-sm text-red-600">{errors.propertyType}</p>
-          )}
+            value={formData.propertyType}
+            onChange={(value) => {
+              handleInputChange("propertyType", value);
+              
+              // Validation en temps réel pour les champs texte
+              if (value.trim() && errors.propertyType) {
+                setErrors((prev) => {
+                  const newErrors = { ...prev };
+                  delete newErrors.propertyType;
+                  return newErrors;
+                });
+              }
+            }}
+            placeholder="Sélectionnez un type"
+            error={errors.propertyType}
+            options={Object.values(PropertyType).map((type) => ({
+              value: type,
+              label: type,
+            }))}
+          />
         </div>
       </div>
 
