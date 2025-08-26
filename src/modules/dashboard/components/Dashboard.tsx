@@ -140,6 +140,12 @@ export default function Dashboard({
   onFilterChange,
   selectedStatus 
 }: DashboardProps) {
+  console.log("Dashboard: properties =", properties.length);
+  console.log("Dashboard: stats =", stats);
+  console.log("Dashboard: recentActivity =", recentActivity.length);
+  console.log("Dashboard: revenueData =", revenueData.length);
+  console.log("Dashboard: selectedStatus =", selectedStatus);
+  
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -263,20 +269,26 @@ export default function Dashboard({
             </div>
           </div>
           <div className="h-64 flex items-end justify-between space-x-2">
-            {revenueData.map((data, index) => (
-              <div key={index} className="flex-1 flex flex-col items-center">
-                <div className="w-full bg-gray-200 rounded-t relative">
-                  <div 
-                    className="bg-purple-600 rounded-t transition-all duration-500"
-                    style={{ 
-                      height: `${(data.revenue / Math.max(...revenueData.map(d => d.revenue))) * 100}%` 
-                    }}
-                  ></div>
+            {revenueData.length > 0 ? (
+              revenueData.map((data, index) => (
+                <div key={index} className="flex-1 flex flex-col items-center">
+                  <div className="w-full bg-gray-200 rounded-t relative">
+                    <div 
+                      className="bg-purple-600 rounded-t transition-all duration-500"
+                      style={{ 
+                        height: `${(data.revenue / Math.max(...revenueData.map(d => d.revenue))) * 100}%` 
+                      }}
+                    ></div>
+                  </div>
+                  <p className="text-xs text-gray-600 mt-2">{data.month}</p>
+                  <p className="text-xs font-medium text-gray-900">{data.revenue}€</p>
                 </div>
-                <p className="text-xs text-gray-600 mt-2">{data.month}</p>
-                <p className="text-xs font-medium text-gray-900">{data.revenue}€</p>
+              ))
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <p className="text-gray-500 text-sm">Aucune donnée de revenus disponible</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
 

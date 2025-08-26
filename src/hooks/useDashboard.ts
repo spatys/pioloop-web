@@ -33,7 +33,7 @@ interface Property {
 
 interface UseDashboardReturn {
   properties: Property[];
-  stats: DashboardStats | null;
+  stats: DashboardStats;
   recentActivity: RecentActivity[];
   revenueData: RevenueData[];
   loading: boolean;
@@ -43,16 +43,33 @@ interface UseDashboardReturn {
 export const useDashboard = (): UseDashboardReturn => {
   const { user } = useAuth();
   const [properties, setProperties] = useState<Property[]>([]);
-  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const defaultStats: DashboardStats = {
+    totalProperties: 0,
+    pendingApprovals: 0,
+    publishedProperties: 0,
+    rentedProperties: 0,
+    totalRevenue: 0,
+    monthlyRevenue: 0,
+    revenueGrowth: 0,
+    totalBookings: 0,
+    activeBookings: 0,
+    averageRating: 0,
+    totalReviews: 0,
+    occupancyRate: 0
+  };
+  const [stats, setStats] = useState<DashboardStats>(defaultStats);
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
   const [revenueData, setRevenueData] = useState<RevenueData[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Commencer à false
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log("useDashboard: user =", user);
+    console.log("useDashboard: user?.id =", user?.id);
+    
     const fetchDashboardData = async () => {
       if (!user?.id) {
-        setLoading(false);
+        console.log("useDashboard: Pas d'utilisateur, pas de chargement");
         return;
       }
       
@@ -96,6 +113,10 @@ export const useDashboard = (): UseDashboardReturn => {
         // Récupérer les données de revenus
         const revenue = await revenueService.getRevenueData(user.id, 6);
         
+        console.log("useDashboard: Données récupérées avec succès");
+        console.log("useDashboard: properties =", convertedProperties.length);
+        console.log("useDashboard: stats =", dashboardStats);
+        
         setProperties(convertedProperties);
         setStats(dashboardStats);
         setRecentActivity(activities);
@@ -104,6 +125,7 @@ export const useDashboard = (): UseDashboardReturn => {
         console.error("Erreur lors du chargement du dashboard:", err);
         setError("Erreur lors du chargement du tableau de bord");
       } finally {
+        console.log("useDashboard: Fin du loading");
         setLoading(false);
       }
     };

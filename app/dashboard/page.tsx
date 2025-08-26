@@ -14,6 +14,7 @@ export default function DashboardPage() {
 
   // Rediriger si pas d'utilisateur connecté
   if (!user) {
+    console.log("DashboardPage: Pas d'utilisateur, retour null");
     return null; // ProtectedRoute gère la redirection
   }
 
@@ -58,20 +59,7 @@ export default function DashboardPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <Dashboard
               properties={properties}
-              stats={stats || {
-                totalProperties: 0,
-                pendingApprovals: 0,
-                publishedProperties: 0,
-                rentedProperties: 0,
-                totalRevenue: 0,
-                monthlyRevenue: 0,
-                revenueGrowth: 0,
-                totalBookings: 0,
-                activeBookings: 0,
-                averageRating: 0,
-                totalReviews: 0,
-                occupancyRate: 0
-              }}
+              stats={stats}
               recentActivity={recentActivity}
               revenueData={revenueData}
               onFilterChange={handleFilterChange}
