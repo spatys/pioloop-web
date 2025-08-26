@@ -299,32 +299,39 @@ export default function Dashboard({
             <Activity className="h-5 w-5 text-gray-400" />
           </div>
           <div className="space-y-4">
-            {recentActivity.slice(0, 5).map((activity) => (
-              <div key={activity.id} className="flex items-start space-x-3">
-                <div className={`w-2 h-2 rounded-full mt-2 ${
-                  activity.type === "booking" ? "bg-green-500" :
-                  activity.type === "review" ? "bg-yellow-500" :
-                  activity.type === "payment" ? "bg-blue-500" :
-                  "bg-orange-500"
-                }`}></div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">{activity.title}</p>
-                  <p className="text-xs text-gray-500 truncate">{activity.propertyTitle}</p>
-                  <p className="text-xs text-gray-400">{activity.timestamp}</p>
+            {recentActivity.length > 0 ? (
+              recentActivity.slice(0, 5).map((activity) => (
+                <div key={activity.id} className="flex items-start space-x-3">
+                  <div className={`w-2 h-2 rounded-full mt-2 ${
+                    activity.type === "booking" ? "bg-green-500" :
+                    activity.type === "review" ? "bg-yellow-500" :
+                    activity.type === "payment" ? "bg-blue-500" :
+                    "bg-orange-500"
+                  }`}></div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">{activity.title}</p>
+                    <p className="text-xs text-gray-500 truncate">{activity.propertyTitle}</p>
+                    <p className="text-xs text-gray-400">{activity.timestamp}</p>
+                  </div>
+                  {activity.amount && (
+                    <span className="text-sm font-medium text-green-600">+{activity.amount}€</span>
+                  )}
                 </div>
-                {activity.amount && (
-                  <span className="text-sm font-medium text-green-600">+{activity.amount}€</span>
-                )}
+              ))
+            ) : (
+              <div className="text-center py-8">
+                <Activity className="h-8 w-8 text-gray-300 mx-auto mb-2" />
+                <p className="text-gray-500 text-sm">Aucune activité récente</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
 
       {/* Logements les plus performants */}
-      {topPerformingProperties.length > 0 && (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Logements les plus performants</h3>
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h3 className="text-lg font-medium text-gray-900 mb-4">Logements les plus performants</h3>
+        {topPerformingProperties.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {topPerformingProperties.map((property, index) => (
               <div key={property.id} className="border border-gray-200 rounded-lg p-4">
@@ -352,8 +359,13 @@ export default function Dashboard({
               </div>
             ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="text-center py-8">
+            <Home className="h-8 w-8 text-gray-300 mx-auto mb-2" />
+            <p className="text-gray-500 text-sm">Aucun logement performant pour le moment</p>
+          </div>
+        )}
+      </div>
 
       {/* Filtres et recherche */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
