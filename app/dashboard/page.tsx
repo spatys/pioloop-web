@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { ProtectedRoute } from "@/components/shared/ProtectedRoute";
+import { OwnerOnly } from "@/components/shared/RoleGuard";
 import { 
   Home, 
   Plus, 
@@ -149,9 +151,11 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+    <ProtectedRoute>
+      <OwnerOnly>
+        <div className="min-h-screen bg-gray-50">
+          {/* Header */}
+          <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
@@ -355,7 +359,9 @@ export default function DashboardPage() {
             )}
           </div>
         </div>
+              </div>
       </div>
-    </div>
-  );
+    </OwnerOnly>
+  </ProtectedRoute>
+);
 }

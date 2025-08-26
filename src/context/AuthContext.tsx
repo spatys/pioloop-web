@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     checkAuthOnLoad();
-  }, []); // Exécuter seulement au montage
+  }, [authHook.user]); // Re-exécuter si l'utilisateur change
 
   const value = {
     user: authHook.user,

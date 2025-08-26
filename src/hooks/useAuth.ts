@@ -70,12 +70,12 @@ export const useAuth = (): UseAuthReturn => {
     },
     {
       revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      revalidateIfStale: false,
+      revalidateOnReconnect: true,
+      revalidateIfStale: true,
       dedupingInterval: 60000,
-      errorRetryCount: 0, // Ne pas réessayer en cas d'erreur
-      shouldRetryOnError: false, // Ne pas réessayer automatiquement
-      revalidateOnMount: false, // Ne pas faire de requête automatique au montage
+      errorRetryCount: 1,
+      shouldRetryOnError: true,
+      revalidateOnMount: true, // Permettre la revalidation au montage
     },
   );
 

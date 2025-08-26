@@ -20,10 +20,15 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const { user, loading } = useAuth();
 
   useEffect(() => {
-    if (!loading && !user) {
-      // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-      router.push(fallbackPath);
-    }
+    // Attendre un peu plus longtemps pour permettre à SWR de faire sa requête
+    const timer = setTimeout(() => {
+      if (!loading && !user) {
+        // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+        router.push(fallbackPath);
+      }
+    }, 1000); // Attendre 1 seconde
+
+    return () => clearTimeout(timer);
   }, [user, loading, router, fallbackPath]);
 
   // Afficher un loader pendant la vérification de l'authentification
