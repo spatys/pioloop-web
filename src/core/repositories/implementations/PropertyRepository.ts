@@ -224,4 +224,38 @@ export class PropertyRepository implements IPropertyRepository {
       updatedAt: p.updatedAt.toISOString(),
     }));
   }
+
+  async getPropertiesByOwnerId(ownerId: string): Promise<PropertyResponse[]> {
+    // Filtrer les propriétés par ownerId
+    const ownerProperties = properties.filter((p) => p.ownerId === ownerId);
+
+    // Conversion vers PropertyResponse
+    return ownerProperties.map((p) => ({
+      id: p.id,
+      title: p.title,
+      description: p.description,
+      propertyType: p.propertyType,
+      maxGuests: p.maxGuests,
+      bedrooms: p.bedrooms,
+      beds: p.beds,
+      bathrooms: p.bathrooms,
+      squareMeters: p.squareMeters,
+      address: p.address,
+      city: p.city,
+      postalCode: p.postalCode,
+      latitude: p.latitude,
+      longitude: p.longitude,
+      pricePerNight: p.pricePerNight,
+      cleaningFee: p.cleaningFee,
+      serviceFee: p.serviceFee,
+      status: p.status,
+      ownerId: p.ownerId,
+      ownerName: p.ownerName,
+      ownerEmail: p.ownerEmail,
+      imageUrls: p.imageUrls,
+      amenities: p.amenities,
+      createdAt: p.createdAt.toISOString(),
+      updatedAt: p.updatedAt.toISOString(),
+    }));
+  }
 }
