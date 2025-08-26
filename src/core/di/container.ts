@@ -8,7 +8,7 @@ import { AuthRepository } from "../repositories/implementations/AuthRepository";
 import { IContractRepository } from "../repositories/interfaces/IContractRepository";
 import { ContractRepository } from "../repositories/implementations/ContractRepository";
 import { IPropertyRepository } from "../repositories/interfaces/IPropertyRepository";
-import { HttpPropertyRepository } from "../repositories/implementations/HttpPropertyRepository";
+import { PropertyRepository } from "../repositories/implementations/PropertyRepository";
 
 // Services
 import { IAuthService } from "../services/interfaces/IAuthService";
@@ -33,7 +33,7 @@ container
   .to(ContractRepository);
 container
   .bind<IPropertyRepository>(TYPES.IPropertyRepository)
-  .to(HttpPropertyRepository);
+  .to(PropertyRepository);
 
 // Enregistrement des services avec injection de dépendances
 container.bind<IAuthService>(TYPES.IAuthService).to(AuthService);
