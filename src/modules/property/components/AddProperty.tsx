@@ -236,8 +236,9 @@ export const AddProperty: React.FC = () => {
     const createRequest: CreatePropertyRequest = {
       ...(formData as CreatePropertyRequest),
     };
+    console.log(createRequest);
     const response = await propertyService.createProperty(createRequest);
-
+    console.log(response);
     if (response) {
       setShowPageLoader(false);
       // Redirection vers le dashboard du propriétaire
@@ -1122,7 +1123,7 @@ export const AddProperty: React.FC = () => {
   return (
     <>
       {showPageLoader && (
-        <PageLoader message="Création de votre propriété en cours..." />
+        <PageLoader />
       )}
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -91,7 +91,8 @@ export class PropertyRepository implements IPropertyRepository {
   async createProperty(
     request: CreatePropertyRequest,
   ): Promise<PropertyResponse> {
-    const response = await this.httpClient.post<PropertyResponse>('/api/properties', request);
+    // Utiliser une route relative, HttpClient gère l'URL de base
+    const response = await this.httpClient.post<PropertyResponse>('/api/property/create', request);
     
     if (response.success && response.data) {
       return response.data;
@@ -104,7 +105,7 @@ export class PropertyRepository implements IPropertyRepository {
     id: string,
     request: Partial<CreatePropertyRequest>,
   ): Promise<PropertyResponse | null> {
-    const response = await this.httpClient.put<PropertyResponse>(`/api/properties/${id}`, request);
+    const response = await this.httpClient.put<PropertyResponse>(`/api/property/${id}`, request);
     
     if (response.success && response.data) {
       return response.data;

@@ -7,7 +7,7 @@ export class HttpClient implements IHttpClient {
   private baseURL: string;
 
   constructor() {
-    this.baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:64604";
+    this.baseURL = process.env.NEXT_PUBLIC_API_URL!;
   }
 
   private async apiRequest<T>(
@@ -21,26 +21,29 @@ export class HttpClient implements IHttpClient {
       "/api/auth/me",
     ];
 
-    // Endpoints qui vont directement au backend C# (pas de cookies nécessaires)
+    // Endpoints qui vont directement au backend C# (avec cookies via credentials: "include")
     const directBackendEndpoints = [
       "/api/auth/register/register-email",
       "/api/auth/register/register-verify-email",
       "/api/auth/register/register-complete",
       "/api/auth/register/resend-email-code",
+      "/api/property/create",
+      "/api/property/update",
+      "/api/property/delete",
     ];
 
     // Déterminer l'URL cible
     let url: string;
     if (cookieEndpoints.includes(endpoint)) {
       // Endpoints de cookies → API routes Next.js
-      url = `http://localhost:3000${endpoint}`;
+      url = `http://localhost:5000${endpoint}`;
     } else if (directBackendEndpoints.includes(endpoint)) {
       // Endpoints directs → Backend C# (enlever /api/ du baseURL car endpoint contient déjà /api/)
       const baseURLWithoutApi = this.baseURL.replace("/api", "");
       url = `${baseURLWithoutApi}${endpoint}`;
     } else if (endpoint.startsWith("/api/")) {
       // Autres endpoints /api/ → API routes Next.js (par défaut)
-      url = `http://localhost:3000${endpoint}`;
+      url = `http://localhost:5000${endpoint}`;
     } else {
       // Endpoints sans /api/ → Backend C# direct
       url = `${this.baseURL}${endpoint}`;

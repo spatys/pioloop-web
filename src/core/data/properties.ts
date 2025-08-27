@@ -21,7 +21,7 @@ export const Properties: Property[] = [
             cleaningFee: 12000,
             serviceFee: 4000,
     status: "Verified",
-    ownerId: "11111111-1111-1111-1111-111111111111",
+    ownerId: "046b19c4-ebda-49ef-b698-fbb6b222055d",
     imageUrls: [
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
     ],
@@ -77,7 +77,7 @@ export const Properties: Property[] = [
             cleaningFee: 6000,
             serviceFee: 2000,
     status: "Verified",
-    ownerId: "33333333-3333-3333-3333-333333333333",
+    ownerId: "046b19c4-ebda-49ef-b698-fbb6b222055d",
     imageUrls: [
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop"
     ],
