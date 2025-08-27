@@ -63,7 +63,7 @@ export const RegisterEmail: React.FC = () => {
       // Stocker l'email dans le contexte
       setRegisterEmail(data.email);
 
-      // Redirection directe vers la page de vérification
+      // Redirection directe vers la page de vérification sans attendre
       router.push("/register-verify-email");
     }
   };
@@ -93,6 +93,7 @@ export const RegisterEmail: React.FC = () => {
                 id="email"
                 type="email"
                 autoComplete="email"
+                disabled={isLoading}
                 {...register("email")}
                 onFocus={() => setFocusedField("email")}
                 onBlur={() => setFocusedField(null)}

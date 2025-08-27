@@ -60,6 +60,8 @@ module.exports = {
         "scale-in": "scaleIn 0.3s ease-out",
         pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         spin: "spin 1s linear infinite",
+        "spin-reverse": "spinReverse 1.5s linear infinite",
+        "progress": "progress 2s ease-in-out infinite",
       },
       keyframes: {
         fadeIn: {
@@ -81,6 +83,15 @@ module.exports = {
         spin: {
           "0%": { transform: "rotate(0deg)" },
           "100%": { transform: "rotate(360deg)" },
+        },
+        spinReverse: {
+          "0%": { transform: "rotate(360deg)" },
+          "100%": { transform: "rotate(0deg)" },
+        },
+        progress: {
+          "0%": { width: "0%" },
+          "50%": { width: "70%" },
+          "100%": { width: "100%" },
         },
       },
     },

@@ -11,6 +11,7 @@ import {
 import { getPropertyService } from "@/core/di/container";
 import { Loader } from "lucide-react";
 import { Dropdown } from "@/components/ui/Dropdown";
+import { PageLoader } from "@/components/ui/PageLoader";
 
 export const AddProperty: React.FC = () => {
   const router = useRouter();
@@ -18,6 +19,7 @@ export const AddProperty: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [showPageLoader, setShowPageLoader] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState<Partial<CreatePropertyRequest>>({
     title: "",
@@ -190,7 +192,7 @@ export const AddProperty: React.FC = () => {
 
       case 4:
         if (!formData.pricePerNight || formData.pricePerNight < 1) {
-          newErrors.pricePerNight = "Le prix par nuit doit être au moins 1 fcfa";
+                      newErrors.pricePerNight = "Le prix par nuit doit être au moins 1";
         }
         break;
 
@@ -227,12 +229,14 @@ export const AddProperty: React.FC = () => {
     }
 
     setIsSubmitting(true);
+    setShowPageLoader(true);
+    
     const propertyService = getPropertyService();
 
     const createRequest: CreatePropertyRequest = {
       ...(formData as CreatePropertyRequest),
     };
-
+    console.log(createRequest);
     const response = await propertyService.createProperty(createRequest);
 
     if (response) {
@@ -240,6 +244,7 @@ export const AddProperty: React.FC = () => {
       router.push("/dashboard");
     } else {
       console.log(response);
+      setShowPageLoader(false);
     }
 
     setIsSubmitting(false);
@@ -660,7 +665,7 @@ export const AddProperty: React.FC = () => {
       <h2 className="text-xl font-medium text-gray-900 mb-4">Tarification</h2>
       <div>
         <label className="block text-sm font-normal text-gray-700 mb-2">
-          Prix par nuit (FCFA) <span className="text-red-500">*</span>
+          Prix par nuit <span className="text-red-500">*</span>
         </label>
         <input
           type="number"
@@ -694,7 +699,7 @@ export const AddProperty: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-normal text-gray-700 mb-2">
-            Frais de ménage (FCFA)
+            Frais de ménage
           </label>
           <input
             type="number"
@@ -712,7 +717,7 @@ export const AddProperty: React.FC = () => {
 
         <div>
           <label className="block text-sm font-normal text-gray-700 mb-2">
-            Frais de service (FCFA)
+            Frais de service
           </label>
           <input
             type="number"
@@ -1118,7 +1123,11 @@ export const AddProperty: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <>
+      {showPageLoader && (
+        <PageLoader />
+      )}
+      <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* En-tête simple */}
         <div className="text-center mb-8">
@@ -1191,5 +1200,6 @@ export const AddProperty: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
   );
 }

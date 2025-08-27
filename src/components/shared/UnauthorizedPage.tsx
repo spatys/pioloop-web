@@ -111,17 +111,16 @@ export const UnauthorizedPage: React.FC<UnauthorizedPageProps> = ({
           {requiredRole === "Owner" && (
             <button
               onClick={() => router.push(upgradePath)}
-              className="w-full flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
+              className="w-full flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 transition-colors"
             >
               <Plus className="h-5 w-5 mr-2" />
               Ajouter mon premier logement
-              <ArrowRight className="h-5 w-5 ml-2" />
             </button>
           )}
           
           <button
             onClick={() => router.push("/")}
-            className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
+            className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors"
           >
             Retour à l'accueil
           </button>
