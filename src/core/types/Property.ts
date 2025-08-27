@@ -69,8 +69,6 @@ export interface Property {
   serviceFee: number;
   status: string;
   ownerId: string;
-  ownerName: string;
-  ownerEmail: string;
   imageUrls: string[];
   amenities: string[];
   createdAt: Date;
@@ -182,8 +180,6 @@ export interface PropertyResponse {
   serviceFee: number;
   status: string;
   ownerId: string;
-  ownerName: string;
-  ownerEmail: string;
   imageUrls: string[];
   amenities: string[];
   createdAt: string;

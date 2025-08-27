@@ -7,9 +7,38 @@ import { injectable, inject } from "inversify";
 import { TYPES } from "@/core/di/types";
 import type { IHttpClient } from "../interfaces/IHttpClient";
 import { ApiResponse } from "@/core/types";
+import { Properties } from "@/core/data/properties";
 
 @injectable()
 export class PropertyRepository implements IPropertyRepository {
+  private mapPropertyToPropertyResponse(property: any): PropertyResponse {
+    return {
+      id: property.id,
+      title: property.title,
+      description: property.description,
+      propertyType: property.propertyType,
+      maxGuests: property.maxGuests,
+      bedrooms: property.bedrooms,
+      beds: property.beds,
+      bathrooms: property.bathrooms,
+      squareMeters: property.squareMeters,
+      address: property.address,
+      neighborhood: property.neighborhood,
+      city: property.city,
+      postalCode: property.postalCode,
+      latitude: property.latitude,
+      longitude: property.longitude,
+      pricePerNight: property.pricePerNight,
+      cleaningFee: property.cleaningFee,
+      serviceFee: property.serviceFee,
+      status: property.status,
+      ownerId: property.ownerId,
+      imageUrls: property.imageUrls,
+      amenities: property.amenities,
+      createdAt: property.createdAt.toISOString(),
+      updatedAt: property.updatedAt.toISOString()
+    };
+  }
   constructor(
     @inject(TYPES.IHttpClient) private httpClient: IHttpClient,
   ) {}
@@ -17,52 +46,46 @@ export class PropertyRepository implements IPropertyRepository {
   async searchProperties(
     criteria: PropertySearchCriteria,
   ): Promise<PropertySearchResponse> {
-    const queryParams = new URLSearchParams();
+    // Utiliser les données mock
+    let filteredProperties = [...Properties];
     
+    // Filtrer par localisation si spécifiée
     if (criteria.location) {
-      queryParams.append('location', criteria.location);
+      filteredProperties = filteredProperties.filter(property =>
+        property.city.toLowerCase().includes(criteria.location!.toLowerCase()) ||
+        property.neighborhood.toLowerCase().includes(criteria.location!.toLowerCase())
+      );
     }
-    if (criteria.checkIn) {
-      queryParams.append('checkIn', criteria.checkIn);
-    }
-    if (criteria.checkOut) {
-      queryParams.append('checkOut', criteria.checkOut);
-    }
+    
+    // Filtrer par nombre de voyageurs si spécifié
     if (criteria.guests) {
-      queryParams.append('guests', criteria.guests.toString());
-    }
-    if (criteria.page) {
-      queryParams.append('page', criteria.page.toString());
-    }
-    if (criteria.pageSize) {
-      queryParams.append('pageSize', criteria.pageSize.toString());
-    }
-
-    const endpoint = `/api/properties/search?${queryParams.toString()}`;
-    const response = await this.httpClient.get<PropertySearchResponse>(endpoint);
-    
-    if (response.success && response.data) {
-      return response.data;
+      filteredProperties = filteredProperties.filter(property =>
+        property.maxGuests >= criteria.guests!
+      );
     }
     
-    // Fallback avec des données vides en cas d'erreur
+    // Pagination
+    const page = criteria.page || 1;
+    const pageSize = criteria.pageSize || 10;
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const paginatedProperties = filteredProperties.slice(startIndex, endIndex);
+    
     return {
-      properties: [],
-      totalCount: 0,
-      page: criteria.page || 1,
-      pageSize: criteria.pageSize || 10,
-      totalPages: 0,
+      properties: paginatedProperties.map(property => this.mapPropertyToPropertyResponse(property)),
+      totalCount: filteredProperties.length,
+      page: page,
+      pageSize: pageSize,
+      totalPages: Math.ceil(filteredProperties.length / pageSize),
     };
   }
 
   async getPropertyById(id: string): Promise<PropertyResponse | null> {
-    const response = await this.httpClient.get<PropertyResponse>(`/api/properties/${id}`);
+    // Utiliser les données mock
+    const property = Properties.find(p => p.id === id);
+    if (!property) return null;
     
-    if (response.success && response.data) {
-      return response.data;
-    }
-    
-    return null;
+    return this.mapPropertyToPropertyResponse(property);
   }
 
   async createProperty(
@@ -91,22 +114,18 @@ export class PropertyRepository implements IPropertyRepository {
   }
 
   async getLatestProperties(limit: number): Promise<PropertyResponse[]> {
-    const response = await this.httpClient.get<PropertyResponse[]>(`/api/properties/latest?limit=${limit}`);
+    // Utiliser les données mock
+    const latestProperties = Properties
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice(0, limit);
     
-    if (response.success && response.data) {
-      return response.data;
-    }
-    
-    return [];
+    return latestProperties.map(property => this.mapPropertyToPropertyResponse(property));
   }
 
   async getPropertiesByOwnerId(ownerId: string): Promise<PropertyResponse[]> {
-    const response = await this.httpClient.get<PropertyResponse[]>(`/api/properties/owner/${ownerId}`);
+    // Utiliser les données mock
+    const ownerProperties = Properties.filter(property => property.ownerId === ownerId);
     
-    if (response.success && response.data) {
-      return response.data;
-    }
-    
-    return [];
+    return ownerProperties.map(property => this.mapPropertyToPropertyResponse(property));
   }
 }
