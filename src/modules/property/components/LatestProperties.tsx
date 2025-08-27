@@ -30,7 +30,7 @@ export const LatestProperties: React.FC = () => {
         <div className="max-w-[1600px] mx-auto px-6 sm:px-8 lg:px-12">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-normal text-gray-700 mb-4">
-              Derniers Logements Ajoutés
+              Derniers Logements 
             </h2>
             <p className="text-lg text-gray-600">
               Découvrez nos nouvelles propriétés disponibles
@@ -48,12 +48,11 @@ export const LatestProperties: React.FC = () => {
       <div className="max-w-[1600px] mx-auto px-6 sm:px-8 lg:px-12">
         {/* En-tête de section */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-normal text-gray-900 mb-4">
-            Derniers logements
+          <h2 className="text-2xl font-normal text-gray-900 mb-4">
+            Nouveautés & coups de cœur
           </h2>
           <p className="text-lg text-gray-600">
-            Découvrez nos nouvelles propriétés disponibles, triées par date
-            d'ajout
+            Découvrez nos dernières acquisitions et logements premium sélectionnées pour vous
           </p>
         </div>
 

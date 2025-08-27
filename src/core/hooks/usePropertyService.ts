@@ -7,6 +7,7 @@ import {
   PropertySearchResponse,
   CreatePropertyRequest,
   UpdatePropertyRequest,
+  convertPropertyResponseToProperty,
 } from "../types/Property";
 
 // Instance du service
@@ -48,7 +49,7 @@ export const usePropertyService = () => {
 
       try {
         const result = await propertyService.getPropertyById(id);
-        return result;
+        return result ? convertPropertyResponseToProperty(result) : null;
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Une erreur est survenue",
@@ -73,7 +74,7 @@ export const usePropertyService = () => {
         const result = await propertyService.createProperty(
           createPropertyRequest,
         );
-        return result;
+        return result ? convertPropertyResponseToProperty(result) : null;
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Une erreur est survenue",
@@ -100,7 +101,7 @@ export const usePropertyService = () => {
           id,
           updatePropertyRequest,
         );
-        return result;
+        return result ? convertPropertyResponseToProperty(result) : null;
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Une erreur est survenue",

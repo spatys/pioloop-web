@@ -189,3 +189,12 @@ export interface PropertyResponse {
   createdAt: string;
   updatedAt: string;
 }
+
+// Fonction utilitaire pour convertir PropertyResponse en Property
+export const convertPropertyResponseToProperty = (response: PropertyResponse): Property => {
+  return {
+    ...response,
+    createdAt: new Date(response.createdAt),
+    updatedAt: new Date(response.updatedAt),
+  };
+};
