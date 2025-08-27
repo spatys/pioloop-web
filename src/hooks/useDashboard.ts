@@ -38,10 +38,11 @@ interface UseDashboardReturn {
   revenueData: RevenueData[];
   loading: boolean;
   error: string | null;
+  authLoading: boolean;
 }
 
 export const useDashboard = (): UseDashboardReturn => {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
   const [properties, setProperties] = useState<Property[]>([]);
   const defaultStats: DashboardStats = {
     totalProperties: 0,
@@ -69,8 +70,15 @@ export const useDashboard = (): UseDashboardReturn => {
   useEffect(() => {
     console.log("useDashboard: user =", user);
     console.log("useDashboard: userId =", userId);
+    console.log("useDashboard: isLoading =", isLoading);
     
     const fetchDashboardData = async () => {
+      // Attendre que le chargement de l'authentification soit terminé
+      if (isLoading) {
+        console.log("useDashboard: Chargement de l'authentification en cours, attente...");
+        return;
+      }
+      
       if (!userId) {
         console.log("useDashboard: Pas d'utilisateur, pas de chargement");
         return;
@@ -134,7 +142,7 @@ export const useDashboard = (): UseDashboardReturn => {
     };
 
     fetchDashboardData();
-  }, [userId]);
+  }, [userId, isLoading]);
 
   return {
     properties,
@@ -142,6 +150,7 @@ export const useDashboard = (): UseDashboardReturn => {
     recentActivity,
     revenueData,
     loading,
-    error
+    error,
+    authLoading: isLoading
   };
 };

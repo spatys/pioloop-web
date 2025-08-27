@@ -79,7 +79,12 @@ export const useAuth = (): UseAuthReturn => {
     },
   );
 
-  const user = userData?.user || null;
+  // Extraire l'utilisateur de la structure de réponse de l'API
+  const user = userData?.user?.profile || userData?.user || null;
+  
+  // Debug logs
+  console.log("useAuth: userData =", userData);
+  console.log("useAuth: user =", user);
 
   // Revalider les données utilisateur quand nécessaire
   const refreshUser = useCallback(async () => {

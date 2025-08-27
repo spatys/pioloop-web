@@ -40,7 +40,7 @@ export const LoaderProvider: React.FC<LoaderProviderProps> = ({ children }) => {
   return (
     <LoaderContext.Provider value={{ showLoader, hideLoader, isLoading, message }}>
       {children}
-      {isLoading && <PageLoader message={message} />}
+      {isLoading && <PageLoader />}
     </LoaderContext.Provider>
   );
 };
