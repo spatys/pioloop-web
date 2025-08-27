@@ -72,6 +72,38 @@ body {
   }
 }
 
+/* Animation de rotation inverse */
+@keyframes spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+/* Animation de progression */
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+  50% {
+    width: 70%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+/* Classes utilitaires pour les animations */
+.animate-spin-reverse {
+  animation: spin-reverse 1s linear infinite;
+}
+
+.animate-progress {
+  animation: progress 2s ease-in-out infinite;
+}
+
 /* Désactiver les styles par défaut du navigateur sur les inputs */
 @layer base {
   input:focus {

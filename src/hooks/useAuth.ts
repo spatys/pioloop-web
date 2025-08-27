@@ -48,6 +48,7 @@ interface UseAuthReturn {
 
 export const useAuth = (): UseAuthReturn => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string> | null>(
     null,
@@ -58,7 +59,7 @@ export const useAuth = (): UseAuthReturn => {
   const authService = container.get<IAuthService>(TYPES.IAuthService);
 
   // Utiliser SWR pour gérer l'état de l'utilisateur
-  const { data: userData, mutate: mutateUser } = useSWR(
+  const { data: userData, mutate: mutateUser, isLoading: swrIsLoading } = useSWR(
     "/api/auth/me",
     async (url) => {
       const response = await fetch(url, { credentials: "include" });
@@ -81,6 +82,13 @@ export const useAuth = (): UseAuthReturn => {
 
   // Extraire l'utilisateur de la structure de réponse de l'API
   const user = userData?.user?.profile || userData?.user || null;
+
+  // Gérer l'état de chargement initial
+  useEffect(() => {
+    if (!swrIsLoading) {
+      setIsInitialLoading(false);
+    }
+  }, [swrIsLoading]);
 
   // Revalider les données utilisateur quand nécessaire
   const refreshUser = useCallback(async () => {
@@ -240,7 +248,7 @@ export const useAuth = (): UseAuthReturn => {
 
   return {
     user,
-    isLoading,
+    isLoading: isLoading || isInitialLoading,
     error,
     fieldErrors,
     globalErrors,
