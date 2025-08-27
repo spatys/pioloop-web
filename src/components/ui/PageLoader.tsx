@@ -2,11 +2,7 @@
 
 import React from "react";
 
-interface PageLoaderProps {
-  message?: string;
-}
-
-export const PageLoader: React.FC<PageLoaderProps> = ({ 
+export const PageLoader: React.FC = ({ 
 }) => {
   return (
     <div className="fixed inset-0 bg-white bg-opacity-50 z-50 flex items-center justify-center">

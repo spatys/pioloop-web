@@ -1,22 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/shared/ProtectedRoute";
 import { OwnerOnly } from "@/components/shared/RoleGuard";
 import Dashboard from "@/modules/dashboard/components/Dashboard";
 import { useDashboard } from "@/hooks/useDashboard";
 
 export default function DashboardPage() {
-  const { user } = useAuth();
   const [selectedStatus, setSelectedStatus] = useState("all");
   const { properties, stats, recentActivity, revenueData, loading, error } = useDashboard();
-
-  // Rediriger si pas d'utilisateur connecté
-  if (!user) {
-    console.log("DashboardPage: Pas d'utilisateur, retour null");
-    return null; // ProtectedRoute gère la redirection
-  }
 
   const handleFilterChange = (status: string) => {
     setSelectedStatus(status);

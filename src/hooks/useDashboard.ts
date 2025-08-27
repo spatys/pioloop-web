@@ -63,12 +63,15 @@ export const useDashboard = (): UseDashboardReturn => {
   const [loading, setLoading] = useState(false); // Commencer à false
   const [error, setError] = useState<string | null>(null);
 
+  // Extraire l'ID utilisateur - user peut être directement l'objet User ou null
+  const userId = user?.id;
+  
   useEffect(() => {
     console.log("useDashboard: user =", user);
-    console.log("useDashboard: user?.id =", user?.id);
+    console.log("useDashboard: userId =", userId);
     
     const fetchDashboardData = async () => {
-      if (!user?.id) {
+      if (!userId) {
         console.log("useDashboard: Pas d'utilisateur, pas de chargement");
         return;
       }
@@ -108,10 +111,10 @@ export const useDashboard = (): UseDashboardReturn => {
         const dashboardStats = await dashboardService.calculateStats(ownerProperties);
         
         // Récupérer les activités récentes
-        const activities = await activityService.getRecentActivities(user.id);
+        const activities = await activityService.getRecentActivities(userId);
         
         // Récupérer les données de revenus
-        const revenue = await revenueService.getRevenueData(user.id, 6);
+        const revenue = await revenueService.getRevenueData(userId, 6);
         
         console.log("useDashboard: Données récupérées avec succès");
         console.log("useDashboard: properties =", convertedProperties.length);
@@ -131,7 +134,7 @@ export const useDashboard = (): UseDashboardReturn => {
     };
 
     fetchDashboardData();
-  }, [user?.id]);
+  }, [userId]);
 
   return {
     properties,
