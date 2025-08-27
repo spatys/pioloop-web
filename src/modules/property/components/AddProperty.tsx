@@ -11,7 +11,7 @@ import {
 import { getPropertyService } from "@/core/di/container";
 import { Loader } from "lucide-react";
 import { Dropdown } from "@/components/ui/Dropdown";
-import { PageLoader } from "@/components/ui/PageLoader";
+import { useLoader } from "@/context/LoaderContext";
 
 export const AddProperty: React.FC = () => {
   const router = useRouter();
@@ -19,7 +19,7 @@ export const AddProperty: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
-  const [showPageLoader, setShowPageLoader] = useState(false);
+  const { showLoader } = useLoader();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState<Partial<CreatePropertyRequest>>({
     title: "",
@@ -229,7 +229,7 @@ export const AddProperty: React.FC = () => {
     }
 
     setIsSubmitting(true);
-    setShowPageLoader(true);
+    showLoader("Création de votre propriété en cours...");
     
     const propertyService = getPropertyService();
 
@@ -244,7 +244,6 @@ export const AddProperty: React.FC = () => {
       router.push("/dashboard");
     } else {
       console.log(response);
-      setShowPageLoader(false);
     }
 
     setIsSubmitting(false);
@@ -1123,11 +1122,7 @@ export const AddProperty: React.FC = () => {
   };
 
   return (
-    <>
-      {showPageLoader && (
-        <PageLoader />
-      )}
-      <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* En-tête simple */}
         <div className="text-center mb-8">
@@ -1200,6 +1195,5 @@ export const AddProperty: React.FC = () => {
         </div>
       </div>
     </div>
-    </>
   );
 }
