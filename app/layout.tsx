@@ -4,8 +4,6 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { SWRProvider } from "@/providers/SWRProvider";
 import { ConditionalLayout } from "@/components/layout/ConditionalLayout";
-import { LoaderProvider } from "@/context/LoaderContext";
-import { FetchInterceptor } from "@/components/shared/FetchInterceptor";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,10 +22,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <SWRProvider>
           <AuthProvider>
-            <LoaderProvider>
-              <FetchInterceptor />
-              <ConditionalLayout>{children}</ConditionalLayout>
-            </LoaderProvider>
+            <ConditionalLayout>{children}</ConditionalLayout>
           </AuthProvider>
         </SWRProvider>
       </body>

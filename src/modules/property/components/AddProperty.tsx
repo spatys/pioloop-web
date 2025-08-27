@@ -11,15 +11,16 @@ import {
 import { getPropertyService } from "@/core/di/container";
 import { Loader } from "lucide-react";
 import { Dropdown } from "@/components/ui/Dropdown";
-import { useLoader } from "@/context/LoaderContext";
+import { PageLoader } from "@/components/ui/PageLoader";
+
 
 export const AddProperty: React.FC = () => {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [currentStep, setCurrentStep] = useState(1);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
-  const { showLoader } = useLoader();
+  const [showPageLoader, setShowPageLoader] = useState(false);
+
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState<Partial<CreatePropertyRequest>>({
     title: "",
@@ -228,25 +229,22 @@ export const AddProperty: React.FC = () => {
       return;
     }
 
-    setIsSubmitting(true);
-    showLoader("Création de votre propriété en cours...");
+    setShowPageLoader(true);
     
     const propertyService = getPropertyService();
 
     const createRequest: CreatePropertyRequest = {
       ...(formData as CreatePropertyRequest),
     };
-    console.log(createRequest);
     const response = await propertyService.createProperty(createRequest);
 
     if (response) {
+      setShowPageLoader(false);
       // Redirection vers le dashboard du propriétaire
       router.push("/dashboard");
-    } else {
-      console.log(response);
     }
 
-    setIsSubmitting(false);
+    setShowPageLoader(false);
   };
 
   const stepTitles = [
@@ -1122,8 +1120,12 @@ export const AddProperty: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <>
+      {showPageLoader && (
+        <PageLoader message="Création de votre propriété en cours..." />
+      )}
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* En-tête simple */}
         <div className="text-center mb-8">
           <h1 className="text-2xl font-normal text-gray-900 mb-2">
@@ -1175,25 +1177,15 @@ export const AddProperty: React.FC = () => {
             ) : (
               <button
                 onClick={handleSubmit}
-                disabled={isSubmitting}
                 className="px-4 py-2 bg-purple-600 text-white rounded-md font-normal hover:bg-purple-700"
               >
-                {isSubmitting ? (
-                  <Loader
-                    className="h-5 w-5 text-white"
-                    style={{
-                      animation: "spin 1s linear infinite",
-                      transformOrigin: "center",
-                    }}
-                  />
-                ) : (
-                  "Valider"
-                )}
+                "Valider"
               </button>
             )}
           </div>
         </div>
       </div>
     </div>
+    </>
   );
 }

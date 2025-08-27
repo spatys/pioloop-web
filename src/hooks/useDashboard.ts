@@ -68,19 +68,13 @@ export const useDashboard = (): UseDashboardReturn => {
   const userId = user?.id;
   
   useEffect(() => {
-    console.log("useDashboard: user =", user);
-    console.log("useDashboard: userId =", userId);
-    console.log("useDashboard: isLoading =", isLoading);
-    
     const fetchDashboardData = async () => {
       // Attendre que le chargement de l'authentification soit terminé
       if (isLoading) {
-        console.log("useDashboard: Chargement de l'authentification en cours, attente...");
         return;
       }
       
       if (!userId) {
-        console.log("useDashboard: Pas d'utilisateur, pas de chargement");
         return;
       }
       
@@ -124,10 +118,6 @@ export const useDashboard = (): UseDashboardReturn => {
         // Récupérer les données de revenus
         const revenue = await revenueService.getRevenueData(userId, 6);
         
-        console.log("useDashboard: Données récupérées avec succès");
-        console.log("useDashboard: properties =", convertedProperties.length);
-        console.log("useDashboard: stats =", dashboardStats);
-        
         setProperties(convertedProperties);
         setStats(dashboardStats);
         setRecentActivity(activities);
@@ -136,7 +126,6 @@ export const useDashboard = (): UseDashboardReturn => {
         console.error("Erreur lors du chargement du dashboard:", err);
         setError("Erreur lors du chargement du tableau de bord");
       } finally {
-        console.log("useDashboard: Fin du loading");
         setLoading(false);
       }
     };

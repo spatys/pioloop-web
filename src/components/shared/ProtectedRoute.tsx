@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import { PageLoader } from "@/components/ui/PageLoader";
+
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -31,10 +31,12 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return () => clearTimeout(timer);
   }, [user, isLoading, router, fallbackPath]);
 
-  // Afficher le PageLoader pendant la vérification de l'authentification
+  // Afficher un loader simple pendant la vérification de l'authentification
   if (isLoading && showLoading) {
     return (
-      <PageLoader />
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+      </div>
     );
   }
 
