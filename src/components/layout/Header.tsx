@@ -395,10 +395,10 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                           </div>
                         </Link>
 
-                        {/* Afficher "Mes logements" seulement pour les propriétaires */}
-                        <OwnerOnly>
+                        {/* Afficher "Mon dashboard" seulement pour les propriétaires */}
+                        <OwnerOnly showUnauthorizedPage={false}>
                           <Link
-                            href="/my-properties"
+                            href="/dashboard"
                             className="flex items-center justify-between py-3 px-4 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200 w-full"
                           >
                             <div className="flex items-center space-x-3">
@@ -415,7 +415,7 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                                   d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
                                 />
                               </svg>
-                              <span className="font-normal">Mes logements</span>
+                              <span className="font-normal">Mon dashboard</span>
                             </div>
                             <div className="bg-green-100 text-green-600 text-xs font-medium px-2 py-1 rounded-full">
                               5
