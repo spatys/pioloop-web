@@ -12,7 +12,7 @@ export const LatestProperties: React.FC = () => {
   if (error) {
     return (
       <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1600px] mx-auto px-6 sm:px-8 lg:px-12">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-normal text-gray-700 mb-4">
               Erreur de chargement
@@ -27,7 +27,7 @@ export const LatestProperties: React.FC = () => {
   if (isLoading) {
     return (
       <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1600px] mx-auto px-6 sm:px-8 lg:px-12">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-normal text-gray-700 mb-4">
               Derniers Logements Ajoutés
@@ -45,7 +45,7 @@ export const LatestProperties: React.FC = () => {
 
   return (
     <section className="py-10 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1600px] mx-auto px-6 sm:px-8 lg:px-12">
         {/* En-tête de section */}
         <div className="text-center mb-12">
           <h2 className="text-3xl font-normal text-gray-900 mb-4">
@@ -58,7 +58,7 @@ export const LatestProperties: React.FC = () => {
         </div>
 
         {/* Grille des propriétés */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
           {latestProperties.map((property) => (
             <PropertyCard key={property.id} property={property} />
           ))}
