@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Plus, ArrowRight, Users, DollarSign } from "lucide-react";
+import { Plus, ArrowRight, Users, Home, BarChart3, Settings, Bell } from "lucide-react";
 import { useRoles } from "@/hooks/useRoles";
 
 interface UnauthorizedPageProps {
@@ -82,14 +82,27 @@ export const UnauthorizedPage: React.FC<UnauthorizedPageProps> = ({
             <h3 className="text-lg font-medium text-gray-700 mb-4">
               Avantages d'être propriétaire
             </h3>
-            <ul className="space-y-3">
-              {roleInfo.benefits.map((benefit, index) => (
-                <li key={index} className="flex items-start">
-                  <DollarSign className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                  <span className="text-sm text-gray-600">{benefit}</span>
-                </li>
-              ))}
-            </ul>
+                         <ul className="space-y-3">
+               {roleInfo.benefits.map((benefit, index) => {
+                 // Icônes spécifiques pour chaque avantage
+                 const getIcon = (index: number) => {
+                   switch (index) {
+                     case 0: return <Home className="h-5 w-5 text-blue-500 mr-3 mt-0.5 flex-shrink-0" />;
+                     case 1: return <BarChart3 className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />;
+                     case 2: return <Settings className="h-5 w-5 text-purple-500 mr-3 mt-0.5 flex-shrink-0" />;
+                     case 3: return <Bell className="h-5 w-5 text-orange-500 mr-3 mt-0.5 flex-shrink-0" />;
+                     default: return <Home className="h-5 w-5 text-gray-500 mr-3 mt-0.5 flex-shrink-0" />;
+                   }
+                 };
+                 
+                 return (
+                   <li key={index} className="flex items-start">
+                     {getIcon(index)}
+                     <span className="text-sm text-gray-600">{benefit}</span>
+                   </li>
+                 );
+               })}
+             </ul>
           </div>
         )}
 
