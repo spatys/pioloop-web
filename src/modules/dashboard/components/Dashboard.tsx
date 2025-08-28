@@ -140,11 +140,6 @@ export default function Dashboard({
   onFilterChange,
   selectedStatus 
 }: DashboardProps) {
-  console.log("Dashboard: properties =", properties.length);
-  console.log("Dashboard: stats =", stats);
-  console.log("Dashboard: recentActivity =", recentActivity.length);
-  console.log("Dashboard: revenueData =", revenueData.length);
-  console.log("Dashboard: selectedStatus =", selectedStatus);
   
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
@@ -155,6 +150,7 @@ export default function Dashboard({
                          prop.city.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesStatus && matchesSearch;
   });
+  
 
   const topPerformingProperties = properties
     .filter(p => p.monthlyRevenue && p.occupancyRate)

@@ -8,9 +8,10 @@ import { useDashboard } from "@/hooks/useDashboard";
 import { PageLoader } from "@/components/ui/PageLoader";
 
 export default function DashboardPage() {
+  
   const [selectedStatus, setSelectedStatus] = useState("all");
   const { properties, stats, recentActivity, revenueData, loading, error, authLoading } = useDashboard();
-
+  
   const handleFilterChange = (status: string) => {
     setSelectedStatus(status);
   };

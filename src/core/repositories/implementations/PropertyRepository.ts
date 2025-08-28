@@ -124,9 +124,13 @@ export class PropertyRepository implements IPropertyRepository {
   }
 
   async getPropertiesByOwnerId(ownerId: string): Promise<PropertyResponse[]> {
-    // Utiliser les données mock
-    const ownerProperties = Properties.filter(property => property.ownerId === ownerId);
+    // Appeler l'API backend pour récupérer les propriétés de l'owner
+    const response = await this.httpClient.get<PropertyResponse[]>(`/api/property/owner/${ownerId}`);
+  
+    if (response.success && response.data) {
+      return response.data;
+    }
     
-    return ownerProperties.map(property => this.mapPropertyToPropertyResponse(property));
+    throw new Error(response.message || 'Erreur lors de la récupération des propriétés par owner');
   }
 }

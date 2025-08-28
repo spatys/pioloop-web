@@ -64,10 +64,13 @@ export const useDashboard = (): UseDashboardReturn => {
   const [loading, setLoading] = useState(false); // Commencer à false
   const [error, setError] = useState<string | null>(null);
 
-  // Extraire l'ID utilisateur - user peut être directement l'objet User ou null
-  const userId = user?.id;
+  // Extraire l'ID utilisateur - user est l'objet de réponse avec data.id
+  const userId = user?.data?.id;
+  
+
   
   useEffect(() => {
+    
     const fetchDashboardData = async () => {
       // Attendre que le chargement de l'authentification soit terminé
       if (isLoading) {
@@ -88,7 +91,7 @@ export const useDashboard = (): UseDashboardReturn => {
         const revenueService = container.get<IRevenueService>(TYPES.IRevenueService);
         
         // Récupérer les propriétés du propriétaire
-        const ownerProperties: PropertyResponse[] = await propertyService.getPropertiesByOwnerId(user.id);
+        const ownerProperties: PropertyResponse[] = await propertyService.getPropertiesByOwnerId(userId);
         
         // Convertir PropertyResponse[] en Property[] pour le dashboard
         const convertedProperties: Property[] = ownerProperties.map(prop => ({

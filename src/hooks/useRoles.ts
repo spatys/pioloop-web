@@ -52,7 +52,7 @@ export const useRoles = () => {
   );
 
   // Rôles de l'utilisateur (depuis l'objet user)
-  const userRoles = user?.roles || [];
+  const userRoles = user?.data?.roles || [];
 
   // Vérifier si l'utilisateur a un rôle spécifique
   const hasRole = (role: UserRole): boolean => {

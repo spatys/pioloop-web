@@ -12,7 +12,7 @@ import { LoginSuccessResponseDto } from "@/core/types/Auth";
 
 interface UseAuthReturn {
   // States
-  user: User | null;
+  user: { success: boolean; message: string; data: User; validationErrors: any } | null;
   isLoading: boolean;
   error: string | null;
   fieldErrors: Record<string, string> | null;
@@ -81,7 +81,7 @@ export const useAuth = (): UseAuthReturn => {
   );
 
   // Extraire l'utilisateur de la structure de réponse de l'API
-  const user = userData?.user?.profile || userData?.user || null;
+  const user = userData?.data || userData?.user?.profile || userData?.user || null;
 
   // Gérer l'état de chargement initial
   useEffect(() => {
