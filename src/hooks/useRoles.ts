@@ -87,6 +87,7 @@ export const useRoles = () => {
 
     // États de chargement
     isLoadingAllRoles: !allRolesData && !allRolesError,
+    isLoadingUserRoles: !user, // Chargement si user est null
 
     // Erreurs
     allRolesError,
