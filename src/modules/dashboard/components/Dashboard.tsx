@@ -29,8 +29,10 @@ import {
   ArrowUpRight,
   ArrowDownRight
 } from "lucide-react";
+import { PropertyCard } from "@/modules/property/components/PropertyCard";
+import { Property as PropertyCardType } from "@/core/types/Property";
 
-interface Property {
+interface DashboardProperty {
   id: string;
   title: string;
   description: string;
@@ -124,13 +126,43 @@ const getStatusInfo = (status: string) => {
 };
 
 interface DashboardProps {
-  properties: Property[]; // Doit être filtré par ownerId
+  properties: DashboardProperty[]; // Doit être filtré par ownerId
   stats: DashboardStats;
   recentActivity: RecentActivity[];
   revenueData: RevenueData[];
   onFilterChange: (status: string) => void;
   selectedStatus: string;
 }
+
+// Fonction pour transformer DashboardProperty en PropertyCardType
+const transformToPropertyCard = (dashboardProperty: DashboardProperty): PropertyCardType => {
+  return {
+    id: dashboardProperty.id,
+    title: dashboardProperty.title,
+    description: dashboardProperty.description,
+    propertyType: dashboardProperty.propertyType,
+    maxGuests: dashboardProperty.maxGuests,
+    bedrooms: dashboardProperty.bedrooms,
+    beds: dashboardProperty.bedrooms, // Utiliser bedrooms comme approximation
+    bathrooms: 1, // Valeur par défaut
+    squareMeters: 100, // Valeur par défaut
+    address: dashboardProperty.address,
+    neighborhood: dashboardProperty.city, // Utiliser city comme neighborhood
+    city: dashboardProperty.city,
+    postalCode: "", // Valeur par défaut
+    latitude: undefined,
+    longitude: undefined,
+    pricePerNight: dashboardProperty.pricePerNight,
+    cleaningFee: 0, // Valeur par défaut
+    serviceFee: 0, // Valeur par défaut
+    status: dashboardProperty.status,
+    ownerId: "", // Valeur par défaut
+    imageUrls: dashboardProperty.images.map(img => img.imageUrl),
+    amenities: [], // Valeur par défaut
+    createdAt: new Date(dashboardProperty.createdAt),
+    updatedAt: new Date(dashboardProperty.createdAt)
+  };
+};
 
 export default function Dashboard({ 
   properties, 
@@ -399,76 +431,33 @@ export default function Dashboard({
             const StatusIcon = statusInfo.icon;
             
             return (
-              <div key={property.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
-                {/* Image */}
-                <div className="aspect-video bg-gray-200 relative">
-                  <img
-                    src={property.images[0]?.imageUrl || "/images/placeholder-property.jpg"}
-                    alt={property.images[0]?.altText || property.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-3 right-3">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${statusInfo.color}`}>
-                      <StatusIcon className="h-3 w-3 mr-1" />
-                      {statusInfo.label}
-                    </span>
-                  </div>
-                  {property.rating && (
-                    <div className="absolute bottom-3 left-3 bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs flex items-center">
-                      <Star className="h-3 w-3 text-yellow-400 fill-current mr-1" />
-                      {property.rating}
-                    </div>
-                  )}
+              <div key={property.id} className="relative group">
+                {/* Badge de statut */}
+                <div className="absolute top-3 right-3 z-10">
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${statusInfo.color}`}>
+                    <StatusIcon className="h-3 w-3 mr-1" />
+                    {statusInfo.label}
+                  </span>
                 </div>
-
-                {/* Content */}
-                <div className="p-4">
-                  <h3 className="text-lg font-medium text-gray-900 mb-2 line-clamp-1">
-                    {property.title}
-                  </h3>
+                
+                {/* PropertyCard */}
+                <div className="relative">
+                  <PropertyCard property={transformToPropertyCard(property)} />
                   
-                  <div className="flex items-center text-sm text-gray-600 mb-3">
-                    <MapPin className="h-4 w-4 mr-1" />
-                    {property.city}
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div className="flex items-center text-sm text-gray-600">
-                      <Users className="h-4 w-4 mr-2" />
-                      {property.maxGuests} voyageurs
-                    </div>
-                    <div className="flex items-center text-sm text-gray-600">
-                      <Home className="h-4 w-4 mr-2" />
-                      {property.bedrooms} chambres
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center text-lg font-semibold text-gray-900">
-                      <Euro className="h-5 w-5 mr-1" />
-                      {property.pricePerNight.toLocaleString()} / nuit
-                    </div>
-                    {property.monthlyRevenue && (
-                      <div className="text-sm text-green-600 font-medium">
-                        +{property.monthlyRevenue}€/mois
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                    <button
-                      onClick={() => router.push(`/property/${property.id}`)}
-                      className="flex items-center text-sm text-purple-600 hover:text-purple-700"
-                    >
-                      <Eye className="h-4 w-4 mr-1" />
-                      Voir
-                    </button>
-                    
-                    <div className="flex items-center space-x-2">
+                  {/* Actions overlay au survol */}
+                  <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-lg flex items-center justify-center">
+                    <div className="flex items-center space-x-3">
+                      <button
+                        onClick={() => router.push(`/property/${property.id}`)}
+                        className="flex items-center px-3 py-2 bg-white text-purple-600 rounded-md hover:bg-purple-50 transition-colors"
+                      >
+                        <Eye className="h-4 w-4 mr-1" />
+                        Voir
+                      </button>
+                      
                       <button
                         onClick={() => router.push(`/property/${property.id}/edit`)}
-                        className="flex items-center text-sm text-gray-600 hover:text-gray-700"
+                        className="flex items-center px-3 py-2 bg-white text-gray-600 rounded-md hover:bg-gray-50 transition-colors"
                       >
                         <Edit className="h-4 w-4 mr-1" />
                         Modifier
@@ -479,7 +468,7 @@ export default function Dashboard({
                           // TODO: Implement delete confirmation
                           console.log("Delete property:", property.id);
                         }}
-                        className="flex items-center text-sm text-red-600 hover:text-red-700"
+                        className="flex items-center px-3 py-2 bg-white text-red-600 rounded-md hover:bg-red-50 transition-colors"
                       >
                         <Trash2 className="h-4 w-4 mr-1" />
                         Supprimer
@@ -487,6 +476,15 @@ export default function Dashboard({
                     </div>
                   </div>
                 </div>
+                
+                {/* Revenus mensuels si disponibles */}
+                {property.monthlyRevenue && (
+                  <div className="absolute bottom-3 left-3 z-10">
+                    <div className="bg-green-600 text-white px-2 py-1 rounded text-xs font-medium">
+                      +{property.monthlyRevenue}€/mois
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}

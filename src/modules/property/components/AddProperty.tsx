@@ -241,8 +241,8 @@ export const AddProperty: React.FC = () => {
     console.log(response);
     if (response) {
       setShowPageLoader(false);
-      // Redirection vers le dashboard du propriétaire
-      router.push("/dashboard");
+      // Redirection vers le dashboard du propriétaire avec un paramètre pour forcer la revalidation
+      router.push("/dashboard?refresh=true");
     }
 
     setShowPageLoader(false);

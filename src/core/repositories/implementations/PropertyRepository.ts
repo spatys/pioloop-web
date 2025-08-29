@@ -111,7 +111,7 @@ export class PropertyRepository implements IPropertyRepository {
       return response.data;
     }
     
-    return null;
+      return null;
   }
 
   async getLatestProperties(limit: number): Promise<PropertyResponse[]> {
@@ -119,7 +119,7 @@ export class PropertyRepository implements IPropertyRepository {
     const latestProperties = Properties
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       .slice(0, limit);
-    
+
     return latestProperties.map(property => this.mapPropertyToPropertyResponse(property));
   }
 

@@ -1,16 +1,32 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ProtectedRoute } from "@/components/shared/ProtectedRoute";
 import { OwnerOnly } from "@/components/shared/RoleGuard";
 import Dashboard from "@/modules/dashboard/components/Dashboard";
 import { useDashboard } from "@/hooks/useDashboard";
+import { useAuth } from "@/hooks/useAuth";
 import { PageLoader } from "@/components/ui/PageLoader";
 
 export default function DashboardPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { getCurrentUser } = useAuth();
   
   const [selectedStatus, setSelectedStatus] = useState("all");
   const { properties, stats, recentActivity, revenueData, loading, error, authLoading } = useDashboard();
+  
+  // Gérer le paramètre de rafraîchissement
+  useEffect(() => {
+    const refresh = searchParams.get('refresh');
+    if (refresh === 'true') {
+      // Forcer la revalidation des données utilisateur
+      getCurrentUser();
+      // Nettoyer l'URL
+      router.replace('/dashboard');
+    }
+  }, [searchParams, getCurrentUser, router]);
   
   const handleFilterChange = (status: string) => {
     setSelectedStatus(status);

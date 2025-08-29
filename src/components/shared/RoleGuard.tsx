@@ -1,6 +1,7 @@
 import React from "react";
 import { useRoles, UserRole } from "@/hooks/useRoles";
 import { UnauthorizedPage } from "./UnauthorizedPage";
+import { PageLoader } from "../ui/PageLoader";
 
 interface RoleGuardProps {
   children: React.ReactNode;
@@ -22,10 +23,8 @@ export const RoleGuard: React.FC<RoleGuardProps> = ({
   // Afficher un loader pendant le chargement des rôles utilisateur
   if (isLoadingUserRoles) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-purple-600"></div>
-      </div>
-    );
+      <PageLoader />
+    )
   }
 
   const hasPermission = requireAll ? hasAllRoles(roles) : hasAnyRole(roles);
