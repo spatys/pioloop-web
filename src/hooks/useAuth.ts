@@ -14,6 +14,7 @@ interface UseAuthReturn {
   // States
   user: { success: boolean; message: string; data: User; validationErrors: any } | null;
   isLoading: boolean;
+  isInitialLoading: boolean;
   error: string | null;
   fieldErrors: Record<string, string> | null;
   globalErrors: string[] | null;

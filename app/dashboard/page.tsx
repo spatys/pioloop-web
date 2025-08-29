@@ -7,12 +7,12 @@ import { OwnerOnly } from "@/components/shared/RoleGuard";
 import Dashboard from "@/modules/dashboard/components/Dashboard";
 import { useDashboard } from "@/hooks/useDashboard";
 import { useAuth } from "@/hooks/useAuth";
-import { PageLoader } from "@/components/ui/PageLoader";
+import { DashboardSkeleton } from "@/modules/dashboard/components/DashboardSkeleton";
 
 export default function DashboardPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { getCurrentUser } = useAuth();
+  const { getCurrentUser, isInitialLoading } = useAuth();
   
   const [selectedStatus, setSelectedStatus] = useState("all");
   const { properties, stats, recentActivity, revenueData, loading, error, authLoading } = useDashboard();
@@ -32,14 +32,9 @@ export default function DashboardPage() {
     setSelectedStatus(status);
   };
 
-  if (authLoading || loading) {
-    return (
-      <ProtectedRoute>
-        <OwnerOnly>
-          <PageLoader />
-        </OwnerOnly>
-      </ProtectedRoute>
-    );
+  // Afficher le skeleton pendant le chargement initial ou le chargement des données
+  if (authLoading || loading || isInitialLoading) {
+    return <DashboardSkeleton />;
   }
 
   if (error) {
