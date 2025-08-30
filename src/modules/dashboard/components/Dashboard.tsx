@@ -427,13 +427,6 @@ export default function Dashboard({
         {/* Liste des logements */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 p-6 bg-gray-50 rounded-lg">
           {filteredProperties.map((property) => {
-            // Log temporaire pour déboguer les images
-            console.log(`🏠 Property ${property.title}:`, {
-              id: property.id,
-              images: property.images,
-              imageUrls: property.images?.map(img => img.imageUrl) || []
-            });
-            
             const statusInfo = getStatusInfo(property.status);
             const StatusIcon = statusInfo.icon;
             
