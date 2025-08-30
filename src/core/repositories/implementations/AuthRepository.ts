@@ -19,6 +19,9 @@ export class AuthRepository implements IAuthRepository {
       credentials,
     );
 
+    // Le backend doit retourner directement les fieldErrors dans la bonne structure
+    // Pas de transformation côté frontend
+
     return response;
   }
 

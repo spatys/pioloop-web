@@ -33,7 +33,7 @@ export class PropertyRepository implements IPropertyRepository {
       serviceFee: property.serviceFee,
       status: property.status,
       ownerId: property.ownerId,
-      imageUrls: property.imageUrls,
+      images: property.images || [],
       amenities: property.amenities,
       createdAt: property.createdAt.toISOString(),
       updatedAt: property.updatedAt.toISOString()
@@ -91,7 +91,7 @@ export class PropertyRepository implements IPropertyRepository {
   async createProperty(
     request: CreatePropertyRequest,
   ): Promise<PropertyResponse> {
-    // Utiliser une route relative, HttpClient gère l'URL de base
+    // Appeler directement l'API des microservices via l'API Gateway
     const response = await this.httpClient.post<PropertyResponse>('/api/property/create', request);
     
     if (response.success && response.data) {
@@ -124,7 +124,7 @@ export class PropertyRepository implements IPropertyRepository {
   }
 
   async getPropertiesByOwnerId(ownerId: string): Promise<PropertyResponse[]> {
-    // Appeler l'API backend pour récupérer les propriétés de l'owner
+    // Appeler directement l'API des microservices via l'API Gateway
     const response = await this.httpClient.get<PropertyResponse[]>(`/api/property/owner/${ownerId}`);
   
     if (response.success && response.data) {

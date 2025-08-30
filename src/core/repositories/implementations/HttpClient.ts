@@ -81,10 +81,10 @@ export class HttpClient implements IHttpClient {
       }
 
       if (!response.ok) {
-        // Ne pas log les erreurs 401 normales pour /auth/me
-        // if (response.status !== 401 || !endpoint.includes('/auth/me')) {
-        //   console.error(`HTTP ${response.status} error for ${endpoint}:`, data);
-        // }
+        // Log pour déboguer les erreurs de validation
+        if (response.status === 400 && data?.fieldErrors) {
+          console.log(`🔍 Validation errors for ${endpoint}:`, data.fieldErrors);
+        }
 
         return {
           success: false,
@@ -112,8 +112,8 @@ export class HttpClient implements IHttpClient {
   }
 
   private getAuthHeaders(): Record<string, string> {
-    // Pour l'instant, on n'ajoute pas de headers d'authentification
-    // car on utilise les cookies HttpOnly
+    // Pas de headers d'authentification car on utilise les cookies HttpOnly
+    // Les cookies seront automatiquement envoyés avec credentials: "include"
     return {};
   }
 

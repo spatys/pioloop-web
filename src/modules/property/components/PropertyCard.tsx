@@ -10,6 +10,7 @@ interface PropertyCardProps {
 
 export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   const [isFavorite, setIsFavorite] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const toggleFavorite = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -18,6 +19,16 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
     console.log("Toggle favoris pour:", property.id);
   };
 
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
+  const getImageUrl = () => {
+    if (imageError || !property.images?.length) {
+      return "/images/placeholder-property.jpg";
+    }
+    return property.images[0].imageUrl;
+  };
   return (
     <Link
       href={`/property/${property.id}`}
@@ -26,9 +37,10 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
       {/* Image de la propriété */}
       <div className="relative h-48 overflow-hidden">
         <img
-          src={property.imageUrls?.[0] || "/images/placeholder-property.jpg"}
+          src={getImageUrl()}
           alt={property.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          onError={handleImageError}
         />
         <div className="absolute top-3 left-3">
           <span className="bg-purple-600 text-white text-xs font-normal px-2 py-1 rounded-full">

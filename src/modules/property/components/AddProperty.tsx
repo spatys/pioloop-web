@@ -44,6 +44,21 @@ export const AddProperty: React.FC = () => {
 
   const totalSteps = 6;
 
+  // Fonction pour convertir un fichier en base64
+  const convertFileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        // Extraire la partie base64 (après "data:image/jpeg;base64,")
+        const base64 = result.split(',')[1];
+        resolve(base64);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleInputChange = (
     field: keyof CreatePropertyRequest,
     value: any,
@@ -60,7 +75,7 @@ export const AddProperty: React.FC = () => {
     }
   };
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
       const fileArray = Array.from(files);
@@ -77,21 +92,24 @@ export const AddProperty: React.FC = () => {
         return;
       }
 
-      // Convertir les fichiers en objets PropertyImageRequest
-      const newImages: PropertyImageRequest[] = imageFiles.map(
-        (file, index) => ({
-          imageUrl: URL.createObjectURL(file),
-          altText: file.name,
-          isMainImage: (formData.images?.length || 0) === 0 && index === 0,
-          displayOrder: (formData.images?.length || 0) + index + 1,
-        }),
+      // Convertir les fichiers en base64 et créer les objets PropertyImageRequest
+      const newImages: PropertyImageRequest[] = await Promise.all(
+        imageFiles.map(async (file, index) => {
+          const base64 = await convertFileToBase64(file);
+          return {
+            imageUrl: base64,
+            altText: file.name,
+            isMainImage: (formData.images?.length || 0) === 0 && index === 0,
+            displayOrder: (formData.images?.length || 0) + index + 1,
+          };
+        })
       );
       const updatedImages = [...(formData.images || []), ...newImages];
       handleInputChange("images", updatedImages);
     }
   };
 
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setIsDragOver(false);
     const files = event.dataTransfer.files;
@@ -110,14 +128,17 @@ export const AddProperty: React.FC = () => {
         return;
       }
 
-      // Convertir les fichiers en objets PropertyImageRequest
-      const newImages: PropertyImageRequest[] = imageFiles.map(
-        (file, index) => ({
-          imageUrl: URL.createObjectURL(file),
-          altText: file.name,
-          isMainImage: (formData.images?.length || 0) === 0 && index === 0,
-          displayOrder: (formData.images?.length || 0) + index + 1,
-        }),
+      // Convertir les fichiers en base64 et créer les objets PropertyImageRequest
+      const newImages: PropertyImageRequest[] = await Promise.all(
+        imageFiles.map(async (file, index) => {
+          const base64 = await convertFileToBase64(file);
+          return {
+            imageUrl: base64,
+            altText: file.name,
+            isMainImage: (formData.images?.length || 0) === 0 && index === 0,
+            displayOrder: (formData.images?.length || 0) + index + 1,
+          };
+        })
       );
       const updatedImages = [...(formData.images || []), ...newImages];
       handleInputChange("images", updatedImages);
@@ -782,7 +803,7 @@ export const AddProperty: React.FC = () => {
                       className="aspect-video bg-gray-100 rounded-lg border border-gray-300 relative group"
                     >
                       <img
-                        src={image.imageUrl}
+                        src={`data:image/jpeg;base64,${image.imageUrl}`}
                         alt={image.altText}
                         className="w-full h-full object-cover rounded-lg"
                       />
@@ -1075,7 +1096,7 @@ export const AddProperty: React.FC = () => {
                 {formData.images.slice(0, 4).map((image, index) => (
                   <div key={index} className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
                     <img
-                      src={image.imageUrl}
+                      src={`data:image/jpeg;base64,${image.imageUrl}`}
                       alt={image.altText}
                       className="w-full h-full object-cover"
                     />

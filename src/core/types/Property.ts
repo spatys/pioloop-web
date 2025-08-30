@@ -21,9 +21,9 @@ export interface PropertyImage {
   id: string;
   propertyId: string;
   imageUrl: string;
-  isPrimary: boolean;
-  caption?: string;
-  order: number;
+  altText: string;
+  isMainImage: boolean;
+  displayOrder: number;
   createdAt: Date;
 }
 
@@ -69,7 +69,7 @@ export interface Property {
   serviceFee: number;
   status: string;
   ownerId: string;
-  imageUrls: string[];
+  images: PropertyImage[];
   amenities: string[];
   createdAt: Date;
   updatedAt: Date;
@@ -180,7 +180,7 @@ export interface PropertyResponse {
   serviceFee: number;
   status: string;
   ownerId: string;
-  imageUrls: string[];
+  images: PropertyImage[];
   amenities: string[];
   createdAt: string;
   updatedAt: string;

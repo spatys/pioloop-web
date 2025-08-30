@@ -157,7 +157,15 @@ const transformToPropertyCard = (dashboardProperty: DashboardProperty): Property
     serviceFee: 0, // Valeur par défaut
     status: dashboardProperty.status,
     ownerId: "", // Valeur par défaut
-    imageUrls: dashboardProperty.images?.map(img => img.imageUrl) || [],
+    images: dashboardProperty.images?.map(img => ({
+      id: img.imageUrl, // Utiliser imageUrl comme ID temporaire
+      propertyId: dashboardProperty.id,
+      imageUrl: img.imageUrl, // Maintenant imageUrl contient l'URL
+      altText: img.altText,
+      isMainImage: false,
+      displayOrder: 0,
+      createdAt: new Date()
+    })) || [],
     amenities: [], // Valeur par défaut
     createdAt: new Date(dashboardProperty.createdAt),
     updatedAt: new Date(dashboardProperty.createdAt)
