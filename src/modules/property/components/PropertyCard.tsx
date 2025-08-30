@@ -26,9 +26,14 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
       {/* Image de la propriété */}
       <div className="relative h-48 overflow-hidden">
         <img
-          src={property.imageUrls[0] || "/images/placeholder-property.jpg"}
+          src={property.imageUrls?.[0] || "/images/placeholder-property.jpg"}
           alt={property.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          onError={(e) => {
+            console.log("❌ Erreur de chargement d'image pour:", property.title);
+            console.log("❌ URLs des images:", property.imageUrls);
+            e.currentTarget.src = "/images/placeholder-property.jpg";
+          }}
         />
         <div className="absolute top-3 left-3">
           <span className="bg-purple-600 text-white text-xs font-normal px-2 py-1 rounded-full">

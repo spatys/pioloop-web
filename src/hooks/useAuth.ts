@@ -38,6 +38,7 @@ interface UseAuthReturn {
   logout: () => Promise<void>;
   getCurrentUser: () => Promise<ApiResponse<any>>;
   initializeUser: () => Promise<void>;
+  forceRevalidate: () => Promise<void>;
 
   // Utilities
   clearError: () => void;
@@ -237,6 +238,11 @@ export const useAuth = (): UseAuthReturn => {
     await mutateUser();
   }, [mutateUser]);
 
+  // Fonction pour forcer la revalidation (utile après login/logout)
+  const forceRevalidate = useCallback(async () => {
+    await mutateUser(undefined, { revalidate: true });
+  }, [mutateUser]);
+
   const clearError = () => setError(null);
   const clearSuccess = () => setSuccess(null);
   const clearFieldErrors = () => setFieldErrors(null);
@@ -249,7 +255,8 @@ export const useAuth = (): UseAuthReturn => {
 
   return {
     user,
-    isLoading: isLoading || isInitialLoading,
+    isLoading: isLoading,
+    isInitialLoading,
     error,
     fieldErrors,
     globalErrors,
@@ -262,6 +269,7 @@ export const useAuth = (): UseAuthReturn => {
     logout,
     getCurrentUser,
     initializeUser,
+    forceRevalidate,
     clearError,
     clearSuccess,
     clearFieldErrors,

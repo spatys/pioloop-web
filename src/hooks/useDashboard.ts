@@ -94,23 +94,25 @@ export const useDashboard = (): UseDashboardReturn => {
         const ownerProperties: PropertyResponse[] = await propertyService.getPropertiesByOwnerId(userId);
         
         // Convertir PropertyResponse[] en Property[] pour le dashboard
-        const convertedProperties: Property[] = ownerProperties.map(prop => ({
-          id: prop.id,
-          title: prop.title,
-          description: prop.description,
-          propertyType: prop.propertyType,
-          address: prop.address,
-          city: prop.city,
-          pricePerNight: prop.pricePerNight,
-          status: prop.status,
-          maxGuests: prop.maxGuests,
-          bedrooms: prop.bedrooms,
-          images: prop.imageUrls.map((url, index) => ({
-            imageUrl: url,
-            altText: `${prop.title} - Image ${index + 1}`
-          })),
-          createdAt: prop.createdAt
-        }));
+        const convertedProperties: Property[] = ownerProperties.map(prop => {
+          return {
+            id: prop.id,
+            title: prop.title,
+            description: prop.description,
+            propertyType: prop.propertyType,
+            address: prop.address,
+            city: prop.city,
+            pricePerNight: prop.pricePerNight,
+            status: prop.status,
+            maxGuests: prop.maxGuests,
+            bedrooms: prop.bedrooms,
+            images: prop.imageUrls?.map((url, index) => ({
+              imageUrl: url,
+              altText: `${prop.title} - Image ${index + 1}`
+            })) || [],
+            createdAt: prop.createdAt
+          };
+        });
         
         // Récupérer les statistiques
         const dashboardStats = await dashboardService.calculateStats(ownerProperties);

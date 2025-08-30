@@ -157,7 +157,7 @@ const transformToPropertyCard = (dashboardProperty: DashboardProperty): Property
     serviceFee: 0, // Valeur par défaut
     status: dashboardProperty.status,
     ownerId: "", // Valeur par défaut
-    imageUrls: dashboardProperty.images.map(img => img.imageUrl),
+    imageUrls: dashboardProperty.images?.map(img => img.imageUrl) || [],
     amenities: [], // Valeur par défaut
     createdAt: new Date(dashboardProperty.createdAt),
     updatedAt: new Date(dashboardProperty.createdAt)
@@ -425,13 +425,20 @@ export default function Dashboard({
         </div>
 
         {/* Liste des logements */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 p-6 bg-gray-50 rounded-lg">
           {filteredProperties.map((property) => {
+            // Log temporaire pour déboguer les images
+            console.log(`🏠 Property ${property.title}:`, {
+              id: property.id,
+              images: property.images,
+              imageUrls: property.images?.map(img => img.imageUrl) || []
+            });
+            
             const statusInfo = getStatusInfo(property.status);
             const StatusIcon = statusInfo.icon;
             
             return (
-              <div key={property.id} className="relative group">
+              <div key={property.id} className="relative group bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
                 {/* Badge de statut */}
                 <div className="absolute top-3 right-3 z-10">
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${statusInfo.color}`}>
