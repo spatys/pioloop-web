@@ -416,6 +416,15 @@ export default function Dashboard({
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-medium text-gray-900">Mes logements</h3>
           <div className="flex items-center space-x-3">
+            {/* Bouton "Voir Tous les Logements" */}
+            <button
+              onClick={() => router.push("/properties")}
+              className="inline-flex items-center px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-md hover:bg-purple-700 transition-colors"
+            >
+              <ArrowUpRight className="h-4 w-4 mr-2" />
+              Voir Tous les Logements
+            </button>
+            
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <input

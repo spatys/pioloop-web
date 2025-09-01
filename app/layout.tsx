@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
-import { SWRProvider } from "@/providers/SWRProvider";
+import { ReactQueryProvider } from "@/providers/ReactQueryProvider";
 import { ConditionalLayout } from "@/components/layout/ConditionalLayout";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,11 +20,11 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className={inter.className}>
-        <SWRProvider>
+        <ReactQueryProvider>
           <AuthProvider>
             <ConditionalLayout>{children}</ConditionalLayout>
           </AuthProvider>
-        </SWRProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );
