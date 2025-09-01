@@ -92,7 +92,7 @@ export class PropertyRepository implements IPropertyRepository {
     request: CreatePropertyRequest,
   ): Promise<PropertyResponse> {
     // Appeler directement l'API des microservices via l'API Gateway
-    const response = await this.httpClient.post<PropertyResponse>('/api/property/create', request);
+    const response = await this.httpClient.post<PropertyResponse>('/api/properties/create', request);
     
     if (response.success && response.data) {
       return response.data;

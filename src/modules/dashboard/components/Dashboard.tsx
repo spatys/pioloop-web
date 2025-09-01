@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 import { PropertyCard } from "@/modules/property/components/PropertyCard";
 import { Property as PropertyCardType } from "@/core/types/Property";
+import { PropertyStatus, getPropertyStatusLabel, getPropertyStatusColor } from "@/core/types/Property";
 
 interface DashboardProperty {
   id: string;
@@ -87,33 +88,40 @@ interface RevenueData {
 
 const getStatusInfo = (status: string) => {
   switch (status) {
-    case "PendingApproval":
+    case PropertyStatus.PendingApproval:
       return {
-        label: "En attente de validation",
+        label: getPropertyStatusLabel(PropertyStatus.PendingApproval),
         color: "bg-yellow-100 text-yellow-800 border-yellow-200",
         icon: Clock,
         bgColor: "bg-yellow-50"
       };
-    case "Published":
+    case PropertyStatus.Verified:
       return {
-        label: "Publié",
+        label: getPropertyStatusLabel(PropertyStatus.Verified),
         color: "bg-green-100 text-green-800 border-green-200",
         icon: CheckCircle,
         bgColor: "bg-green-50"
       };
-    case "Rented":
+    case PropertyStatus.Rented:
       return {
-        label: "Loué",
+        label: getPropertyStatusLabel(PropertyStatus.Rented),
         color: "bg-blue-100 text-blue-800 border-blue-200",
         icon: Users,
         bgColor: "bg-blue-50"
       };
-    case "Maintenance":
+    case PropertyStatus.Maintenance:
       return {
-        label: "En maintenance",
+        label: getPropertyStatusLabel(PropertyStatus.Maintenance),
         color: "bg-orange-100 text-orange-800 border-orange-200",
         icon: AlertCircle,
         bgColor: "bg-orange-50"
+      };
+    case PropertyStatus.Deleted:
+      return {
+        label: getPropertyStatusLabel(PropertyStatus.Deleted),
+        color: "bg-red-100 text-red-800 border-red-200",
+        icon: XCircle,
+        bgColor: "bg-red-50"
       };
     default:
       return {
@@ -424,10 +432,11 @@ export default function Dashboard({
               className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             >
               <option value="all">Tous les statuts</option>
-              <option value="PendingApproval">En attente de validation</option>
-              <option value="Published">Publiés</option>
-              <option value="Rented">Loués</option>
-              <option value="Maintenance">En maintenance</option>
+              <option value={PropertyStatus.PendingApproval}>{getPropertyStatusLabel(PropertyStatus.PendingApproval)}</option>
+              <option value={PropertyStatus.Verified}>{getPropertyStatusLabel(PropertyStatus.Verified)}</option>
+              <option value={PropertyStatus.Rented}>{getPropertyStatusLabel(PropertyStatus.Rented)}</option>
+              <option value={PropertyStatus.Maintenance}>{getPropertyStatusLabel(PropertyStatus.Maintenance)}</option>
+              <option value={PropertyStatus.Deleted}>{getPropertyStatusLabel(PropertyStatus.Deleted)}</option>
             </select>
           </div>
         </div>
