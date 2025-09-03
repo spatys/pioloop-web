@@ -15,18 +15,19 @@ export default function DashboardPage() {
   const { getCurrentUser, isInitialLoading } = useAuth();
   
   const [selectedStatus, setSelectedStatus] = useState("all");
-  const { properties, stats, recentActivity, revenueData, loading, error, authLoading } = useDashboard();
+  const { properties, stats, recentActivity, revenueData, loading, error, authLoading, refetch } = useDashboard();
   
   // Gérer le paramètre de rafraîchissement
   useEffect(() => {
     const refresh = searchParams.get('refresh');
     if (refresh === 'true') {
-      // Forcer la revalidation des données utilisateur
+      // Forcer la revalidation des données utilisateur et du dashboard
       getCurrentUser();
+      refetch();
       // Nettoyer l'URL
       router.replace('/dashboard');
     }
-  }, [searchParams, getCurrentUser, router]);
+  }, [searchParams, getCurrentUser, router, refetch]);
   
   const handleFilterChange = (status: string) => {
     setSelectedStatus(status);
