@@ -3,53 +3,53 @@ import { cookies } from 'next/headers';
 
 export async function POST(request: NextRequest) {
   try {
-    // Récupérer le cookie d'authentification
+    // Récupérer les cookies HttpOnly
     const cookieStore = await cookies();
     const authToken = cookieStore.get('auth_token');
 
     if (!authToken) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 });
+      return NextResponse.json(
+        { error: 'Non authentifié' },
+        { status: 401 }
+      );
     }
 
     // Récupérer les données de la requête
     const body = await request.json();
 
-    // Décoder le JWT pour récupérer l'ID de l'utilisateur
-    const token = authToken.value;
-    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-    const userId = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-
-    if (!userId) {
-      return NextResponse.json({ error: 'ID utilisateur non trouvé' }, { status: 400 });
+    // Appeler le backend avec le token d'authentification
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    
+    if (!apiUrl) {
+      return NextResponse.json(
+        { error: 'URL de l\'API non configurée. Veuillez définir NEXT_PUBLIC_API_URL dans votre fichier .env.local' },
+        { status: 500 }
+      );
     }
-
-    // Ajouter l'ID de l'utilisateur aux données de la propriété
-    const propertyData = {
-      ...body,
-      ownerId: userId
-    };
-
-    // Appeler l'API backend pour créer la propriété
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
     const response = await fetch(`${apiUrl}/api/property/create`, {
       method: 'POST',
       headers: {
-        'Cookie': `auth_token=${token}`,
         'Content-Type': 'application/json',
+        'Cookie': `auth_token=${authToken.value}`,
       },
-      body: JSON.stringify(propertyData),
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(`Erreur API: ${response.status} - ${errorData.message || response.statusText}`);
+      const errorData = await response.text();
+      console.error('Backend error:', response.status, errorData);
+      
+      return NextResponse.json(
+        { error: `Erreur du serveur: ${response.status}` },
+        { status: response.status }
+      );
     }
 
-    const property = await response.json();
-    return NextResponse.json(property);
+    const data = await response.json();
+    return NextResponse.json(data);
 
   } catch (error) {
-    console.error('Erreur lors de la création de la propriété:', error);
+    console.error('Error in create property API route:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }

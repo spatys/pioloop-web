@@ -53,7 +53,8 @@ export class PropertyService implements IPropertyService {
   }
 
   async createProperty(request: CreatePropertyRequest): Promise<PropertyResponse> {
-    const response = await fetch(`${this.baseUrl}/create`, {
+    // Utiliser l'API route Next.js qui peut lire les cookies HttpOnly
+    const response = await fetch('/api/properties/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
