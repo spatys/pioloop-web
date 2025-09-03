@@ -95,14 +95,34 @@ export class PropertyService implements IPropertyService {
     }
   }
 
-  async getLatestProperties(limit: number): Promise<PropertyResponse[]> {
-    const response = await fetch(`${this.baseUrl}/latest?limit=${limit}`);
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+  async getPopularProperties(limit: number): Promise<PropertyResponse[]> {
+    try {
+      // Appeler directement l'API Gateway pour récupérer les propriétés populaires
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      
+      if (!apiUrl) {
+        throw new Error('URL de l\'API non configurée. Veuillez définir NEXT_PUBLIC_API_URL dans votre fichier .env.local');
+      }
+      
+      const response = await fetch(`${apiUrl}/api/property/search?page=1&pageSize=${limit}&sortBy=popularity&sortOrder=desc`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      // Si la réponse est paginée, extraire les données
+      if (data.data && Array.isArray(data.data)) {
+        return data.data;
+      }
+      
+      // Si la réponse n'est pas paginée, retourner directement
+      return Array.isArray(data) ? data : [];
+    } catch (error) {
+      console.error('Error fetching popular properties:', error);
+      throw new Error('Erreur lors de la récupération des propriétés populaires');
     }
-    
-    return await response.json();
   }
 
   async getPropertiesByOwnerId(ownerId: string): Promise<PropertyResponse[]> {

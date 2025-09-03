@@ -1,4 +1,4 @@
 export { PropertyCard } from "./PropertyCard";
-export { LatestProperties } from "./LatestProperties";
+export { PopularProperties } from "./PopularProperties";
 export { PropertySkeleton } from "./PropertySkeleton";
 export { AddProperty } from "./AddProperty";

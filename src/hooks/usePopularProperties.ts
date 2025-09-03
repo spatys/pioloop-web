@@ -2,22 +2,22 @@ import { useState, useEffect, useCallback } from "react";
 import { Property } from "@/core/types/Property";
 import { getPropertyService } from "@/core/di/container";
 
-export const useLatestProperties = (limit: number = 5) => {
-  const [latestProperties, setLatestProperties] = useState<Property[]>([]);
+export const usePopularProperties = (limit: number = 5) => {
+  const [popularProperties, setPopularProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchLatestProperties = useCallback(async () => {
+  const fetchPopularProperties = useCallback(async () => {
     try {
       setError(null);
       const propertyService = getPropertyService();
-      const properties = await propertyService.getLatestProperties(limit);
-      setLatestProperties(properties);
+      const properties = await propertyService.getPopularProperties(limit);
+      setPopularProperties(properties);
     } catch (err) {
       setError(
         err instanceof Error
           ? err.message
-          : "Erreur lors de la récupération des logements",
+          : "Erreur lors de la récupération des logements populaires",
       );
     } finally {
       setIsLoading(false);
@@ -25,17 +25,17 @@ export const useLatestProperties = (limit: number = 5) => {
   }, [limit]);
 
   useEffect(() => {
-    fetchLatestProperties();
-  }, [fetchLatestProperties]);
+    fetchPopularProperties();
+  }, [fetchPopularProperties]);
 
   return {
-    latestProperties,
+    popularProperties,
     isLoading,
     error,
     refetch: () => {
       setIsLoading(true);
       setError(null);
-      fetchLatestProperties();
+      fetchPopularProperties();
     },
   };
 };

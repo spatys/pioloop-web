@@ -2,12 +2,12 @@
 
 import React from "react";
 import { PropertyCard } from "./PropertyCard";
-import { useLatestProperties } from "@/hooks/useLatestProperties";
+import { usePopularProperties } from "@/hooks/usePopularProperties";
 import { PropertySkeleton } from "./PropertySkeleton";
 import { BoutonLink } from "@/components/ui/BoutonLink";
 
-export const LatestProperties: React.FC = () => {
-  const { latestProperties, isLoading, error } = useLatestProperties(5);
+export const PopularProperties: React.FC = () => {
+  const { popularProperties, isLoading, error } = usePopularProperties(5);
 
   if (error) {
     return (
@@ -30,10 +30,10 @@ export const LatestProperties: React.FC = () => {
         <div className="max-w-[1600px] mx-auto px-6 sm:px-8 lg:px-12">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-normal text-gray-700 mb-4">
-              Derniers Logements 
+              Logements Populaires
             </h2>
             <p className="text-lg text-gray-600">
-              Découvrez nos nouvelles propriétés disponibles
+              Découvrez nos propriétés les plus recherchées
             </p>
           </div>
 
@@ -49,16 +49,16 @@ export const LatestProperties: React.FC = () => {
         {/* En-tête de section */}
         <div className="text-center mb-12">
           <h2 className="text-2xl font-normal text-gray-900 mb-4">
-            Nouveautés & coups de cœur
+            Logements Populaires & Coups de Cœur
           </h2>
           <p className="text-lg text-gray-600">
-            Découvrez nos dernières acquisitions et logements premium sélectionnées pour vous
+            Découvrez nos propriétés les plus recherchées et appréciées par nos voyageurs
           </p>
         </div>
 
         {/* Grille des propriétés */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-          {latestProperties.map((property) => (
+          {popularProperties.map((property) => (
             <PropertyCard key={property.id} property={property} />
           ))}
         </div>

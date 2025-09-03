@@ -7,6 +7,6 @@ export interface IPropertyRepository {
   getPropertyById(id: string): Promise<PropertyResponse | null>;
   createProperty(request: CreatePropertyRequest): Promise<PropertyResponse>;
   updateProperty(id: string, request: Partial<CreatePropertyRequest>): Promise<PropertyResponse | null>;
-  getLatestProperties(limit: number): Promise<PropertyResponse[]>;
+  getPopularProperties(limit: number): Promise<PropertyResponse[]>;
   getPropertiesByOwnerId(ownerId: string): Promise<PropertyResponse[]>;
 }

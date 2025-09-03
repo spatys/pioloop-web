@@ -114,13 +114,13 @@ export class PropertyRepository implements IPropertyRepository {
       return null;
   }
 
-  async getLatestProperties(limit: number): Promise<PropertyResponse[]> {
-    // Utiliser les données mock
-    const latestProperties = Properties
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+  async getPopularProperties(limit: number): Promise<PropertyResponse[]> {
+    // Simuler la récupération des propriétés populaires (par nombre de vues, réservations, etc.)
+    const popularProperties = Properties
+      .sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0))
       .slice(0, limit);
 
-    return latestProperties.map(property => this.mapPropertyToPropertyResponse(property));
+    return popularProperties.map(property => this.mapPropertyToPropertyResponse(property));
   }
 
   async getPropertiesByOwnerId(ownerId: string): Promise<PropertyResponse[]> {

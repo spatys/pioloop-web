@@ -102,7 +102,7 @@ export const useDashboard = (): UseDashboardReturn => {
           console.warn("⚠️ Erreur lors de la récupération des propriétés, utilisation des données mock:", error);
           // Fallback: utiliser toutes les propriétés mock pour le développement
           const propertyService = container.get<IPropertyService>(TYPES.IPropertyService);
-          ownerProperties = await propertyService.getLatestProperties(10);
+          ownerProperties = await propertyService.getPopularProperties(10);
         }
         
         console.log("✅ Propriétés récupérées:", ownerProperties);

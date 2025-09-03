@@ -13,6 +13,6 @@ export interface IPropertyService {
     id: string,
     request: Partial<CreatePropertyRequest>,
   ): Promise<PropertyResponse | null>;
-  getLatestProperties(limit: number): Promise<PropertyResponse[]>;
+  getPopularProperties(limit: number): Promise<PropertyResponse[]>;
   getPropertiesByOwnerId(ownerId: string): Promise<PropertyResponse[]>;
 }
