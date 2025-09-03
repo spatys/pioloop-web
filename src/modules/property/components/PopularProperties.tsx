@@ -33,7 +33,7 @@ export const PopularProperties: React.FC = () => {
               Logements Populaires
             </h2>
             <p className="text-lg text-gray-600">
-              Découvrez nos propriétés les plus recherchées
+              Découvrez nos logements les plus recherchés
             </p>
           </div>
 
@@ -51,9 +51,9 @@ export const PopularProperties: React.FC = () => {
           <h2 className="text-2xl font-normal text-gray-900 mb-4">
             Logements Populaires & Coups de Cœur
           </h2>
-          <p className="text-lg text-gray-600">
-            Découvrez nos propriétés les plus recherchées et appréciées par nos voyageurs
-          </p>
+                      <p className="text-lg text-gray-600">
+              Découvrez nos logements les plus recherchés et appréciés par nos voyageurs
+            </p>
         </div>
 
         {/* Grille des propriétés */}

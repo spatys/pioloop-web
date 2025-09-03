@@ -97,14 +97,14 @@ export class PropertyService implements IPropertyService {
 
   async getPopularProperties(limit: number): Promise<PropertyResponse[]> {
     try {
-      // Appeler directement l'API Gateway pour récupérer les propriétés populaires
+      // Appeler directement l'API Gateway pour récupérer les logements populaires
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       
       if (!apiUrl) {
         throw new Error('URL de l\'API non configurée. Veuillez définir NEXT_PUBLIC_API_URL dans votre fichier .env.local');
       }
       
-      const response = await fetch(`${apiUrl}/api/property/search?page=1&pageSize=${limit}&sortBy=popularity&sortOrder=desc`);
+      const response = await fetch(`${apiUrl}/api/property/search?page=1&pageSize=${limit}&sortBy=Popularity&sortOrder=Descending`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -121,7 +121,7 @@ export class PropertyService implements IPropertyService {
       return Array.isArray(data) ? data : [];
     } catch (error) {
       console.error('Error fetching popular properties:', error);
-      throw new Error('Erreur lors de la récupération des propriétés populaires');
+      throw new Error('Erreur lors de la récupération des logements populaires');
     }
   }
 

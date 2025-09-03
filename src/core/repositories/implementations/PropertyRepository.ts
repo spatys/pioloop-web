@@ -115,7 +115,7 @@ export class PropertyRepository implements IPropertyRepository {
   }
 
   async getPopularProperties(limit: number): Promise<PropertyResponse[]> {
-    // Simuler la récupération des propriétés populaires (par nombre de vues, réservations, etc.)
+    // Simuler la récupération des logements populaires (par nombre de vues, réservations, etc.)
     const popularProperties = Properties
       .sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0))
       .slice(0, limit);
