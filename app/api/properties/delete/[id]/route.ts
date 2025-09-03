@@ -21,9 +21,9 @@ export async function DELETE(
     const response = await fetch(`${apiUrl}/api/property/delete/${id}`, {
       method: 'DELETE',
       headers: {
-        'Cookie': `auth_token=${authToken.value}`,
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
     });
 
     if (!response.ok) {

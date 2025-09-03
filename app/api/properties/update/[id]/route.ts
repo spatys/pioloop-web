@@ -20,13 +20,13 @@ export async function PUT(
     const body = await request.json();
 
     // Appeler l'API backend pour mettre à jour la propriété
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const response = await fetch(`${apiUrl}/api/property/update/${id}`, {
       method: 'PUT',
       headers: {
-        'Cookie': `auth_token=${authToken.value}`,
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify(body),
     });
 

@@ -21,13 +21,13 @@ export async function GET(request: NextRequest) {
     }
 
     // Appeler l'API backend pour récupérer les propriétés de l'utilisateur
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const response = await fetch(`${apiUrl}/api/property/owner/${userId}`, {
       method: 'GET',
       headers: {
-        'Cookie': `auth_token=${token}`,
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
     });
 
     if (!response.ok) {

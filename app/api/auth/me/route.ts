@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
 
     // Appeler votre API C# pour vérifier le token et récupérer les infos utilisateur
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       const response = await fetch(`${apiUrl}/api/auth/me`, {
         method: "GET",
         headers: {

@@ -4,7 +4,7 @@ export async function POST(request: NextRequest) {
   try {
     // Appeler l'API C# pour la déconnexion (optionnel)
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       await fetch(`${apiUrl}/api/auth/logout`, {
         method: "POST",
         headers: {

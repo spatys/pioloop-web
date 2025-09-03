@@ -40,8 +40,9 @@ export async function GET(
     const response = await fetch(`${apiUrl}/api/property/owner/${userId}`, {
       method: 'GET',
       headers: {
-        'Cookie': `auth_token=${authToken.value}`,
+        'Content-Type': 'application/json',
       },
+      credentials: 'include',
     });
 
     if (!response.ok) {

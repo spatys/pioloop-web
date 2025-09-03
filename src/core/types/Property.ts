@@ -177,7 +177,9 @@ export interface PropertyAmenityRequest {
 }
 
 export interface PropertyImageRequest {
-  imageUrl: string;
+  imageData: string; // Base64 encoded image data
+  fileName: string; // Original filename
+  contentType: string; // MIME type (e.g., image/jpeg)
   altText: string;
   isMainImage: boolean;
   displayOrder: number;

@@ -26,12 +26,13 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+
     const response = await fetch(`${apiUrl}/api/property/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `auth_token=${authToken.value}`,
       },
+      credentials: 'include',
       body: JSON.stringify(body),
     });
 
