@@ -82,27 +82,21 @@ export const useDashboard = (): UseDashboardReturn => {
       setLoading(true);
       setError(null);
       
-      console.log("🔍 Chargement du dashboard pour l'utilisateur:", userId);
-      
       const propertyService = container.get<IPropertyService>(TYPES.IPropertyService);
       const dashboardService = container.get<IDashboardService>(TYPES.IDashboardService);
       const activityService = container.get<IActivityService>(TYPES.IActivityService);
       const revenueService = container.get<IRevenueService>(TYPES.IRevenueService);
       
       // Récupérer les propriétés du propriétaire
-      console.log("📋 Récupération des propriétés...");
       let ownerProperties: PropertyResponse[] = [];
       
       try {
         ownerProperties = await propertyService.getPropertiesByOwnerId(userId);
       } catch (error) {
-        console.warn("⚠️ Erreur lors de la récupération des propriétés, utilisation des données mock:", error);
         // Fallback: utiliser toutes les propriétés mock pour le développement
         const propertyService = container.get<IPropertyService>(TYPES.IPropertyService);
         ownerProperties = await propertyService.getPopularProperties(10);
       }
-      
-      console.log("✅ Propriétés récupérées:", ownerProperties);
       
       // Convertir PropertyResponse[] en Property[] pour le dashboard
       const convertedProperties: Property[] = ownerProperties.map(prop => {
@@ -124,31 +118,20 @@ export const useDashboard = (): UseDashboardReturn => {
           createdAt: prop.createdAt
         };
       });
-      console.log("🔄 Propriétés converties:", convertedProperties);
       
       // Récupérer les statistiques
-      console.log("📊 Calcul des statistiques...");
       const dashboardStats = await dashboardService.calculateStats(ownerProperties);
-      console.log("✅ Statistiques calculées:", dashboardStats);
       
-      // Récupérer les activités récentes
-      console.log("📈 Récupération des activités...");
+      // Récupérer les activités récentes et revenus
       const activities = await activityService.getRecentActivities(userId);
       const revenue = await revenueService.getRevenueData(userId, 6);
-      console.log("✅ Activités récupérées:", activities);
-      
-      // Récupérer les données de revenus
-      console.log("💰 Récupération des revenus...");
-      console.log("✅ Revenus récupérés:", revenue);
       
       setProperties(convertedProperties);
       setStats(dashboardStats);
       setRecentActivity(activities);
       setRevenueData(revenue);
       
-      console.log("🎉 Dashboard chargé avec succès!");
     } catch (err) {
-      console.error("❌ Erreur lors du chargement du dashboard:", err);
       setError("Erreur lors du chargement du tableau de bord");
     } finally {
       setLoading(false);

@@ -1201,7 +1201,7 @@ export const AddProperty: React.FC = () => {
                 onClick={handleSubmit}
                 className="px-4 py-2 bg-purple-600 text-white rounded-md font-normal hover:bg-purple-700"
               >
-                "Valider"
+                Valider
               </button>
             )}
           </div>

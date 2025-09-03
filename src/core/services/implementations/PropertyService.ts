@@ -127,13 +127,20 @@ export class PropertyService implements IPropertyService {
   }
 
   async getPropertiesByOwnerId(ownerId: string): Promise<PropertyResponse[]> {
-    const response = await fetch(`${this.baseUrl}/owner/${ownerId}`);
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    try {
+      // Utiliser l'API route Next.js qui peut lire les cookies HttpOnly
+      const response = await fetch(`/api/properties/owner/${ownerId}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      return Array.isArray(data) ? data : [];
+    } catch (error) {
+      console.error('Error fetching properties by owner ID:', error);
+      throw new Error('Erreur lors de la récupération des propriétés du propriétaire');
     }
-    
-    return await response.json();
   }
 }
 
