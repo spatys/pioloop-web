@@ -12,29 +12,34 @@ import { DashboardSkeleton } from "@/modules/dashboard/components/DashboardSkele
 export default function DashboardPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { getCurrentUser, isInitialLoading } = useAuth();
+  const { getCurrentUser, isInitialLoading, forceRevalidate } = useAuth();
   
   const [selectedStatus, setSelectedStatus] = useState("all");
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const { properties, stats, recentActivity, revenueData, loading, error, authLoading, refetch } = useDashboard();
   
   // Gérer le paramètre de rafraîchissement
   useEffect(() => {
     const refresh = searchParams.get('refresh');
     if (refresh === 'true') {
+      setIsRefreshing(true);
       // Forcer la revalidation des données utilisateur et du dashboard
-      getCurrentUser();
+      forceRevalidate();
       refetch();
-      // Nettoyer l'URL
-      router.replace('/dashboard');
+      // Nettoyer l'URL après un court délai pour permettre le chargement
+      setTimeout(() => {
+        router.replace('/dashboard');
+        setIsRefreshing(false);
+      }, 2000);
     }
-  }, [searchParams, getCurrentUser, router, refetch]);
+  }, [searchParams, forceRevalidate, router, refetch]);
   
   const handleFilterChange = (status: string) => {
     setSelectedStatus(status);
   };
 
-  // Afficher le skeleton pendant le chargement initial ou le chargement des données
-  if (authLoading || loading || isInitialLoading) {
+  // Afficher le skeleton pendant le chargement initial, le chargement des données, ou le rafraîchissement
+  if (authLoading || loading || isInitialLoading || isRefreshing) {
     return <DashboardSkeleton />;
   }
 
@@ -55,7 +60,7 @@ export default function DashboardPage() {
 
   return (
     <ProtectedRoute>
-      <OwnerOnly>
+      <OwnerOnly fallback={<DashboardSkeleton />} showUnauthorizedPage={false}>
         <div className="min-h-screen bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <Dashboard

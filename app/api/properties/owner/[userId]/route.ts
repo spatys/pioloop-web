@@ -1,22 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { userId: string } }
 ) {
   try {
-    // Récupérer les cookies HttpOnly
-    const cookieStore = await cookies();
-    const authToken = cookieStore.get('auth_token');
-
-    if (!authToken) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      );
-    }
-
     // Récupérer l'ID utilisateur depuis les paramètres
     const { userId } = params;
 
@@ -41,6 +29,8 @@ export async function GET(
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        // Forward user's cookies so backend reads auth_token from cookie
+        Cookie: request.headers.get('cookie') || '',
       },
       credentials: 'include',
     });

@@ -1,19 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 
 export async function POST(request: NextRequest) {
   try {
-    // Récupérer les cookies HttpOnly
-    const cookieStore = await cookies();
-    const authToken = cookieStore.get('auth_token');
-
-    if (!authToken) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      );
-    }
-
     // Récupérer les données de la requête
     const body = await request.json();
 
@@ -31,6 +19,8 @@ export async function POST(request: NextRequest) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        // Forward user's cookies so backend reads auth_token from cookie
+        Cookie: request.headers.get('cookie') || '',
       },
       credentials: 'include',
       body: JSON.stringify(body),

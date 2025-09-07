@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 
 export async function DELETE(
   request: NextRequest,
@@ -8,20 +7,14 @@ export async function DELETE(
   try {
     const { id } = params;
 
-    // Récupérer le cookie d'authentification
-    const cookieStore = await cookies();
-    const authToken = cookieStore.get('auth_token');
-
-    if (!authToken) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 });
-    }
-
     // Appeler l'API backend pour supprimer la propriété
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
     const response = await fetch(`${apiUrl}/api/property/delete/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        // Forward user's cookies so backend reads auth_token from cookie
+        Cookie: request.headers.get('cookie') || '',
       },
       credentials: 'include',
     });
