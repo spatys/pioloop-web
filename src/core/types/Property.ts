@@ -223,6 +223,7 @@ export interface PropertyResponse {
   neighborhood: string;
   city: string;
   postalCode: string;
+  country: string;
   latitude?: number;
   longitude?: number;
   pricePerNight: number;
@@ -232,6 +233,8 @@ export interface PropertyResponse {
   ownerId: string;
   images: PropertyImage[];
   amenities: string[];
+  averageRating?: number;
+  reviewCount?: number;
   createdAt: string;
   updatedAt: string;
 }
