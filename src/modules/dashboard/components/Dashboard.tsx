@@ -86,7 +86,6 @@ interface RevenueData {
 const getStatusInfo = (status: string) => {
   switch (status) {
     case PropertyStatus.AwaitingVerification:
-    case "PendingApproval": // Compatibilité avec l'ancien statut
       return {
         label: getPropertyStatusLabel(status),
         color: "bg-yellow-100 text-yellow-800 border-yellow-200",

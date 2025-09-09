@@ -11,6 +11,9 @@ import { devises } from "@/core/data/devises";
 import { BoutonLink } from "@/components/ui/BoutonLink";
 import { ProtectedBoutonLink } from "@/components/ui/ProtectedBoutonLink";
 import { Logo } from "@/components/ui/Logo";
+import { useFavorites } from "@/hooks/useFavorites";
+import { useReservations } from "@/hooks/useReservations";
+import { useDashboard } from "@/hooks/useDashboard";
 import useSWR from "swr";
 import type { Language } from "@/core/types/Language";
 import type { Devise } from "@/core/types/Devise";
@@ -43,6 +46,11 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
   );
 
   const isAuthenticated = !!data?.user;
+
+  // Hooks pour récupérer les données dynamiques
+  const { totalCount: favoritesCount } = useFavorites();
+  const { totalCount: reservationsCount } = useReservations();
+  const { stats: dashboardStats } = useDashboard();
 
   const handleLogout = async () => {
     try {
@@ -364,7 +372,7 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                             <span className="font-normal">Mes favoris</span>
                           </div>
                           <div className="bg-purple-100 text-purple-600 text-xs font-medium px-2 py-1 rounded-full">
-                            3
+                            {favoritesCount || 0}
                           </div>
                         </Link>
 
@@ -391,7 +399,7 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                             </span>
                           </div>
                           <div className="bg-blue-100 text-blue-600 text-xs font-medium px-2 py-1 rounded-full">
-                            2
+                            {reservationsCount || 0}
                           </div>
                         </Link>
 
@@ -418,7 +426,7 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
                               <span className="font-normal">Mon dashboard</span>
                             </div>
                             <div className="bg-green-100 text-green-600 text-xs font-medium px-2 py-1 rounded-full">
-                              5
+                              {dashboardStats?.totalProperties || 0}
                             </div>
                           </Link>
                         </OwnerOnly>
