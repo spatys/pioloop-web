@@ -27,18 +27,18 @@ export const AddProperty: React.FC = () => {
     title: "",
     description: "",
     propertyType: "",
-    maxGuests: 1,
-    bedrooms: 1,
-    beds: 1,
-    bathrooms: 1,
-    squareMeters: 0,
+    maxGuests: undefined,
+    bedrooms: undefined,
+    beds: undefined,
+    bathrooms: undefined,
+    squareMeters: undefined,
     address: "",
     neighborhood: "",
     city: "",
     postalCode: "",
-    pricePerNight: 0,
-    cleaningFee: 0,
-    serviceFee: 0,
+    pricePerNight: undefined,
+    cleaningFee: undefined,
+    serviceFee: undefined,
     amenities: [],
     images: [],
   });
@@ -249,19 +249,19 @@ export const AddProperty: React.FC = () => {
         break;
 
       case 2:
-        if (!formData.bedrooms || formData.bedrooms < 1) {
+        if (formData.bedrooms === undefined || formData.bedrooms < 1) {
           newErrors.bedrooms = "Le nombre de chambres doit être au moins 1";
         }
-        if (!formData.beds || formData.beds < 1) {
+        if (formData.beds === undefined || formData.beds < 1) {
           newErrors.beds = "Le nombre de lits doit être au moins 1";
         }
-        if (!formData.bathrooms || formData.bathrooms < 1) {
+        if (formData.bathrooms === undefined || formData.bathrooms < 1) {
           newErrors.bathrooms = "Le nombre de salles de bain doit être au moins 1";
         }
-        if (!formData.maxGuests || formData.maxGuests < 1) {
+        if (formData.maxGuests === undefined || formData.maxGuests < 1) {
           newErrors.maxGuests = "La capacité maximale doit être au moins 1";
         }
-        if (!formData.squareMeters || formData.squareMeters < 1) {
+        if (formData.squareMeters === undefined || formData.squareMeters < 1) {
           newErrors.squareMeters = "La surface doit être au moins 1 m²";
         }
         break;
@@ -276,9 +276,9 @@ export const AddProperty: React.FC = () => {
         break;
 
       case 4:
-        if (!formData.pricePerNight || formData.pricePerNight < 1) {
+        if (formData.pricePerNight === undefined || formData.pricePerNight < 1) {
                       newErrors.pricePerNight = "Le prix par nuit doit être au moins 1";
-        }
+                    }
         break;
 
       case 5:
@@ -346,6 +346,14 @@ export const AddProperty: React.FC = () => {
       // Créer la propriété avec les images base64
       const createRequest: CreatePropertyRequest = {
         ...(formData as CreatePropertyRequest),
+        maxGuests: formData.maxGuests || 1,
+        bedrooms: formData.bedrooms || 1,
+        beds: formData.beds || 1,
+        bathrooms: formData.bathrooms || 1,
+        squareMeters: formData.squareMeters || 0,
+        pricePerNight: formData.pricePerNight || 0,
+        cleaningFee: formData.cleaningFee || 0,
+        serviceFee: formData.serviceFee || 0,
         images: imagesWithBase64,
       };
 
@@ -524,14 +532,14 @@ export const AddProperty: React.FC = () => {
           <input
             type="number"
             min="1"
-            value={formData.bedrooms}
+            value={formData.bedrooms?.toString() || ""}
             onChange={(e) => {
               const value =
-                e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+                e.target.value === "" ? undefined : parseInt(e.target.value) || undefined;
               handleInputChange("bedrooms", value);
               
               // Validation en temps réel pour les champs numériques
-              if (value >= 1 && errors.bedrooms) {
+              if (value && value >= 1 && errors.bedrooms) {
                 setErrors((prev) => {
                   const newErrors = { ...prev };
                   delete newErrors.bedrooms;
@@ -556,14 +564,14 @@ export const AddProperty: React.FC = () => {
           <input
             type="number"
             min="1"
-            value={formData.beds}
+            value={formData.beds?.toString() || ""}
             onChange={(e) => {
               const value =
-                e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+                e.target.value === "" ? undefined : parseInt(e.target.value) || undefined;
               handleInputChange("beds", value);
               
               // Validation en temps réel pour les champs numériques
-              if (value >= 1 && errors.beds) {
+              if (value && value >= 1 && errors.beds) {
                 setErrors((prev) => {
                   const newErrors = { ...prev };
                   delete newErrors.beds;
@@ -588,14 +596,14 @@ export const AddProperty: React.FC = () => {
           <input
             type="number"
             min="1"
-            value={formData.bathrooms}
+            value={formData.bathrooms?.toString() || ""}
             onChange={(e) => {
               const value =
-                e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+                e.target.value === "" ? undefined : parseInt(e.target.value) || undefined;
               handleInputChange("bathrooms", value);
               
               // Validation en temps réel pour les champs numériques
-              if (value >= 1 && errors.bathrooms) {
+              if (value && value >= 1 && errors.bathrooms) {
                 setErrors((prev) => {
                   const newErrors = { ...prev };
                   delete newErrors.bathrooms;
@@ -620,14 +628,14 @@ export const AddProperty: React.FC = () => {
           <input
             type="number"
             min="1"
-            value={formData.maxGuests}
+            value={formData.maxGuests?.toString() || ""}
             onChange={(e) => {
               const value =
-                e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+                e.target.value === "" ? undefined : parseInt(e.target.value) || undefined;
               handleInputChange("maxGuests", value);
               
               // Validation en temps réel pour les champs numériques
-              if (value >= 1 && errors.maxGuests) {
+              if (value && value >= 1 && errors.maxGuests) {
                 setErrors((prev) => {
                   const newErrors = { ...prev };
                   delete newErrors.maxGuests;
@@ -653,14 +661,14 @@ export const AddProperty: React.FC = () => {
         <input
           type="number"
           min="1"
-          value={formData.squareMeters}
+          value={formData.squareMeters?.toString() || ""}
           onChange={(e) => {
             const value =
-              e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+              e.target.value === "" ? undefined : parseInt(e.target.value) || undefined;
             handleInputChange("squareMeters", value);
             
             // Validation en temps réel pour les champs numériques
-            if (value >= 1 && errors.squareMeters) {
+            if (value && value >= 1 && errors.squareMeters) {
               setErrors((prev) => {
                 const newErrors = { ...prev };
                 delete newErrors.squareMeters;
@@ -787,14 +795,14 @@ export const AddProperty: React.FC = () => {
         <input
           type="number"
           min="0"
-          value={formData.pricePerNight}
+          value={formData.pricePerNight?.toString() || ""}
           onChange={(e) => {
             const value =
-              e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+              e.target.value === "" ? undefined : parseInt(e.target.value) || undefined;
             handleInputChange("pricePerNight", value);
             
             // Validation en temps réel pour les champs numériques
-            if (value >= 1 && errors.pricePerNight) {
+            if (value && value >= 1 && errors.pricePerNight) {
               setErrors((prev) => {
                 const newErrors = { ...prev };
                 delete newErrors.pricePerNight;
@@ -821,10 +829,10 @@ export const AddProperty: React.FC = () => {
           <input
             type="number"
             min="0"
-            value={formData.cleaningFee}
+            value={formData.cleaningFee?.toString() || ""}
             onChange={(e) => {
               const value =
-                e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+                e.target.value === "" ? undefined : parseInt(e.target.value) || undefined;
               handleInputChange("cleaningFee", value);
             }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
@@ -839,10 +847,10 @@ export const AddProperty: React.FC = () => {
           <input
             type="number"
             min="0"
-            value={formData.serviceFee}
+            value={formData.serviceFee?.toString() || ""}
             onChange={(e) => {
               const value =
-                e.target.value === "" ? 0 : parseInt(e.target.value) || 0;
+                e.target.value === "" ? undefined : parseInt(e.target.value) || undefined;
               handleInputChange("serviceFee", value);
             }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-purple-500"
@@ -1177,23 +1185,23 @@ export const AddProperty: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
               <span className="text-sm font-medium text-gray-600">Voyageurs max</span>
-              <p className="text-gray-900">{formData.maxGuests || 0}</p>
+              <p className="text-gray-900">{formData.maxGuests || "Non renseigné"}</p>
             </div>
             <div>
               <span className="text-sm font-medium text-gray-600">Chambres</span>
-              <p className="text-gray-900">{formData.bedrooms || 0}</p>
+              <p className="text-gray-900">{formData.bedrooms || "Non renseigné"}</p>
             </div>
             <div>
               <span className="text-sm font-medium text-gray-600">Lits</span>
-              <p className="text-gray-900">{formData.beds || 0}</p>
+              <p className="text-gray-900">{formData.beds || "Non renseigné"}</p>
             </div>
             <div>
               <span className="text-sm font-medium text-gray-600">Salles de bain</span>
-              <p className="text-gray-900">{formData.bathrooms || 0}</p>
+              <p className="text-gray-900">{formData.bathrooms || "Non renseigné"}</p>
             </div>
             <div>
               <span className="text-sm font-medium text-gray-600">Surface (m²)</span>
-              <p className="text-gray-900">{formData.squareMeters || 0}</p>
+              <p className="text-gray-900">{formData.squareMeters || "Non renseigné"}</p>
             </div>
           </div>
           
@@ -1246,15 +1254,15 @@ export const AddProperty: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <span className="text-sm font-medium text-gray-600">Prix par nuit</span>
-              <p className="text-gray-900">{formData.pricePerNight || 0} €</p>
+              <p className="text-gray-900">{formData.pricePerNight || "Non renseigné"} {formData.pricePerNight ? "€" : ""}</p>
             </div>
             <div>
               <span className="text-sm font-medium text-gray-600">Frais de ménage</span>
-              <p className="text-gray-900">{formData.cleaningFee || 0} €</p>
+              <p className="text-gray-900">{formData.cleaningFee || "Non renseigné"} {formData.cleaningFee ? "€" : ""}</p>
             </div>
             <div>
               <span className="text-sm font-medium text-gray-600">Frais de service</span>
-              <p className="text-gray-900">{formData.serviceFee || 0} €</p>
+              <p className="text-gray-900">{formData.serviceFee || "Non renseigné"} {formData.serviceFee ? "€" : ""}</p>
             </div>
           </div>
         </div>
