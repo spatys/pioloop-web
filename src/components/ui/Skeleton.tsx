@@ -43,7 +43,7 @@ export const SkeletonCard: React.FC<{ className?: string }> = ({
   className = "",
 }) => (
   <div
-    className={`bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden ${className}`}
+    className={`bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden w-full max-w-[240px] ${className}`}
   >
     <SkeletonImage />
     <div className="p-4 space-y-3">
