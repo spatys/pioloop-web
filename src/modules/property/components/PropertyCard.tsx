@@ -2,15 +2,16 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Property } from "@/core/types/Property";
+import { Property, getPropertyStatusLabel, getPropertyStatusColor } from "@/core/types/Property";
 
 interface PropertyCardProps {
   property: Property;
   showFavorite?: boolean; // Par défaut true, false pour le dashboard
   showActions?: boolean; // Par défaut false, true pour le dashboard
+  showStatus?: boolean; // Par défaut false, true pour afficher le statut à la place du favori
 }
 
-export const PropertyCard: React.FC<PropertyCardProps> = ({ property, showFavorite = true, showActions = false }) => {
+export const PropertyCard: React.FC<PropertyCardProps> = ({ property, showFavorite = true, showActions = false, showStatus = false }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [imageError, setImageError] = useState(false);
 
@@ -54,7 +55,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, showFavori
             {property.propertyType}
           </span>
         </div>
-        {showFavorite && (
+        {showFavorite && !showStatus && (
           <div className="absolute top-3 right-3">
             <button
               className={`p-2 rounded-full transition-all duration-200 group/fav ${
@@ -82,6 +83,22 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, showFavori
                 />
               </svg>
             </button>
+          </div>
+        )}
+        
+        {showStatus && (
+          <div className="absolute top-3 right-3">
+            <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+              getPropertyStatusColor(property.status) === "warning" 
+                ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
+                : getPropertyStatusColor(property.status) === "success"
+                ? "bg-green-100 text-green-800 border border-green-200"
+                : getPropertyStatusColor(property.status) === "info"
+                ? "bg-blue-100 text-blue-800 border border-blue-200"
+                : "bg-gray-100 text-gray-800 border border-gray-200"
+            }`}>
+              {getPropertyStatusLabel(property.status)}
+            </span>
           </div>
         )}
       </div>

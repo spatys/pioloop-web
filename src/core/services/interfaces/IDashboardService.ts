@@ -2,7 +2,7 @@ import type { PropertyResponse } from "@/core/types/Property";
 
 export interface DashboardStats {
   totalProperties: number;
-  pendingApprovals: number;
+  awaitingApprovals: number;
   publishedProperties: number;
   rentedProperties: number;
   totalRevenue: number;

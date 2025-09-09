@@ -47,7 +47,7 @@ export const useDashboard = (): UseDashboardReturn => {
   const [properties, setProperties] = useState<Property[]>([]);
   const defaultStats: DashboardStats = {
     totalProperties: 0,
-    pendingApprovals: 0,
+    awaitingApprovals: 0,
     publishedProperties: 0,
     rentedProperties: 0,
     totalRevenue: 0,

@@ -25,7 +25,7 @@ interface OwnerPropertiesResponse {
   statistics: {
     totalProperties: number;
     verifiedProperties: number;
-    pendingApprovals: number;
+    awaitingApprovalss: number;
     rentedProperties: number;
   };
 }
@@ -58,7 +58,7 @@ export const useOwnerProperties = () => {
   const statistics = data?.statistics || {
     totalProperties: 0,
     verifiedProperties: 0,
-    pendingApprovals: 0,
+    awaitingApprovalss: 0,
     rentedProperties: 0,
   };
 
@@ -138,7 +138,7 @@ export const useOwnerProperties = () => {
   };
 
   const getPendingProperties = () => {
-    return getPropertiesByStatus(PropertyStatus.AwaitingVerification);
+    return getPropertiesByStatus(PropertyStatus.PendingVerification);
   };
 
   const getRentedProperties = () => {

@@ -6,7 +6,7 @@ import type { PropertyResponse } from "@/core/types/Property";
 export class DashboardService implements IDashboardService {
   async calculateStats(properties: PropertyResponse[]): Promise<DashboardStats> {
     const totalProperties = properties.length;
-    const pendingApprovals = properties.filter(p => p.status === "AwaitingVerification").length;
+    const awaitingApprovals = properties.filter(p => p.status === "PendingVerification").length;
     const publishedProperties = properties.filter(p => p.status === "Verified").length;
     const rentedProperties = properties.filter(p => p.status === "Rented").length;
     
@@ -30,7 +30,7 @@ export class DashboardService implements IDashboardService {
 
     return {
       totalProperties,
-      pendingApprovals,
+      awaitingApprovals,
       publishedProperties,
       rentedProperties,
       totalRevenue,

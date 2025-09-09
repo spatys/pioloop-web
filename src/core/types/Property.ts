@@ -2,7 +2,7 @@ import { User } from "./User";
 import { Money } from "./Money";
 
 export enum PropertyStatus {
-  AwaitingVerification = "AwaitingVerification",
+  PendingVerification = "PendingVerification",
   Verified = "Verified",
   Rented = "Rented",
   Deleted = "Deleted",
@@ -10,7 +10,7 @@ export enum PropertyStatus {
 
 // Constantes pour faciliter l'utilisation
 export const PROPERTY_STATUS = {
-  AWAITING_VERIFICATION: PropertyStatus.AwaitingVerification,
+  PENDING_VERIFICATION: PropertyStatus.PendingVerification,
   VERIFIED: PropertyStatus.Verified,
   RENTED: PropertyStatus.Rented,
   DELETED: PropertyStatus.Deleted,
@@ -18,19 +18,19 @@ export const PROPERTY_STATUS = {
 
 // Fonction utilitaire pour obtenir le label affiché d'un statut
 export const getPropertyStatusLabel = (status: PropertyStatus | string): string => {
-  if (status === PropertyStatus.AwaitingVerification) {
+  if (status === PropertyStatus.PendingVerification) {
     return "En attente de vérification";
   }
   
   switch (status) {
-    case PropertyStatus.AwaitingVerification:
+    case PropertyStatus.PendingVerification:
       return "En attente de vérification";
     case PropertyStatus.Verified:
-      return "Vérifiée";
+      return "Vérifié";
     case PropertyStatus.Rented:
-      return "Louée";
+      return "Loué";
     case PropertyStatus.Deleted:
-      return "Supprimée";
+      return "Supprimé";
     default:
       return "Statut inconnu";
   }
@@ -38,12 +38,12 @@ export const getPropertyStatusLabel = (status: PropertyStatus | string): string 
 
 // Fonction utilitaire pour obtenir la couleur d'un statut (pour l'UI)
 export const getPropertyStatusColor = (status: PropertyStatus | string): string => {
-  if (status === PropertyStatus.AwaitingVerification) {
+  if (status === PropertyStatus.PendingVerification) {
     return "warning"; // Orange/Yellow
   }
   
   switch (status) {
-    case PropertyStatus.AwaitingVerification:
+    case PropertyStatus.PendingVerification:
       return "warning"; // Orange/Yellow
     case PropertyStatus.Verified:
       return "success"; // Green

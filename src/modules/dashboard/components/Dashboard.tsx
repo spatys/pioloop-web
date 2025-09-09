@@ -52,7 +52,7 @@ interface DashboardProperty {
 
 interface DashboardStats {
   totalProperties: number;
-  pendingApprovals: number;
+  awaitingApprovals: number;
   publishedProperties: number;
   rentedProperties: number;
   totalRevenue: number;
@@ -85,7 +85,7 @@ interface RevenueData {
 
 const getStatusInfo = (status: string) => {
   switch (status) {
-    case PropertyStatus.AwaitingVerification:
+    case PropertyStatus.PendingVerification:
       return {
         label: getPropertyStatusLabel(status),
         color: "bg-yellow-100 text-yellow-800 border-yellow-200",
@@ -282,7 +282,7 @@ export default function Dashboard({
                   {stats.publishedProperties} vérifiés
                 </span>
                 <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full w-fit">
-                  {stats.pendingApprovals} en attente de vérification
+                  {stats.awaitingApprovals} en attente de vérification
                 </span>
               </div>
             </div>
@@ -432,7 +432,7 @@ export default function Dashboard({
               className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-purple-500"
             >
               <option value="all">Tous les statuts</option>
-              <option value={PropertyStatus.AwaitingVerification}>{getPropertyStatusLabel(PropertyStatus.AwaitingVerification)}</option>
+              <option value={PropertyStatus.PendingVerification}>{getPropertyStatusLabel(PropertyStatus.PendingVerification)}</option>
               <option value={PropertyStatus.Verified}>{getPropertyStatusLabel(PropertyStatus.Verified)}</option>
               <option value={PropertyStatus.Rented}>{getPropertyStatusLabel(PropertyStatus.Rented)}</option>
               <option value={PropertyStatus.Deleted}>{getPropertyStatusLabel(PropertyStatus.Deleted)}</option>
@@ -443,21 +443,15 @@ export default function Dashboard({
         {/* Liste des logements */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6 bg-gray-50 rounded-lg">
           {filteredProperties.map((property) => {
-            const statusInfo = getStatusInfo(property.status);
-            const StatusIcon = statusInfo.icon;
-            
             return (
               <div key={property.id} className="relative">
-                {/* PropertyCard */}
-                <PropertyCard property={transformToPropertyCard(property)} showFavorite={false} showActions={true} />
-                
-                {/* Badge de statut */}
-                <div className="absolute top-3 right-3 z-10">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${statusInfo.color}`}>
-                    <StatusIcon className="h-3 w-3 mr-1" />
-                    {statusInfo.label}
-                  </span>
-                </div>
+                {/* PropertyCard avec statut intégré */}
+                <PropertyCard 
+                  property={transformToPropertyCard(property)} 
+                  showFavorite={false} 
+                  showActions={true} 
+                  showStatus={true}
+                />
                 
                 {/* Revenus mensuels si disponibles */}
                 {property.monthlyRevenue && (
