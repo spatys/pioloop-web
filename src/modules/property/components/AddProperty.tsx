@@ -386,38 +386,49 @@ export const AddProperty: React.FC = () => {
 
   const renderStepIndicator = () => (
     <div className="mb-8">
-      <div className="flex items-center justify-center space-x-12">
-        {Array.from({ length: totalSteps }, (_, index) => (
-          <div key={index} className="flex flex-col items-center w-36">
-            <div className="flex items-center justify-center w-full h-10 mb-3">
-              <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-200 ${
-                  index + 1 === currentStep
-                    ? "bg-purple-600 text-white shadow-lg"
-                    : index + 1 < currentStep
-                      ? "bg-green-500 text-white"
-                      : "bg-gray-200 text-gray-600"
-                }`}
-              >
-                {index + 1 < currentStep ? "✓" : index + 1}
+      <div className="relative">
+        {/* Barre de progression continue */}
+        <div className="absolute top-5 left-5 right-5 h-0.5 bg-gray-200 rounded-full">
+          <div 
+            className="h-full bg-gradient-to-r from-green-500 to-purple-600 rounded-full transition-all duration-500 ease-out"
+            style={{ 
+              width: currentStep === 1 ? '0%' : `${((currentStep - 1) / (totalSteps - 1)) * 100}%`,
+              marginLeft: currentStep === 1 ? '0' : '0',
+              minWidth: currentStep === 1 ? '0' : 'auto'
+            }}
+          />
+        </div>
+        
+        {/* Étapes */}
+        <div className="flex justify-between relative z-10">
+          {Array.from({ length: totalSteps }, (_, index) => (
+            <div key={index} className="flex flex-col items-center">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+                index + 1 < currentStep
+                  ? "bg-green-500 text-white shadow-lg scale-110"
+                  : index + 1 === currentStep
+                    ? "bg-purple-600 text-white shadow-lg scale-110"
+                    : "bg-white text-gray-400 border-2 border-gray-200"
+              }`}>
+                {index + 1 < currentStep ? (
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                ) : (
+                  index + 1
+                )}
+              </div>
+              
+              <div className="mt-3 text-center max-w-24">
+                <div className={`text-xs font-medium transition-colors duration-200 ${
+                  index + 1 <= currentStep ? "text-gray-900" : "text-gray-400"
+                }`}>
+                  {stepTitles[index]}
+                </div>
               </div>
             </div>
-            
-            <div className="text-center h-12 flex items-center justify-center">
-              <div
-                className={`text-xs font-medium transition-colors duration-200 leading-tight text-center ${
-                  index + 1 === currentStep
-                    ? "text-purple-600"
-                    : index + 1 < currentStep
-                      ? "text-green-600"
-                      : "text-gray-500"
-                }`}
-              >
-                {stepTitles[index]}
-              </div>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
