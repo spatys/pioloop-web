@@ -31,6 +31,8 @@ export async function GET(
         'Content-Type': 'application/json',
         // Forward user's cookies so backend reads auth_token from cookie
         Cookie: request.headers.get('cookie') || '',
+        // Forward X-User-Id header for authentication
+        'X-User-Id': userId,
       },
       credentials: 'include',
     });

@@ -66,7 +66,8 @@ export enum PropertyType {
 export interface PropertyImage {
   id: string;
   propertyId: string;
-  imageUrl: string;
+  imageData: string; // Base64 encoded BLOB data
+  contentType: string; // MIME type
   altText: string;
   isMainImage: boolean;
   displayOrder: number;
@@ -178,8 +179,7 @@ export interface PropertyAmenityRequest {
 
 export interface PropertyImageRequest {
   imageData: string; // Base64 encoded image data
-  fileName: string; // Original filename
-  contentType: string; // MIME type (e.g., image/jpeg)
+  contentType: string; // MIME type (e.g., 'image/webp')
   altText: string;
   isMainImage: boolean;
   displayOrder: number;

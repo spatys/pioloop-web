@@ -27,7 +27,13 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
     if (imageError || !property.images?.length) {
       return "/images/placeholder-property.jpg";
     }
-    return property.images[0].imageUrl;
+    // Chercher l'image principale (isMainImage: true)
+    const mainImage = property.images.find(img => img.isMainImage);
+    const imageToUse = mainImage || property.images[0]; // Fallback sur la première si pas d'image principale
+
+    // Retourner les données base64 directement (data:image/webp;base64,...)
+    console.log("Image reçue du backend:", imageToUse.imageData?.substring(0, 50) + "...");
+    return imageToUse.imageData;
   };
   return (
     <Link

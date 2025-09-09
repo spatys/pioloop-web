@@ -44,7 +44,7 @@ interface DashboardProperty {
   status: string;
   maxGuests: number;
   bedrooms: number;
-  images: Array<{ imageUrl: string; altText: string }>;
+  images: Array<{ imageData: string; contentType: string; altText: string }>;
   createdAt: string;
   rating?: number;
   reviewCount?: number;
@@ -134,7 +134,7 @@ const getStatusInfo = (status: string) => {
 };
 
 interface DashboardProps {
-  properties: DashboardProperty[]; // Doit être filtré par ownerId
+  properties: DashboardProperty[];
   stats: DashboardStats;
   recentActivity: RecentActivity[];
   revenueData: RevenueData[];
@@ -166,9 +166,10 @@ const transformToPropertyCard = (dashboardProperty: DashboardProperty): Property
     status: dashboardProperty.status,
     ownerId: "", // Valeur par défaut
     images: dashboardProperty.images?.map(img => ({
-      id: img.imageUrl, // Utiliser imageUrl comme ID temporaire
+      id: img.imageData, // Utiliser imageData comme ID temporaire
       propertyId: dashboardProperty.id,
-      imageUrl: img.imageUrl, // Maintenant imageUrl contient l'URL
+      imageData: img.imageData, // Maintenant imageData contient les données base64
+      contentType: img.contentType,
       altText: img.altText,
       isMainImage: false,
       displayOrder: 0,
@@ -452,6 +453,7 @@ export default function Dashboard({
 
         {/* Liste des logements */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 p-6 bg-gray-50 rounded-lg">
+          <>{console.log(filteredProperties)}</>
           {filteredProperties.map((property) => {
             const statusInfo = getStatusInfo(property.status);
             const StatusIcon = statusInfo.icon;
@@ -468,6 +470,8 @@ export default function Dashboard({
                 
                 {/* PropertyCard */}
                 <div className="relative">
+                <>{console.log("property à verifier")}</>
+                  <>{console.log(property)}</>
                   <PropertyCard property={transformToPropertyCard(property)} />
                   
                   {/* Actions overlay au survol */}

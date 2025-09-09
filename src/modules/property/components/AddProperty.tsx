@@ -42,20 +42,55 @@ export const AddProperty: React.FC = () => {
     images: [],
   });
 
+  // État pour stocker les fichiers WebP
+  const [webpFiles, setWebpFiles] = useState<File[]>([]);
+
   const totalSteps = 6;
 
-  // Fonction pour convertir un fichier en base64
-  const convertFileToBase64 = (file: File): Promise<string> => {
+  // Fonction pour convertir un fichier en WebP et retourner le fichier
+  const convertFileToWebP = (file: File): Promise<File> => {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const result = reader.result as string;
-        // Extraire la partie base64 (après "data:image/jpeg;base64,")
-        const base64 = result.split(',')[1];
-        resolve(base64);
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      
+      img.onload = () => {
+        // Redimensionner si nécessaire (max 1920px de largeur)
+        const maxWidth = 1920;
+        const maxHeight = 1080;
+        let { width, height } = img;
+        
+        if (width > maxWidth) {
+          height = (height * maxWidth) / width;
+          width = maxWidth;
+        }
+        if (height > maxHeight) {
+          width = (width * maxHeight) / height;
+          height = maxHeight;
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Dessiner l'image redimensionnée
+        ctx?.drawImage(img, 0, 0, width, height);
+        
+        // Convertir en WebP avec qualité 85%
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const webpFile = new File([blob], file.name.replace(/\.[^/.]+$/, '.webp'), {
+              type: 'image/webp',
+              lastModified: Date.now()
+            });
+            resolve(webpFile);
+          } else {
+            reject(new Error('Erreur lors de la conversion en WebP'));
+          }
+        }, 'image/webp', 0.85);
       };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
+      
+      img.onerror = () => reject(new Error('Erreur lors du chargement de l\'image'));
+      img.src = URL.createObjectURL(file);
     });
   };
 
@@ -84,7 +119,8 @@ export const AddProperty: React.FC = () => {
           file.type.startsWith("image/") &&
           (file.type === "image/jpeg" ||
             file.type === "image/png" ||
-            file.type === "image/jpg"),
+            file.type === "image/jpg" ||
+            file.type === "image/webp"),
       );
 
       if (imageFiles.length + (formData.images?.length || 0) > 10) {
@@ -92,20 +128,31 @@ export const AddProperty: React.FC = () => {
         return;
       }
 
-      // Convertir les fichiers en base64 et créer les objets PropertyImageRequest
-      const newImages: PropertyImageRequest[] = await Promise.all(
-        imageFiles.map(async (file, index) => {
-          const base64 = await convertFileToBase64(file);
-          return {
-            imageUrl: base64,
-            altText: file.name,
-            isMainImage: (formData.images?.length || 0) === 0 && index === 0,
-            displayOrder: (formData.images?.length || 0) + index + 1,
-          };
-        })
-      );
-      const updatedImages = [...(formData.images || []), ...newImages];
-      handleInputChange("images", updatedImages);
+      try {
+        // Convertir les fichiers en WebP
+        const webpFiles = await Promise.all(
+          imageFiles.map(file => convertFileToWebP(file))
+        );
+
+        // Créer les objets PropertyImageRequest avec les fichiers WebP (sans base64)
+        const newImages: PropertyImageRequest[] = webpFiles.map((webpFile, index) => ({
+          imageData: '', // Sera rempli après l'upload
+          contentType: webpFile.type || 'image/webp',
+          altText: webpFile.name,
+          isMainImage: (formData.images?.length || 0) === 0 && index === 0,
+          displayOrder: (formData.images?.length || 0) + index + 1,
+        }));
+
+        // Mettre à jour les états
+        const updatedImages = [...(formData.images || []), ...newImages];
+        const updatedWebpFiles = [...webpFiles, ...webpFiles];
+        
+        handleInputChange("images", updatedImages);
+        setWebpFiles(updatedWebpFiles);
+      } catch (error) {
+        console.error('Erreur lors de la conversion en WebP:', error);
+        alert('Erreur lors de la conversion des images. Veuillez réessayer.');
+      }
     }
   };
 
@@ -120,7 +167,8 @@ export const AddProperty: React.FC = () => {
           file.type.startsWith("image/") &&
           (file.type === "image/jpeg" ||
             file.type === "image/png" ||
-            file.type === "image/jpg"),
+            file.type === "image/jpg" ||
+            file.type === "image/webp"),
       );
 
       if (imageFiles.length + (formData.images?.length || 0) > 10) {
@@ -128,20 +176,31 @@ export const AddProperty: React.FC = () => {
         return;
       }
 
-      // Convertir les fichiers en base64 et créer les objets PropertyImageRequest
-      const newImages: PropertyImageRequest[] = await Promise.all(
-        imageFiles.map(async (file, index) => {
-          const base64 = await convertFileToBase64(file);
-          return {
-            imageUrl: base64,
-            altText: file.name,
-            isMainImage: (formData.images?.length || 0) === 0 && index === 0,
-            displayOrder: (formData.images?.length || 0) + index + 1,
-          };
-        })
-      );
-      const updatedImages = [...(formData.images || []), ...newImages];
-      handleInputChange("images", updatedImages);
+      try {
+        // Convertir les fichiers en WebP
+        const webpFiles = await Promise.all(
+          imageFiles.map(file => convertFileToWebP(file))
+        );
+
+        // Créer les objets PropertyImageRequest avec les fichiers WebP (sans base64)
+        const newImages: PropertyImageRequest[] = webpFiles.map((webpFile, index) => ({
+          imageData: '', // Sera rempli après l'upload
+          contentType: webpFile.type || 'image/webp',
+          altText: webpFile.name,
+          isMainImage: (formData.images?.length || 0) === 0 && index === 0,
+          displayOrder: (formData.images?.length || 0) + index + 1,
+        }));
+
+        // Mettre à jour les états
+        const updatedImages = [...(formData.images || []), ...newImages];
+        const updatedWebpFiles = [...webpFiles, ...webpFiles];
+        
+        handleInputChange("images", updatedImages);
+        setWebpFiles(updatedWebpFiles);
+      } catch (error) {
+        console.error('Erreur lors de la conversion en WebP:', error);
+        alert('Erreur lors de la conversion des images. Veuillez réessayer.');
+      }
     }
   };
 
@@ -157,7 +216,10 @@ export const AddProperty: React.FC = () => {
 
   const removeImage = (index: number) => {
     const newImages = formData.images?.filter((_, i) => i !== index) || [];
+    const newWebpFiles = webpFiles.filter((_, i) => i !== index);
+    
     handleInputChange("images", newImages);
+    setWebpFiles(newWebpFiles);
     
     // Ajouter l'erreur des images si on a moins de 3 images
     if (newImages.length < 3 && !errors.images) {
@@ -250,23 +312,57 @@ export const AddProperty: React.FC = () => {
       return;
     }
 
-    setShowPageLoader(true);
-    
-    const propertyService = getPropertyService();
-
-    const createRequest: CreatePropertyRequest = {
-      ...(formData as CreatePropertyRequest),
-    };
-    console.log(createRequest);
-    const response = await propertyService.createProperty(createRequest);
-    console.log(response);
-    if (response) {
-      setShowPageLoader(false);
-      // Redirection vers le dashboard du propriétaire avec un paramètre pour forcer la revalidation
-      router.push("/dashboard?refresh=true");
+    // Protection contre les soumissions multiples
+    if (showPageLoader) {
+      return;
     }
 
-    setShowPageLoader(false);
+    setShowPageLoader(true);
+    
+    try {
+      const propertyService = getPropertyService();
+
+      // Convertir les images WebP en base64 (meilleur pour l'affichage)
+      const imagesWithBase64 = await Promise.all(
+        webpFiles.map(async (file, index) => {
+          return new Promise<PropertyImageRequest>((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+              const dataUrl = reader.result as string; // data:image/webp;base64,iVBORw0KGgo...
+              resolve({
+                imageData: dataUrl, // Data URL prêt pour l'affichage et la transmission
+                contentType: file.type || 'image/webp', // MIME type
+                altText: formData.images?.[index]?.altText || file.name,
+                isMainImage: index === 0, // La première image est toujours l'image principale
+                displayOrder: formData.images?.[index]?.displayOrder || index + 1,
+              });
+            };
+            reader.readAsDataURL(file); // Meilleur pour l'affichage
+          });
+        })
+      );
+
+      // Créer la propriété avec les images base64
+      const createRequest: CreatePropertyRequest = {
+        ...(formData as CreatePropertyRequest),
+        images: imagesWithBase64,
+      };
+
+      console.log('Creating property with base64 images...');
+      const propertyResponse = await propertyService.createProperty(createRequest);
+      console.log('Property created with images:', propertyResponse);
+      
+      if (propertyResponse) {
+        setShowPageLoader(false);
+        // Redirection vers le dashboard du propriétaire avec un paramètre pour forcer la revalidation
+        router.push("/dashboard?refresh=true");
+      }
+    } catch (error) {
+      console.error('Erreur lors de la création de la propriété:', error);
+      alert('Erreur lors de la création de la propriété. Veuillez réessayer.');
+    } finally {
+      setShowPageLoader(false);
+    }
   };
 
   const stepTitles = [
@@ -803,7 +899,7 @@ export const AddProperty: React.FC = () => {
                       className="aspect-video bg-gray-100 rounded-lg border border-gray-300 relative group"
                     >
                       <img
-                        src={`data:image/jpeg;base64,${image.imageUrl}`}
+                        src={webpFiles[index] ? URL.createObjectURL(webpFiles[index]) : image.imageData}
                         alt={image.altText}
                         className="w-full h-full object-cover rounded-lg"
                       />
@@ -1096,7 +1192,7 @@ export const AddProperty: React.FC = () => {
                 {formData.images.slice(0, 4).map((image, index) => (
                   <div key={index} className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
                     <img
-                      src={`data:image/jpeg;base64,${image.imageUrl}`}
+                      src={webpFiles[index] ? URL.createObjectURL(webpFiles[index]) : image.imageData}
                       alt={image.altText}
                       className="w-full h-full object-cover"
                     />

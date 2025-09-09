@@ -22,7 +22,7 @@ interface Property {
   status: string;
   maxGuests: number;
   bedrooms: number;
-  images: Array<{ imageUrl: string; altText: string }>;
+  images: Array<{ imageData: string; contentType: string; altText: string }>;
   createdAt: string;
   rating?: number;
   reviewCount?: number;
@@ -93,6 +93,7 @@ export const useDashboard = (): UseDashboardReturn => {
       try {
         ownerProperties = await propertyService.getPropertiesByOwnerId(userId);
       } catch (error) {
+        console.error('Error fetching owner properties:', error);
         // Fallback: utiliser toutes les propriétés mock pour le développement
         const propertyService = container.get<IPropertyService>(TYPES.IPropertyService);
         ownerProperties = await propertyService.getPopularProperties(10);
@@ -100,7 +101,7 @@ export const useDashboard = (): UseDashboardReturn => {
       
       // Convertir PropertyResponse[] en Property[] pour le dashboard
       const convertedProperties: Property[] = ownerProperties.map(prop => {
-        return {
+        const converted = {
           id: prop.id,
           title: prop.title,
           description: prop.description,
@@ -112,11 +113,13 @@ export const useDashboard = (): UseDashboardReturn => {
           maxGuests: prop.maxGuests,
           bedrooms: prop.bedrooms,
           images: prop.images?.map((img, index) => ({
-            imageUrl: img.imageUrl,
+            imageData: img.imageData,
+            contentType: img.contentType,
             altText: img.altText || `${prop.title} - Image ${index + 1}`
           })) || [],
           createdAt: prop.createdAt
         };
+        return converted;
       });
       
       // Récupérer les statistiques
