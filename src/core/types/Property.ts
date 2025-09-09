@@ -2,33 +2,29 @@ import { User } from "./User";
 import { Money } from "./Money";
 
 export enum PropertyStatus {
-  PendingApproval = "PendingApproval",
+  AwaitingVerification = "AwaitingVerification",
   Verified = "Verified",
   Rented = "Rented",
-  Maintenance = "Maintenance",
   Deleted = "Deleted",
 }
 
 // Constantes pour faciliter l'utilisation
 export const PROPERTY_STATUS = {
-  PENDING_APPROVAL: PropertyStatus.PendingApproval,
+  AWAITING_VERIFICATION: PropertyStatus.AwaitingVerification,
   VERIFIED: PropertyStatus.Verified,
   RENTED: PropertyStatus.Rented,
-  MAINTENANCE: PropertyStatus.Maintenance,
   DELETED: PropertyStatus.Deleted,
 } as const;
 
 // Fonction utilitaire pour obtenir le label affiché d'un statut
 export const getPropertyStatusLabel = (status: PropertyStatus): string => {
   switch (status) {
-    case PropertyStatus.PendingApproval:
-      return "En attente d'approbation";
+    case PropertyStatus.AwaitingVerification:
+      return "En attente de vérification";
     case PropertyStatus.Verified:
       return "Vérifiée";
     case PropertyStatus.Rented:
       return "Louée";
-    case PropertyStatus.Maintenance:
-      return "En maintenance";
     case PropertyStatus.Deleted:
       return "Supprimée";
     default:
@@ -39,14 +35,12 @@ export const getPropertyStatusLabel = (status: PropertyStatus): string => {
 // Fonction utilitaire pour obtenir la couleur d'un statut (pour l'UI)
 export const getPropertyStatusColor = (status: PropertyStatus): string => {
   switch (status) {
-    case PropertyStatus.PendingApproval:
+    case PropertyStatus.AwaitingVerification:
       return "warning"; // Orange/Yellow
     case PropertyStatus.Verified:
       return "success"; // Green
     case PropertyStatus.Rented:
       return "info"; // Blue
-    case PropertyStatus.Maintenance:
-      return "warning"; // Orange/Yellow
     case PropertyStatus.Deleted:
       return "danger"; // Red
     default:

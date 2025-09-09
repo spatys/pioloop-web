@@ -85,9 +85,9 @@ interface RevenueData {
 
 const getStatusInfo = (status: string) => {
   switch (status) {
-    case PropertyStatus.PendingApproval:
+    case PropertyStatus.AwaitingVerification:
       return {
-        label: getPropertyStatusLabel(PropertyStatus.PendingApproval),
+        label: getPropertyStatusLabel(PropertyStatus.AwaitingVerification),
         color: "bg-yellow-100 text-yellow-800 border-yellow-200",
         icon: Clock,
         bgColor: "bg-yellow-50"
@@ -105,13 +105,6 @@ const getStatusInfo = (status: string) => {
         color: "bg-blue-100 text-blue-800 border-blue-200",
         icon: Users,
         bgColor: "bg-blue-50"
-      };
-    case PropertyStatus.Maintenance:
-      return {
-        label: getPropertyStatusLabel(PropertyStatus.Maintenance),
-        color: "bg-orange-100 text-orange-800 border-orange-200",
-        icon: AlertCircle,
-        bgColor: "bg-orange-50"
       };
     case PropertyStatus.Deleted:
       return {
@@ -430,19 +423,18 @@ export default function Dashboard({
                 placeholder="Rechercher un logement..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                className="pl-10 pr-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-purple-500"
               />
             </div>
             <select
               value={selectedStatus}
               onChange={(e) => onFilterChange(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-purple-500"
             >
               <option value="all">Tous les statuts</option>
-              <option value={PropertyStatus.PendingApproval}>{getPropertyStatusLabel(PropertyStatus.PendingApproval)}</option>
+              <option value={PropertyStatus.AwaitingVerification}>{getPropertyStatusLabel(PropertyStatus.AwaitingVerification)}</option>
               <option value={PropertyStatus.Verified}>{getPropertyStatusLabel(PropertyStatus.Verified)}</option>
               <option value={PropertyStatus.Rented}>{getPropertyStatusLabel(PropertyStatus.Rented)}</option>
-              <option value={PropertyStatus.Maintenance}>{getPropertyStatusLabel(PropertyStatus.Maintenance)}</option>
               <option value={PropertyStatus.Deleted}>{getPropertyStatusLabel(PropertyStatus.Deleted)}</option>
             </select>
           </div>
