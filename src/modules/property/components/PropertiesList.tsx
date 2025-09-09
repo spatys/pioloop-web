@@ -4,6 +4,7 @@ import React, { useRef, useCallback } from "react";
 import { useInfiniteProperties } from "@/modules/property/hooks/useInfiniteProperties";
 import { PropertyCard } from "./PropertyCard";
 import { Property, convertPropertyResponseToProperty } from "@/core/types/Property";
+import { PropertySkeleton } from "./PropertySkeleton";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 export const PropertiesList: React.FC = () => {
@@ -88,13 +89,9 @@ export const PropertiesList: React.FC = () => {
         />
       )}
 
-      {/* Loader initial */}
+      {/* Skeleton initial */}
       {isLoading && (
-        <LoadingSpinner 
-          size="lg" 
-          text="Chargement des logements..." 
-          className="py-12" 
-        />
+        <PropertySkeleton count={10} />
       )}
     </div>
   );
