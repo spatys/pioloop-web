@@ -61,8 +61,8 @@ export const DashboardSkeleton: React.FC = () => {
 
           {/* Grille des propriétés */}
           <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(6)].map((_, i) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+              {[...Array(10)].map((_, i) => (
                 <div key={i} className="bg-gray-50 rounded-lg overflow-hidden">
                   {/* Image placeholder */}
                   <div className="aspect-video bg-gray-200"></div>
