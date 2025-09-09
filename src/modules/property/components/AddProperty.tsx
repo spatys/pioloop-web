@@ -386,46 +386,36 @@ export const AddProperty: React.FC = () => {
 
   const renderStepIndicator = () => (
     <div className="mb-8">
-      <div className="relative">
-        {/* Barre de progression continue */}
-        <div className="absolute top-5 left-5 right-5 h-0.5 bg-gray-200 rounded-full">
-          <div 
-            className="h-full bg-gradient-to-r from-green-500 to-purple-600 rounded-full transition-all duration-500 ease-out"
-            style={{ 
-              width: currentStep === 1 ? '0%' : `${((currentStep - 1) / (totalSteps - 1)) * 100}%`,
-              marginLeft: currentStep === 1 ? '0' : '0',
-              minWidth: currentStep === 1 ? '0' : 'auto'
-            }}
-          />
-        </div>
-        
-        {/* Étapes */}
-        <div className="flex justify-between relative z-10">
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+        <div className="flex items-center justify-between">
           {Array.from({ length: totalSteps }, (_, index) => (
-            <div key={index} className="flex flex-col items-center">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+            <div key={index} className="flex flex-col items-center flex-1 relative">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
                 index + 1 < currentStep
-                  ? "bg-green-500 text-white shadow-lg scale-110"
+                  ? "bg-green-500 text-white"
                   : index + 1 === currentStep
-                    ? "bg-purple-600 text-white shadow-lg scale-110"
-                    : "bg-white text-gray-400 border-2 border-gray-200"
+                    ? "bg-purple-600 text-white"
+                    : "bg-gray-200 text-gray-500"
               }`}>
-                {index + 1 < currentStep ? (
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                ) : (
-                  index + 1
-                )}
+                {index + 1 < currentStep ? "✓" : index + 1}
               </div>
               
-              <div className="mt-3 text-center max-w-24">
+              <div className="mt-2 text-center">
                 <div className={`text-xs font-medium transition-colors duration-200 ${
-                  index + 1 <= currentStep ? "text-gray-900" : "text-gray-400"
+                  index + 1 <= currentStep ? "text-gray-700" : "text-gray-400"
                 }`}>
                   {stepTitles[index]}
                 </div>
               </div>
+              
+              {/* Barre de progression entre les étapes */}
+              {index < totalSteps - 1 && (
+                <div className="absolute top-4 left-1/2 w-full h-0.5 bg-gray-200 -z-10">
+                  <div className={`h-full transition-all duration-500 ${
+                    index + 1 < currentStep ? "bg-green-500" : "bg-gray-200"
+                  }`} style={{ width: "100%" }} />
+                </div>
+              )}
             </div>
           ))}
         </div>
