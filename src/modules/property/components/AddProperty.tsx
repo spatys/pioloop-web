@@ -12,6 +12,7 @@ import { getPropertyService } from "@/core/di/container";
 import { Loader } from "lucide-react";
 import { Dropdown } from "@/components/ui/Dropdown";
 import { PageLoader } from "@/components/ui/PageLoader";
+import { AvailabilityManager } from "@/components/ui/AvailabilityManager";
 
 
 export const AddProperty: React.FC = () => {
@@ -45,7 +46,7 @@ export const AddProperty: React.FC = () => {
   // État pour stocker les fichiers WebP
   const [webpFiles, setWebpFiles] = useState<File[]>([]);
 
-  const totalSteps = 6;
+  const totalSteps = 7;
 
   // Fonction pour convertir un fichier en WebP et retourner le fichier
   const convertFileToWebP = (file: File): Promise<File> => {
@@ -371,6 +372,7 @@ export const AddProperty: React.FC = () => {
     "Localisation",
     "Tarification",
     "Images du logement",
+    "Disponibilités",
     "Récapitulatif"
   ];
 
@@ -1060,6 +1062,85 @@ export const AddProperty: React.FC = () => {
 
   const renderStep6 = () => (
     <div className="space-y-6">
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+          Configurez votre disponibilité
+        </h2>
+        <p className="text-gray-600 max-w-2xl mx-auto">
+          Définissez les dates disponibles pour votre logement. Vous pourrez modifier ces paramètres à tout moment depuis votre tableau de bord.
+        </p>
+      </div>
+
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+        <div className="flex items-start space-x-3">
+          <div className="flex-shrink-0">
+            <svg className="h-5 w-5 text-yellow-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-yellow-800">Information importante</h3>
+            <p className="text-sm text-yellow-700 mt-1">
+              Votre logement sera automatiquement disponible dès sa validation. Vous pourrez ensuite configurer des périodes spécifiques, 
+              des prix spéciaux et marquer des dates comme indisponibles.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="text-center py-12">
+          <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Gestion de la disponibilité
+          </h3>
+          <p className="text-gray-600 mb-6 max-w-md mx-auto">
+            Une fois votre logement créé, vous pourrez accéder à un calendrier complet pour gérer votre disponibilité, 
+            définir des prix spéciaux et configurer des périodes d'indisponibilité.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
+            <div className="text-center p-4 bg-gray-50 rounded-lg">
+              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h4 className="text-sm font-medium text-gray-900">Disponibilité</h4>
+              <p className="text-xs text-gray-600">Marquez les dates disponibles</p>
+            </div>
+            
+            <div className="text-center p-4 bg-gray-50 rounded-lg">
+              <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <svg className="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                </svg>
+              </div>
+              <h4 className="text-sm font-medium text-gray-900">Prix spéciaux</h4>
+              <p className="text-xs text-gray-600">Définissez des tarifs saisonniers</p>
+            </div>
+            
+            <div className="text-center p-4 bg-gray-50 rounded-lg">
+              <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <h4 className="text-sm font-medium text-gray-900">Maintenance</h4>
+              <p className="text-xs text-gray-600">Bloquez des dates si nécessaire</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderStep7 = () => (
+    <div className="space-y-6">
       <h2 className="text-xl font-medium text-gray-900 mb-4">
         Récapitulatif
       </h2>
@@ -1207,6 +1288,30 @@ export const AddProperty: React.FC = () => {
             )}
           </div>
         </div>
+
+        {/* Disponibilité */}
+        <div>
+          <h3 className="text-lg font-medium text-gray-700 mb-3 flex items-center">
+            <span className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm mr-3">6</span>
+            Disponibilité
+          </h3>
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div>
+                <h4 className="text-sm font-medium text-green-900">Disponibilité automatique</h4>
+                <p className="text-sm text-green-700">
+                  Votre logement sera automatiquement disponible dès sa validation. 
+                  Vous pourrez ensuite configurer des périodes spécifiques depuis votre tableau de bord.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -1217,6 +1322,7 @@ export const AddProperty: React.FC = () => {
       </div>
     </div>
   );
+
 
   const renderCurrentStep = () => {
     switch (currentStep) {
@@ -1232,6 +1338,8 @@ export const AddProperty: React.FC = () => {
         return renderStep5();
       case 6:
         return renderStep6();
+      case 7:
+        return renderStep7();
       default:
         return null;
     }
