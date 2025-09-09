@@ -387,7 +387,7 @@ export const AddProperty: React.FC = () => {
   const renderStepIndicator = () => (
     <div className="mb-8">
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <div className="flex items-center justify-between">
+        <div className="flex items-start justify-between">
           {Array.from({ length: totalSteps }, (_, index) => (
             <div key={index} className="flex flex-col items-center flex-1 relative">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
