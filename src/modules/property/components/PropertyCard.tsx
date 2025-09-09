@@ -6,9 +6,11 @@ import { Property } from "@/core/types/Property";
 
 interface PropertyCardProps {
   property: Property;
+  showFavorite?: boolean; // Par défaut true, false pour le dashboard
+  showActions?: boolean; // Par défaut false, true pour le dashboard
 }
 
-export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
+export const PropertyCard: React.FC<PropertyCardProps> = ({ property, showFavorite = true, showActions = false }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [imageError, setImageError] = useState(false);
 
@@ -32,20 +34,19 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
     const imageToUse = mainImage || property.images[0]; // Fallback sur la première si pas d'image principale
 
     // Retourner les données base64 directement (data:image/webp;base64,...)
-    console.log("Image reçue du backend:", imageToUse.imageData?.substring(0, 50) + "...");
     return imageToUse.imageData;
   };
   return (
     <Link
       href={`/property/${property.id}`}
-      className="group bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 min-w-[280px]"
+      className="group bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 w-full max-w-[240px]"
     >
       {/* Image de la propriété */}
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-48 overflow-hidden rounded-t-lg">
         <img
           src={getImageUrl()}
           alt={property.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover"
           onError={handleImageError}
         />
         <div className="absolute top-3 left-3">
@@ -53,38 +54,40 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
             {property.propertyType}
           </span>
         </div>
-        <div className="absolute top-3 right-3">
-          <button
-            className={`p-2 rounded-full transition-all duration-200 group/fav ${
-              isFavorite
-                ? "bg-red-500 text-white hover:bg-red-600"
-                : "bg-white/90 backdrop-blur-sm text-gray-600 hover:bg-white"
-            }`}
-            onClick={toggleFavorite}
-          >
-            <svg
-              className={`w-4 h-4 transition-colors duration-200 ${
+        {showFavorite && (
+          <div className="absolute top-3 right-3">
+            <button
+              className={`p-2 rounded-full transition-all duration-200 group/fav ${
                 isFavorite
-                  ? "text-white"
-                  : "text-gray-600 group-hover/fav:text-red-500"
+                  ? "bg-red-500 text-white hover:bg-red-600"
+                  : "bg-white/90 backdrop-blur-sm text-gray-600 hover:bg-white"
               }`}
-              fill={isFavorite ? "currentColor" : "none"}
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+              onClick={toggleFavorite}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
-          </button>
-        </div>
+              <svg
+                className={`w-4 h-4 transition-colors duration-200 ${
+                  isFavorite
+                    ? "text-white"
+                    : "text-gray-600 group-hover/fav:text-red-500"
+                }`}
+                fill={isFavorite ? "currentColor" : "none"}
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Informations de la propriété */}
-      <div className="p-4">
+      <div className="p-4 bg-white">
         <h3 className="font-normal text-gray-700 mb-2 truncate transition-colors duration-200">
           {property.title}
         </h3>
@@ -169,12 +172,45 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
           </div>
         </div>
 
-        {/* Prix */}
+        {/* Prix et Actions */}
         <div className="flex items-center justify-between">
           <div className="font-semibold text-purple-600">
             {property.pricePerNight.toLocaleString("fr-FR")} fcfa
+            <span className="text-xs text-gray-500 ml-1">/nuit</span>
           </div>
-          <span className="text-xs text-gray-500">/nuit</span>
+          
+          {/* Boutons d'action */}
+          {showActions && (
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  // TODO: Implémenter la modification
+                  console.log('Modifier propriété:', property.id);
+                }}
+                className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200"
+                title="Modifier"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </button>
+              
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  // TODO: Implémenter la suppression
+                  console.log('Supprimer propriété:', property.id);
+                }}
+                className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors duration-200"
+                title="Supprimer"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </Link>

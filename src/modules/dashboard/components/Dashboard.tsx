@@ -5,9 +5,6 @@ import { useRouter } from "next/navigation";
 import { 
   Home, 
   Plus, 
-  Eye, 
-  Edit, 
-  Trash2, 
   Calendar,
   Users,
   MapPin,
@@ -452,59 +449,22 @@ export default function Dashboard({
         </div>
 
         {/* Liste des logements */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 p-6 bg-gray-50 rounded-lg">
-          <>{console.log(filteredProperties)}</>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6 bg-gray-50 rounded-lg">
           {filteredProperties.map((property) => {
             const statusInfo = getStatusInfo(property.status);
             const StatusIcon = statusInfo.icon;
             
             return (
-              <div key={property.id} className="relative group bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+              <div key={property.id} className="relative">
+                {/* PropertyCard */}
+                <PropertyCard property={transformToPropertyCard(property)} showFavorite={false} showActions={true} />
+                
                 {/* Badge de statut */}
                 <div className="absolute top-3 right-3 z-10">
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${statusInfo.color}`}>
                     <StatusIcon className="h-3 w-3 mr-1" />
                     {statusInfo.label}
                   </span>
-                </div>
-                
-                {/* PropertyCard */}
-                <div className="relative">
-                <>{console.log("property à verifier")}</>
-                  <>{console.log(property)}</>
-                  <PropertyCard property={transformToPropertyCard(property)} />
-                  
-                  {/* Actions overlay au survol */}
-                  <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-lg flex items-center justify-center">
-                    <div className="flex items-center space-x-3">
-                      <button
-                        onClick={() => router.push(`/property/${property.id}`)}
-                        className="flex items-center px-3 py-2 bg-white text-purple-600 rounded-md hover:bg-purple-50 transition-colors"
-                      >
-                        <Eye className="h-4 w-4 mr-1" />
-                        Voir
-                      </button>
-                      
-                      <button
-                        onClick={() => router.push(`/property/${property.id}/edit`)}
-                        className="flex items-center px-3 py-2 bg-white text-gray-600 rounded-md hover:bg-gray-50 transition-colors"
-                      >
-                        <Edit className="h-4 w-4 mr-1" />
-                        Modifier
-                      </button>
-                      
-                      <button
-                        onClick={() => {
-                          // TODO: Implement delete confirmation
-                          console.log("Delete property:", property.id);
-                        }}
-                        className="flex items-center px-3 py-2 bg-white text-red-600 rounded-md hover:bg-red-50 transition-colors"
-                      >
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        Supprimer
-                      </button>
-                    </div>
-                  </div>
                 </div>
                 
                 {/* Revenus mensuels si disponibles */}
