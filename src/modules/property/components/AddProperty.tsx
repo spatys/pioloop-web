@@ -140,15 +140,15 @@ export const AddProperty: React.FC = () => {
           imageData: '', // Sera rempli après l'upload
           contentType: webpFile.type || 'image/webp',
           altText: webpFile.name,
-          isMainImage: (formData.images?.length || 0) === 0 && index === 0,
-          displayOrder: (formData.images?.length || 0) + index + 1,
+            isMainImage: (formData.images?.length || 0) === 0 && index === 0,
+            displayOrder: (formData.images?.length || 0) + index + 1,
         }));
 
         // Mettre à jour les états
-        const updatedImages = [...(formData.images || []), ...newImages];
+      const updatedImages = [...(formData.images || []), ...newImages];
         const updatedWebpFiles = [...webpFiles, ...webpFiles];
         
-        handleInputChange("images", updatedImages);
+      handleInputChange("images", updatedImages);
         setWebpFiles(updatedWebpFiles);
       } catch (error) {
         console.error('Erreur lors de la conversion en WebP:', error);
@@ -188,15 +188,15 @@ export const AddProperty: React.FC = () => {
           imageData: '', // Sera rempli après l'upload
           contentType: webpFile.type || 'image/webp',
           altText: webpFile.name,
-          isMainImage: (formData.images?.length || 0) === 0 && index === 0,
-          displayOrder: (formData.images?.length || 0) + index + 1,
+            isMainImage: (formData.images?.length || 0) === 0 && index === 0,
+            displayOrder: (formData.images?.length || 0) + index + 1,
         }));
 
         // Mettre à jour les états
-        const updatedImages = [...(formData.images || []), ...newImages];
+      const updatedImages = [...(formData.images || []), ...newImages];
         const updatedWebpFiles = [...webpFiles, ...webpFiles];
         
-        handleInputChange("images", updatedImages);
+      handleInputChange("images", updatedImages);
         setWebpFiles(updatedWebpFiles);
       } catch (error) {
         console.error('Erreur lors de la conversion en WebP:', error);
@@ -278,7 +278,7 @@ export const AddProperty: React.FC = () => {
       case 4:
         if (formData.pricePerNight === undefined || formData.pricePerNight < 1) {
                       newErrors.pricePerNight = "Le prix par nuit doit être au moins 1";
-                    }
+        }
         break;
 
       case 5:
@@ -321,7 +321,7 @@ export const AddProperty: React.FC = () => {
     setShowPageLoader(true);
     
     try {
-      const propertyService = getPropertyService();
+    const propertyService = getPropertyService();
 
       // Convertir les images WebP en base64 (meilleur pour l'affichage)
       const imagesWithBase64 = await Promise.all(
@@ -344,8 +344,8 @@ export const AddProperty: React.FC = () => {
       );
 
       // Créer la propriété avec les images base64
-      const createRequest: CreatePropertyRequest = {
-        ...(formData as CreatePropertyRequest),
+    const createRequest: CreatePropertyRequest = {
+      ...(formData as CreatePropertyRequest),
         maxGuests: formData.maxGuests || 1,
         bedrooms: formData.bedrooms || 1,
         beds: formData.beds || 1,
@@ -362,15 +362,15 @@ export const AddProperty: React.FC = () => {
       console.log('Property created with images:', propertyResponse);
       
       if (propertyResponse) {
-        setShowPageLoader(false);
-        // Redirection vers le dashboard du propriétaire avec un paramètre pour forcer la revalidation
-        router.push("/dashboard?refresh=true");
-      }
+      setShowPageLoader(false);
+      // Redirection vers le dashboard du propriétaire avec un paramètre pour forcer la revalidation
+      router.push("/dashboard?refresh=true");
+    }
     } catch (error) {
       console.error('Erreur lors de la création de la propriété:', error);
       alert('Erreur lors de la création de la propriété. Veuillez réessayer.');
     } finally {
-      setShowPageLoader(false);
+    setShowPageLoader(false);
     }
   };
 
