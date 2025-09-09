@@ -17,7 +17,12 @@ export const PROPERTY_STATUS = {
 } as const;
 
 // Fonction utilitaire pour obtenir le label affiché d'un statut
-export const getPropertyStatusLabel = (status: PropertyStatus): string => {
+export const getPropertyStatusLabel = (status: PropertyStatus | string): string => {
+  // Compatibilité avec l'ancien statut
+  if (status === "PendingApproval" || status === PropertyStatus.AwaitingVerification) {
+    return "En attente de vérification";
+  }
+  
   switch (status) {
     case PropertyStatus.AwaitingVerification:
       return "En attente de vérification";
@@ -33,7 +38,12 @@ export const getPropertyStatusLabel = (status: PropertyStatus): string => {
 };
 
 // Fonction utilitaire pour obtenir la couleur d'un statut (pour l'UI)
-export const getPropertyStatusColor = (status: PropertyStatus): string => {
+export const getPropertyStatusColor = (status: PropertyStatus | string): string => {
+  // Compatibilité avec l'ancien statut
+  if (status === "PendingApproval" || status === PropertyStatus.AwaitingVerification) {
+    return "warning"; // Orange/Yellow
+  }
+  
   switch (status) {
     case PropertyStatus.AwaitingVerification:
       return "warning"; // Orange/Yellow

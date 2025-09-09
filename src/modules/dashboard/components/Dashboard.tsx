@@ -86,8 +86,9 @@ interface RevenueData {
 const getStatusInfo = (status: string) => {
   switch (status) {
     case PropertyStatus.AwaitingVerification:
+    case "PendingApproval": // Compatibilité avec l'ancien statut
       return {
-        label: getPropertyStatusLabel(PropertyStatus.AwaitingVerification),
+        label: getPropertyStatusLabel(status),
         color: "bg-yellow-100 text-yellow-800 border-yellow-200",
         icon: Clock,
         bgColor: "bg-yellow-50"
@@ -277,12 +278,12 @@ export default function Dashboard({
             <div>
               <p className="text-sm font-medium text-gray-600">Logements</p>
               <p className="text-2xl font-semibold text-gray-900">{stats.totalProperties}</p>
-              <div className="flex items-center mt-2 space-x-2">
-                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
-                  {stats.publishedProperties} publiés
+              <div className="flex flex-col mt-2 space-y-1">
+                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full w-fit">
+                  {stats.publishedProperties} vérifiés
                 </span>
-                <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
-                  {stats.pendingApprovals} en attente
+                <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full w-fit">
+                  {stats.pendingApprovals} en attente de vérification
                 </span>
               </div>
             </div>
