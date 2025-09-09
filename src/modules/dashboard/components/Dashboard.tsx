@@ -201,7 +201,7 @@ export default function Dashboard({
       {/* Header avec actions */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Tableau de bord</h1>
+          <h1 className="text-2xl font-normal text-gray-700">Tableau de bord</h1>
           <p className="text-gray-600 mt-1">Gérez vos logements et suivez vos performances</p>
         </div>
         <button
