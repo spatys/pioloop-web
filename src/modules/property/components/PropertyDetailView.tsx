@@ -6,7 +6,6 @@ import { PropertyImageGallery } from './PropertyImageGallery';
 import { PropertyInfo } from './PropertyInfo';
 import { PropertyAmenities } from './PropertyAmenities';
 import { PropertyLocation } from './PropertyLocation';
-import { PropertyAvailability } from './PropertyAvailability';
 import { PropertyBookingCard } from './PropertyBookingCard';
 import { PropertyReviews } from './PropertyReviews';
 import { PropertyHost } from './PropertyHost';
@@ -122,7 +121,7 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({ property
             </div>
           </div>
 
-          {/* Colonne latérale - Carte de réservation */}
+          {/* Colonne latérale - Carte de réservation avec calendrier */}
           <div className="lg:col-span-1">
             <div className="sticky top-24">
               <PropertyBookingCard property={property} />
