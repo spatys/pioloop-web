@@ -3,6 +3,7 @@ export { ProtectedBoutonLink } from "./ProtectedBoutonLink";
 
 export { AuthNotification } from "./AuthNotification";
 export { Dropdown } from "./Dropdown";
+export { default as TravelersSelector, type TravelersData } from "./TravelersSelector";
 export {
   Skeleton,
   SkeletonText,
