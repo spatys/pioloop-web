@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { PropertyResponse } from '@/core/types/Property';
+import { TravelersSelector, TravelersData } from '@/components/ui';
 
 interface PropertyBookingCardProps {
   property: PropertyResponse;
@@ -10,9 +11,17 @@ interface PropertyBookingCardProps {
 export const PropertyBookingCard: React.FC<PropertyBookingCardProps> = ({ property }) => {
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
-  const [guests, setGuests] = useState(1);
+  const [travelers, setTravelers] = useState<TravelersData>({
+    adults: 1,
+    children: 0,
+    babies: 0,
+  });
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+  const handleTravelersChange = (newTravelers: TravelersData) => {
+    setTravelers(newTravelers);
+  };
 
   // Générer les données de disponibilité pour le mois sélectionné (fixe)
   const generateAvailabilityData = (month: number, year: number) => {
@@ -257,15 +266,12 @@ export const PropertyBookingCard: React.FC<PropertyBookingCardProps> = ({ proper
         {/* Voyageurs */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Voyageurs</label>
-          <select
-            value={guests}
-            onChange={(e) => setGuests(parseInt(e.target.value))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-          >
-            {Array.from({ length: property.maxGuests }, (_, i) => i + 1).map(num => (
-              <option key={num} value={num}>{num} {num === 1 ? 'voyageur' : 'voyageurs'}</option>
-            ))}
-          </select>
+          <TravelersSelector
+            travelers={travelers}
+            onTravelersChange={handleTravelersChange}
+            placeholder="Sélectionner les voyageurs"
+            maxTotal={property.maxGuests}
+          />
         </div>
 
         {/* Bouton de réservation */}
@@ -273,7 +279,14 @@ export const PropertyBookingCard: React.FC<PropertyBookingCardProps> = ({ proper
           onClick={() => {
             if (checkIn && checkOut) {
               // Logique de réservation
-              console.log('Réservation:', { checkIn, checkOut, guests, total });
+              const totalTravelers = travelers.adults + travelers.children + travelers.babies;
+              console.log('Réservation:', { 
+                checkIn, 
+                checkOut, 
+                travelers: totalTravelers,
+                travelersDetail: travelers,
+                total 
+              });
             }
           }}
           disabled={!checkIn || !checkOut}

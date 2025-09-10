@@ -13,6 +13,7 @@ interface TravelersSelectorProps {
   onTravelersChange: (travelers: TravelersData) => void;
   className?: string;
   placeholder?: string;
+  maxTotal?: number;
 }
 
 const TravelersSelector: React.FC<TravelersSelectorProps> = ({
@@ -20,33 +21,46 @@ const TravelersSelector: React.FC<TravelersSelectorProps> = ({
   onTravelersChange,
   className = "",
   placeholder = "Ajouter des voyageurs",
+  maxTotal,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleAdultChange = (newCount: number) => {
     if (newCount >= 0 && newCount <= 10) {
-      onTravelersChange({
+      const newTravelers = {
         ...travelers,
         adults: newCount,
-      });
+      };
+      const total = newTravelers.adults + newTravelers.children + newTravelers.babies;
+      if (!maxTotal || total <= maxTotal) {
+        onTravelersChange(newTravelers);
+      }
     }
   };
 
   const handleChildrenChange = (newCount: number) => {
     if (newCount >= 0 && newCount <= 10) {
-      onTravelersChange({
+      const newTravelers = {
         ...travelers,
         children: newCount,
-      });
+      };
+      const total = newTravelers.adults + newTravelers.children + newTravelers.babies;
+      if (!maxTotal || total <= maxTotal) {
+        onTravelersChange(newTravelers);
+      }
     }
   };
 
   const handleBabiesChange = (newCount: number) => {
     if (newCount >= 0 && newCount <= 5) {
-      onTravelersChange({
+      const newTravelers = {
         ...travelers,
         babies: newCount,
-      });
+      };
+      const total = newTravelers.adults + newTravelers.children + newTravelers.babies;
+      if (!maxTotal || total <= maxTotal) {
+        onTravelersChange(newTravelers);
+      }
     }
   };
 
@@ -163,7 +177,7 @@ const TravelersSelector: React.FC<TravelersSelectorProps> = ({
                     </span>
                     <button
                       onClick={() => handleAdultChange(travelers.adults + 1)}
-                      disabled={travelers.adults >= 10}
+                      disabled={travelers.adults >= 10 || (maxTotal !== undefined && totalTravelers >= maxTotal)}
                       className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-purple-500 hover:text-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       <svg
@@ -213,7 +227,7 @@ const TravelersSelector: React.FC<TravelersSelectorProps> = ({
                     </span>
                     <button
                       onClick={() => handleChildrenChange(travelers.children + 1)}
-                      disabled={travelers.children >= 10}
+                      disabled={travelers.children >= 10 || (maxTotal !== undefined && totalTravelers >= maxTotal)}
                       className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-purple-500 hover:text-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       <svg
@@ -263,7 +277,7 @@ const TravelersSelector: React.FC<TravelersSelectorProps> = ({
                     </span>
                     <button
                       onClick={() => handleBabiesChange(travelers.babies + 1)}
-                      disabled={travelers.babies >= 5}
+                      disabled={travelers.babies >= 5 || (maxTotal !== undefined && totalTravelers >= maxTotal)}
                       className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-purple-500 hover:text-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       <svg
@@ -287,6 +301,30 @@ const TravelersSelector: React.FC<TravelersSelectorProps> = ({
 
             {/* Footer */}
             <div className="p-6 border-t border-gray-200">
+              {/* Message d'information si limite atteinte */}
+              {maxTotal !== undefined && totalTravelers >= maxTotal && (
+                <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                  <div className="flex items-center space-x-2">
+                    <svg
+                      className="w-5 h-5 text-amber-600 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                      />
+                    </svg>
+                    <p className="text-sm text-amber-800">
+                      Limite maximale de {maxTotal} voyageur{maxTotal > 1 ? 's' : ''} atteinte
+                    </p>
+                  </div>
+                </div>
+              )}
+              
               <button
                 onClick={() => setIsOpen(false)}
                 className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
