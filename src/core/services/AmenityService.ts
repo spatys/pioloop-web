@@ -1,7 +1,7 @@
 import { injectable, inject } from 'inversify';
-import { Amenity } from '@/core/types/Amenity';
-import { IAmenityRepository } from '@/core/repositories/AmenityRepository';
-import { TYPES } from '@/core/di/types';
+import type { Amenity } from '@/core/types/Amenity';
+import type { IAmenityRepository } from '../repositories/AmenityRepository';
+import { TYPES } from '../di/types';
 
 export interface IAmenityService {
   getAllAmenities(): Promise<Amenity[]>;
