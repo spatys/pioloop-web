@@ -56,7 +56,6 @@ const AmenityTabs: React.FC<AmenityTabsProps> = ({ amenities, formData, onAmenit
         isAvailable: true,
         isIncludedInRent: true,
         additionalCost: 0,
-        icon: amenity.icon,
         priority: 1,
       };
       onAmenityChange("amenities", [...currentAmenities, newAmenity]);
@@ -74,67 +73,83 @@ const AmenityTabs: React.FC<AmenityTabsProps> = ({ amenities, formData, onAmenit
 
   return (
     <div className="space-y-4">
-      {/* Onglets */}
-      <div className="border-b border-gray-200">
-        <nav className="-mb-px flex space-x-8 overflow-x-auto">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setActiveTab(category)}
-              className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === category
-                  ? 'border-purple-500 text-purple-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              {category}
-            </button>
-          ))}
-        </nav>
-      </div>
+                  {/* Onglets */}
+                  <div className="border-b border-gray-200 bg-white rounded-t-lg">
+                    <nav className="-mb-px flex space-x-8 overflow-x-auto px-6">
+                      {categories.map((category) => (
+                        <button
+                          key={category}
+                          onClick={() => setActiveTab(category)}
+                          className={`whitespace-nowrap py-4 px-2 border-b-2 font-semibold text-sm transition-all duration-200 ${
+                            activeTab === category
+                              ? 'border-purple-500 text-purple-600 bg-purple-50'
+                              : 'border-transparent text-gray-600 hover:text-purple-600 hover:border-purple-300 hover:bg-purple-25'
+                          }`}
+                        >
+                          {category}
+                        </button>
+                      ))}
+                    </nav>
+                  </div>
 
-      {/* Contenu des onglets */}
-      <div className="min-h-[400px]">
-        {activeTab && amenitiesByCategory[activeTab] && (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {amenitiesByCategory[activeTab]
-              .sort((a, b) => a.name.localeCompare(b.name))
-              .map((amenity) => {
-                const isSelected = isAmenitySelected(amenity);
-                return (
-                  <label
-                    key={amenity.id}
-                    className={`flex flex-col items-center space-y-2 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
-                      isSelected
-                        ? 'border-purple-500 bg-purple-50 shadow-md'
-                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      className="sr-only"
-                      checked={isSelected}
-                      onChange={(e) => handleAmenityToggle(amenity, e.target.checked)}
-                    />
-                    <span className="text-3xl">{amenity.icon}</span>
-                    <span className={`text-sm font-medium text-center ${
-                      isSelected ? 'text-purple-800' : 'text-gray-700'
-                    }`}>
-                      {amenity.name}
-                    </span>
-                    {isSelected && (
-                      <div className="w-5 h-5 bg-purple-600 rounded-full flex items-center justify-center">
-                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
+                  {/* Contenu des onglets */}
+                  <div className="min-h-[450px] bg-gray-50 rounded-b-lg p-4">
+                    {activeTab && amenitiesByCategory[activeTab] && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                        {amenitiesByCategory[activeTab]
+                          .sort((a, b) => a.name.localeCompare(b.name))
+                          .map((amenity) => {
+                            const isSelected = isAmenitySelected(amenity);
+                            return (
+                              <label
+                                key={amenity.id}
+                                className={`group relative flex items-center p-3 rounded-lg border-2 cursor-pointer transition-all duration-300 hover:shadow-lg ${
+                                  isSelected
+                                    ? 'border-purple-500 bg-white shadow-md ring-2 ring-purple-200'
+                                    : 'border-gray-200 bg-white hover:border-purple-300 hover:bg-purple-25'
+                                }`}
+                              >
+                                <input
+                                  type="checkbox"
+                                  className="sr-only"
+                                  checked={isSelected}
+                                  onChange={(e) => handleAmenityToggle(amenity, e.target.checked)}
+                                />
+                                
+                                {/* Checkbox personnalisé */}
+                                <div className={`flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-200 ${
+                                  isSelected 
+                                    ? 'bg-purple-600 border-purple-600' 
+                                    : 'border-gray-300 group-hover:border-purple-400'
+                                }`}>
+                                  {isSelected && (
+                                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                    </svg>
+                                  )}
+                                </div>
+
+                                {/* Nom de l'amenity */}
+                                <div className="ml-3 flex-1 min-w-0">
+                                  <span className={`text-sm font-medium transition-colors duration-200 truncate ${
+                                    isSelected ? 'text-purple-900' : 'text-gray-800 group-hover:text-purple-800'
+                                  }`}>
+                                    {amenity.name}
+                                  </span>
+                                </div>
+
+                                {/* Indicateur de sélection */}
+                                {isSelected && (
+                                  <div className="flex-shrink-0 ml-2">
+                                    <div className="w-1.5 h-1.5 bg-purple-600 rounded-full"></div>
+                                  </div>
+                                )}
+                              </label>
+                            );
+                          })}
                       </div>
                     )}
-                  </label>
-                );
-              })}
-          </div>
-        )}
-      </div>
+                  </div>
 
       {/* Résumé des sélections */}
       {formData.amenities && formData.amenities.length > 0 && (
@@ -148,7 +163,6 @@ const AmenityTabs: React.FC<AmenityTabsProps> = ({ amenities, formData, onAmenit
                 key={index}
                 className="inline-flex items-center space-x-1 px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full"
               >
-                <span>{amenity.icon}</span>
                 <span>{amenity.name}</span>
               </span>
             ))}

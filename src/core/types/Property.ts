@@ -80,7 +80,6 @@ export interface PropertyAmenity {
   id: number;
   name: string;
   category: string;
-  icon: string;
 }
 
 export interface PropertyAddress {
@@ -173,7 +172,6 @@ export interface PropertyAmenityRequest {
   isAvailable: boolean;
   isIncludedInRent: boolean;
   additionalCost?: number;
-  icon: string;
   priority: number;
 }
 
