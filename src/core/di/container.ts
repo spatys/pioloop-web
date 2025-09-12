@@ -9,6 +9,8 @@ import { IContractRepository } from "../repositories/interfaces/IContractReposit
 import { ContractRepository } from "../repositories/implementations/ContractRepository";
 import { IPropertyRepository } from "../repositories/interfaces/IPropertyRepository";
 import { PropertyRepository } from "../repositories/implementations/PropertyRepository";
+import { IAmenityRepository } from "../repositories/AmenityRepository";
+import { AmenityRepository } from "../repositories/AmenityRepository";
 
 // Services
 import { IAuthService } from "../services/interfaces/IAuthService";
@@ -23,6 +25,8 @@ import { IActivityService } from "../services/interfaces/IActivityService";
 import { ActivityService } from "../services/implementations/ActivityService";
 import { IRevenueService } from "../services/interfaces/IRevenueService";
 import { RevenueService } from "../services/implementations/RevenueService";
+import { IAmenityService } from "../services/AmenityService";
+import { AmenityService } from "../services/AmenityService";
 import { IHttpClient } from "../repositories/interfaces/IHttpClient";
 import { HttpClient } from "../repositories/implementations/HttpClient";
 
@@ -40,6 +44,9 @@ container
 container
   .bind<IPropertyRepository>(TYPES.IPropertyRepository)
   .to(PropertyRepository);
+container
+  .bind<IAmenityRepository>(TYPES.IAmenityRepository)
+  .to(AmenityRepository);
 
 // Enregistrement des services avec injection de dépendances
 container.bind<IAuthService>(TYPES.IAuthService).to(AuthService);
@@ -48,6 +55,7 @@ container.bind<IPropertyService>(TYPES.IPropertyService).to(PropertyService);
 container.bind<IDashboardService>(TYPES.IDashboardService).to(DashboardService);
 container.bind<IActivityService>(TYPES.IActivityService).to(ActivityService);
 container.bind<IRevenueService>(TYPES.IRevenueService).to(RevenueService);
+container.bind<IAmenityService>(TYPES.IAmenityService).to(AmenityService);
 
 export { container };
 
@@ -90,4 +98,8 @@ export const getActivityService = (): IActivityService => {
 
 export const getRevenueService = (): IRevenueService => {
   return container.get<IRevenueService>(TYPES.IRevenueService);
+};
+
+export const getAmenityService = (): IAmenityService => {
+  return container.get<IAmenityService>(TYPES.IAmenityService);
 };

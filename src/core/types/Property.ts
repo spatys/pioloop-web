@@ -77,12 +77,10 @@ export interface PropertyImage {
 }
 
 export interface PropertyAmenity {
-  id: string;
-  propertyId: string;
+  id: number;
   name: string;
-  description?: string;
-  icon?: string;
-  createdAt: Date;
+  category: string;
+  icon: string;
 }
 
 export interface PropertyAddress {
@@ -119,7 +117,7 @@ export interface Property {
   status: string;
   ownerId: string;
   images: PropertyImage[];
-  amenities: string[];
+  amenities: PropertyAmenity[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -232,7 +230,7 @@ export interface PropertyResponse {
   status: string;
   ownerId: string;
   images: PropertyImage[];
-  amenities: string[];
+  amenities: PropertyAmenity[];
   averageRating?: number;
   reviewCount?: number;
   createdAt: string;

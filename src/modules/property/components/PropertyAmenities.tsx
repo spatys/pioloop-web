@@ -1,96 +1,128 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { PropertyResponse } from '@/core/types/Property';
+import { useAmenities } from '@/hooks/useAmenities';
+import { Amenity } from '@/core/types/Amenity';
 
 interface PropertyAmenitiesProps {
   property: PropertyResponse;
 }
 
 export const PropertyAmenities: React.FC<PropertyAmenitiesProps> = ({ property }) => {
-  // Liste des équipements basée sur les données de la propriété
-  const amenities = [
-    {
-      category: 'Essentiels',
-      items: [
-        { name: 'Wi-Fi', available: true, icon: '📶' },
-        { name: 'Cuisine équipée', available: true, icon: '🍳' },
-        { name: 'Lave-linge', available: true, icon: '🧺' },
-        { name: 'Chauffage', available: true, icon: '🔥' },
-        { name: 'Climatisation', available: true, icon: '❄️' },
-      ]
-    },
-    {
-      category: 'Sécurité',
-      items: [
-        { name: 'Détecteur de fumée', available: true, icon: '🚨' },
-        { name: 'Détecteur de monoxyde de carbone', available: true, icon: '⚠️' },
-        { name: 'Sécurité 24h/24', available: false, icon: '🔒' },
-        { name: 'Caméras de surveillance', available: false, icon: '📹' },
-      ]
-    },
-    {
-      category: 'Extérieur',
-      items: [
-        { name: 'Parking gratuit', available: true, icon: '🅿️' },
-        { name: 'Jardin', available: false, icon: '🌳' },
-        { name: 'Piscine', available: false, icon: '🏊' },
-        { name: 'Terrasse', available: true, icon: '🪑' },
-        { name: 'Barbecue', available: false, icon: '🔥' },
-      ]
-    },
-    {
-      category: 'Famille',
-      items: [
-        { name: 'Équipements bébé', available: false, icon: '👶' },
-        { name: 'Jeux pour enfants', available: false, icon: '🧸' },
-        { name: 'Chaise haute', available: false, icon: '🪑' },
-        { name: 'Lit bébé', available: false, icon: '🛏️' },
-      ]
-    },
-    {
-      category: 'Accessibilité',
-      items: [
-        { name: 'Accès fauteuil roulant', available: false, icon: '♿' },
-        { name: 'Ascenseur', available: false, icon: '🛗' },
-        { name: 'Rampes d\'accès', available: false, icon: '🛤️' },
-      ]
+  const { amenities, loading, error } = useAmenities();
+  const [activeTab, setActiveTab] = useState<string>('');
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <h3 className="text-xl font-semibold text-gray-900">Équipements</h3>
+        <div className="animate-pulse space-y-4">
+          {[...Array(3)].map((_, i) => (
+            <div key={i}>
+              <div className="h-5 bg-gray-200 rounded w-1/4 mb-3"></div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {[...Array(4)].map((_, j) => (
+                  <div key={j} className="h-12 bg-gray-200 rounded"></div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <h3 className="text-xl font-semibold text-gray-900">Équipements</h3>
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p className="text-red-800">Erreur lors du chargement des équipements</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Grouper les amenities par catégorie
+  const amenitiesByCategory = amenities.reduce((acc, amenity) => {
+    const category = amenity.category;
+    if (!acc[category]) {
+      acc[category] = [];
     }
-  ];
+    acc[category].push(amenity);
+    return acc;
+  }, {} as Record<string, Amenity[]>);
+
+  const categories = Object.keys(amenitiesByCategory).sort();
+  
+  // Définir la première catégorie comme active par défaut
+  if (!activeTab && categories.length > 0) {
+    setActiveTab(categories[0]);
+  }
+
+  // Utiliser les noms des amenities de la propriété pour la correspondance
+  const propertyAmenityNames = property.amenities?.map(amenity => amenity.name) || [];
 
   return (
     <div className="space-y-6">
       <h3 className="text-xl font-semibold text-gray-900">Équipements</h3>
       
-      {amenities.map((category, categoryIndex) => (
-        <div key={categoryIndex} className="space-y-3">
-          <h4 className="text-lg font-medium text-gray-900">{category.category}</h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {category.items.map((amenity, itemIndex) => (
-              <div
-                key={itemIndex}
-                className={`flex items-center space-x-3 p-3 rounded-lg ${
-                  amenity.available 
-                    ? 'bg-green-50 border border-green-200' 
-                    : 'bg-gray-50 border border-gray-200'
-                }`}
-              >
-                <span className="text-xl">{amenity.icon}</span>
-                <span className={`font-medium ${
-                  amenity.available ? 'text-green-800' : 'text-gray-500'
-                }`}>
-                  {amenity.name}
-                </span>
-                {amenity.available && (
-                  <svg className="w-4 h-4 text-green-600 ml-auto" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                )}
-              </div>
-            ))}
+      {/* Onglets */}
+      <div className="border-b border-gray-200">
+        <nav className="-mb-px flex space-x-8 overflow-x-auto">
+          {categories.map((category) => (
+            <button
+              key={category}
+              onClick={() => setActiveTab(category)}
+              className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === category
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              {category}
+            </button>
+          ))}
+        </nav>
+      </div>
+
+      {/* Contenu des onglets */}
+      <div className="min-h-[300px]">
+        {activeTab && amenitiesByCategory[activeTab] && (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {amenitiesByCategory[activeTab]
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((amenity) => {
+                const isAvailable = propertyAmenityNames.includes(amenity.name);
+                return (
+                  <div
+                    key={amenity.id}
+                    className={`flex flex-col items-center space-y-2 p-4 rounded-lg border-2 transition-all duration-200 ${
+                      isAvailable
+                        ? 'border-green-500 bg-green-50 shadow-md'
+                        : 'border-gray-200 bg-gray-50'
+                    }`}
+                  >
+                    <span className="text-3xl">{amenity.icon}</span>
+                    <span className={`text-sm font-medium text-center ${
+                      isAvailable ? 'text-green-800' : 'text-gray-500'
+                    }`}>
+                      {amenity.name}
+                    </span>
+                    {isAvailable && (
+                      <div className="w-5 h-5 bg-green-600 rounded-full flex items-center justify-center">
+                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
           </div>
-        </div>
-      ))}
+        )}
+      </div>
 
       {/* Note sur les équipements */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">

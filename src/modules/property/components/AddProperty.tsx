@@ -9,11 +9,155 @@ import {
   PropertyImageRequest,
 } from "@/core/types/Property";
 import { getPropertyService } from "@/core/di/container";
+import { useAmenities } from "@/hooks/useAmenities";
+import { Amenity } from "@/core/types/Amenity";
 import { Loader } from "lucide-react";
 import { Dropdown } from "@/components/ui/Dropdown";
 import { PageLoader } from "@/components/ui/PageLoader";
 import { AvailabilityManager } from "@/components/ui/AvailabilityManager";
 
+// Composant pour les onglets d'amenities
+interface AmenityTabsProps {
+  amenities: Amenity[];
+  formData: Partial<CreatePropertyRequest>;
+  onAmenityChange: (field: string, value: any) => void;
+}
+
+const AmenityTabs: React.FC<AmenityTabsProps> = ({ amenities, formData, onAmenityChange }) => {
+  const [activeTab, setActiveTab] = useState<string>('');
+
+  // Grouper les amenities par catégorie
+  const amenitiesByCategory = amenities
+    .filter(amenity => amenity.isActive)
+    .reduce((acc, amenity) => {
+      const category = amenity.category;
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(amenity);
+      return acc;
+    }, {} as Record<string, Amenity[]>);
+
+  const categories = Object.keys(amenitiesByCategory).sort();
+  
+  // Définir la première catégorie comme active par défaut
+  if (!activeTab && categories.length > 0) {
+    setActiveTab(categories[0]);
+  }
+
+  const handleAmenityToggle = (amenity: Amenity, isChecked: boolean) => {
+    const currentAmenities = formData.amenities || [];
+    if (isChecked) {
+      const newAmenity: PropertyAmenityRequest = {
+        name: amenity.name,
+        description: amenity.name,
+        type: 1,
+        category: 1,
+        isAvailable: true,
+        isIncludedInRent: true,
+        additionalCost: 0,
+        icon: amenity.icon,
+        priority: 1,
+      };
+      onAmenityChange("amenities", [...currentAmenities, newAmenity]);
+    } else {
+      onAmenityChange(
+        "amenities",
+        currentAmenities.filter((a) => a.name !== amenity.name)
+      );
+    }
+  };
+
+  const isAmenitySelected = (amenity: Amenity) => {
+    return formData.amenities?.some(a => a.name === amenity.name) || false;
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Onglets */}
+      <div className="border-b border-gray-200">
+        <nav className="-mb-px flex space-x-8 overflow-x-auto">
+          {categories.map((category) => (
+            <button
+              key={category}
+              onClick={() => setActiveTab(category)}
+              className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === category
+                  ? 'border-purple-500 text-purple-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              {category}
+            </button>
+          ))}
+        </nav>
+      </div>
+
+      {/* Contenu des onglets */}
+      <div className="min-h-[400px]">
+        {activeTab && amenitiesByCategory[activeTab] && (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {amenitiesByCategory[activeTab]
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((amenity) => {
+                const isSelected = isAmenitySelected(amenity);
+                return (
+                  <label
+                    key={amenity.id}
+                    className={`flex flex-col items-center space-y-2 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
+                      isSelected
+                        ? 'border-purple-500 bg-purple-50 shadow-md'
+                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      className="sr-only"
+                      checked={isSelected}
+                      onChange={(e) => handleAmenityToggle(amenity, e.target.checked)}
+                    />
+                    <span className="text-3xl">{amenity.icon}</span>
+                    <span className={`text-sm font-medium text-center ${
+                      isSelected ? 'text-purple-800' : 'text-gray-700'
+                    }`}>
+                      {amenity.name}
+                    </span>
+                    {isSelected && (
+                      <div className="w-5 h-5 bg-purple-600 rounded-full flex items-center justify-center">
+                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    )}
+                  </label>
+                );
+              })}
+          </div>
+        )}
+      </div>
+
+      {/* Résumé des sélections */}
+      {formData.amenities && formData.amenities.length > 0 && (
+        <div className="mt-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+          <h4 className="text-sm font-medium text-purple-800 mb-2">
+            Équipements sélectionnés ({formData.amenities.length})
+          </h4>
+          <div className="flex flex-wrap gap-2">
+            {formData.amenities.map((amenity, index) => (
+              <span
+                key={index}
+                className="inline-flex items-center space-x-1 px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full"
+              >
+                <span>{amenity.icon}</span>
+                <span>{amenity.name}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export const AddProperty: React.FC = () => {
   const router = useRouter();
@@ -21,6 +165,9 @@ export const AddProperty: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isDragOver, setIsDragOver] = useState(false);
   const [showPageLoader, setShowPageLoader] = useState(false);
+  
+  // Hook pour récupérer les amenities depuis l'API
+  const { amenities, loading: amenitiesLoading, error: amenitiesError } = useAmenities();
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState<Partial<CreatePropertyRequest>>({
@@ -321,7 +468,7 @@ export const AddProperty: React.FC = () => {
     setShowPageLoader(true);
     
     try {
-    const propertyService = getPropertyService();
+      const propertyService = getPropertyService();
 
       // Convertir les images WebP en base64 (meilleur pour l'affichage)
       const imagesWithBase64 = await Promise.all(
@@ -344,8 +491,8 @@ export const AddProperty: React.FC = () => {
       );
 
       // Créer la propriété avec les images base64
-    const createRequest: CreatePropertyRequest = {
-      ...(formData as CreatePropertyRequest),
+      const createRequest: CreatePropertyRequest = {
+        ...(formData as CreatePropertyRequest),
         maxGuests: formData.maxGuests || 1,
         bedrooms: formData.bedrooms || 1,
         beds: formData.beds || 1,
@@ -362,15 +509,15 @@ export const AddProperty: React.FC = () => {
       console.log('Property created with images:', propertyResponse);
       
       if (propertyResponse) {
-      setShowPageLoader(false);
-      // Redirection vers le dashboard du propriétaire avec un paramètre pour forcer la revalidation
-      router.push("/dashboard?refresh=true");
-    }
+        setShowPageLoader(false);
+        // Redirection vers le dashboard du propriétaire avec un paramètre pour forcer la revalidation
+        router.push("/dashboard?refresh=true");
+      }
     } catch (error) {
       console.error('Erreur lors de la création de la propriété:', error);
       alert('Erreur lors de la création de la propriété. Veuillez réessayer.');
     } finally {
-    setShowPageLoader(false);
+      setShowPageLoader(false);
     }
   };
 
@@ -1016,55 +1163,23 @@ export const AddProperty: React.FC = () => {
         <label className="block text-sm font-normal text-gray-700 mb-2">
           Équipements et commodités
         </label>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {[
-            { name: "Wi-Fi", type: 2, category: 2 },
-            { name: "Climatisation", type: 1, category: 1 },
-            { name: "Cuisine", type: 1, category: 1 },
-            { name: "Parking", type: 1, category: 3 },
-            { name: "Piscine", type: 1, category: 4 },
-            { name: "Balcon", type: 1, category: 1 },
-            { name: "Ascenseur", type: 1, category: 1 },
-            { name: "Sécurité", type: 1, category: 3 },
-            { name: "Ménage", type: 2, category: 2 },
-            { name: "Petit-déjeuner", type: 2, category: 2 },
-            { name: "Animaux", type: 2, category: 2 },
-            { name: "Fumeur", type: 2, category: 2 },
-          ].map((amenity) => (
-            <label key={amenity.name} className="flex items-center">
-              <input
-                type="checkbox"
-                className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                onChange={(e) => {
-                  const currentAmenities = formData.amenities || [];
-                  if (e.target.checked) {
-                    const newAmenity: PropertyAmenityRequest = {
-                      name: amenity.name,
-                      description: amenity.name,
-                      type: amenity.type,
-                      category: amenity.category,
-                      isAvailable: true,
-                      isIncludedInRent: true,
-                      additionalCost: 0,
-                      icon: amenity.name.toLowerCase(),
-                      priority: 1,
-                    };
-                    handleInputChange("amenities", [
-                      ...currentAmenities,
-                      newAmenity,
-                    ]);
-                  } else {
-                    handleInputChange(
-                      "amenities",
-                      currentAmenities.filter((a) => a.name !== amenity.name),
-                    );
-                  }
-                }}
-              />
-              <span className="ml-2 text-sm text-gray-700">{amenity.name}</span>
-            </label>
-          ))}
-        </div>
+        
+        {amenitiesError && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+            <p className="text-sm text-red-600">
+              Erreur lors du chargement des équipements: {amenitiesError}
+            </p>
+          </div>
+        )}
+        
+        {amenitiesLoading ? (
+          <div className="flex items-center justify-center py-8">
+            <Loader className="h-6 w-6 animate-spin text-purple-600" />
+            <span className="ml-2 text-gray-600">Chargement des équipements...</span>
+          </div>
+        ) : (
+          <AmenityTabs amenities={amenities} formData={formData} onAmenityChange={handleInputChange} />
+        )}
       </div>
     </div>
   );
@@ -1090,8 +1205,7 @@ export const AddProperty: React.FC = () => {
           <div>
             <h3 className="text-sm font-medium text-yellow-800">Information importante</h3>
             <p className="text-sm text-yellow-700 mt-1">
-              Votre logement sera automatiquement disponible dès sa validation. Vous pourrez ensuite configurer des périodes spécifiques, 
-              des prix spéciaux et marquer des dates comme indisponibles.
+            Votre logement sera mis en ligne sous 24 heures, après validation par nos équipes. Vous pourrez ensuite définir vos périodes de disponibilité directement depuis votre tableau de bord..
             </p>
           </div>
         </div>
@@ -1312,9 +1426,9 @@ export const AddProperty: React.FC = () => {
                 </svg>
               </div>
               <div>
-                <h4 className="text-sm font-medium text-green-900">Disponibilité automatique</h4>
+                <h4 className="text-sm font-medium text-green-900">Disponibilité</h4>
                 <p className="text-sm text-green-700">
-                  Votre logement sera automatiquement disponible dès sa validation. 
+                  Votre logement sera disponible dès validation de nos équipes sous 24heures. 
                   Vous pourrez ensuite configurer des périodes spécifiques depuis votre tableau de bord.
                 </p>
               </div>
