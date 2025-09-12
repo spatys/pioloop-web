@@ -20,7 +20,7 @@ import { AvailabilityManager } from "@/components/ui/AvailabilityManager";
 interface AmenityTabsProps {
   amenities: Amenity[];
   formData: Partial<CreatePropertyRequest>;
-  onAmenityChange: (field: string, value: any) => void;
+  onAmenityChange: (field: keyof CreatePropertyRequest, value: any) => void;
 }
 
 const AmenityTabs: React.FC<AmenityTabsProps> = ({ amenities, formData, onAmenityChange }) => {
