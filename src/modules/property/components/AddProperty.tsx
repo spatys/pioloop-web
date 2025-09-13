@@ -290,6 +290,7 @@ export const AddProperty: React.FC = () => {
         // Créer les objets PropertyImageRequest avec les fichiers WebP (sans base64)
         const newImages: PropertyImageRequest[] = newWebpFiles.map((webpFile, index) => ({
           imageData: '', // Sera rempli après l'upload
+          fileName: webpFile.name,
           contentType: webpFile.type || 'image/webp',
           altText: webpFile.name,
             isMainImage: (formData.images?.length || 0) === 0 && index === 0,
@@ -338,6 +339,7 @@ export const AddProperty: React.FC = () => {
         // Créer les objets PropertyImageRequest avec les fichiers WebP (sans base64)
         const newImages: PropertyImageRequest[] = newWebpFiles.map((webpFile, index) => ({
           imageData: '', // Sera rempli après l'upload
+          fileName: webpFile.name,
           contentType: webpFile.type || 'image/webp',
           altText: webpFile.name,
             isMainImage: (formData.images?.length || 0) === 0 && index === 0,
@@ -1383,7 +1385,7 @@ export const AddProperty: React.FC = () => {
             <span className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm mr-3">6</span>
             Disponibilité
           </h3>
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+          <div className="bg-amber-50 border rounded-lg p-4">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
                 <svg className="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1391,7 +1393,6 @@ export const AddProperty: React.FC = () => {
                 </svg>
               </div>
               <div>
-                <h4 className="text-sm font-medium text-amber-900">Disponibilité</h4>
                 <p className="text-sm text-amber-700">
                   Votre logement sera disponible dès validation de nos équipes sous 24heures. 
                   Vous pourrez ensuite configurer des périodes spécifiques depuis votre tableau de bord.
