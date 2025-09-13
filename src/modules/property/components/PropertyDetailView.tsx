@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { PropertyResponse } from '@/core/types/Property';
 import { PropertyImageGallery } from './PropertyImageGallery';
 import { PropertyInfo } from './PropertyInfo';
-import { PropertyAmenities } from './PropertyAmenities';
+import { PropertyAmenitiesAccordion } from './PropertyAmenitiesAccordion';
 import { PropertyLocation } from './PropertyLocation';
 import { PropertyBookingCard } from './PropertyBookingCard';
 import { PropertyReviews } from './PropertyReviews';
@@ -115,7 +115,7 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({ property
                 </div>
               )}
 
-              {activeTab === 'amenities' && <PropertyAmenities property={property} />}
+              {activeTab === 'amenities' && <PropertyAmenitiesAccordion property={property} />}
               {activeTab === 'location' && <PropertyLocation property={property} />}
               {activeTab === 'reviews' && <PropertyReviews property={property} />}
             </div>
