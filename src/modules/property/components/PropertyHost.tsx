@@ -2,6 +2,9 @@
 
 import React, { useState } from 'react';
 import { PropertyResponse } from '@/core/types/Property';
+import { useAuth } from '@/hooks/useAuth';
+import { useDashboard } from '@/hooks/useDashboard';
+import useSWR from 'swr';
 
 interface PropertyHostProps {
   property: PropertyResponse;
@@ -9,20 +12,47 @@ interface PropertyHostProps {
 
 export const PropertyHost: React.FC<PropertyHostProps> = ({ property }) => {
   const [showContactForm, setShowContactForm] = useState(false);
+  const { user } = useAuth();
+  const { stats } = useDashboard();
 
-  // Données d'exemple pour l'hôte
+  // Récupérer les données utilisateur comme dans le Header
+  const { data } = useSWR(
+    "/api/auth/me",
+    async (url: string) => {
+      const response = await fetch(url, { credentials: "include" });
+      if (!response.ok) {
+        return null;
+      }
+      return response.json();
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      revalidateIfStale: false,
+      dedupingInterval: 60000,
+      errorRetryCount: 0,
+      shouldRetryOnError: false,
+      revalidateOnMount: true,
+    },
+  );
+
+  // Utiliser les vraies données du propriétaire connecté comme dans le Header
   const host = {
-    name: 'Jean Dupont',
-    avatar: '👨',
-    joinDate: '2023-01-15',
-    verified: true,
-    responseRate: 98,
-    responseTime: 'en moins d\'une heure',
-    languages: ['Français', 'Anglais'],
-    description: 'Passionné de voyage et d\'hospitalité, j\'aime partager ma ville avec mes invités. Je suis toujours disponible pour vous aider à découvrir les meilleures adresses locales.',
-    propertiesCount: 3,
-    reviewsCount: 127,
-    averageRating: 4.9
+    name: data?.user?.profile?.data?.firstName && data?.user?.profile?.data?.lastName 
+      ? `${data.user.profile.data.firstName} ${data.user.profile.data.lastName}` 
+      : data?.user?.profile?.data?.firstName || data?.user?.profile?.data?.email || 'Propriétaire',
+    avatar: data?.user?.profile?.data?.firstName && data?.user?.profile?.data?.lastName 
+      ? `${data.user.profile.data.firstName.charAt(0).toUpperCase()}${data.user.profile.data.lastName.charAt(0).toUpperCase()}`
+      : data?.user?.profile?.data?.firstName?.charAt(0).toUpperCase() || '👤',
+    joinDate: data?.user?.profile?.data?.createdAt || new Date().toISOString(),
+    verified: true, // TODO: Récupérer le statut de vérification depuis l'API
+    responseRate: 98, // TODO: Calculer depuis les vraies données
+    responseTime: 'en moins d\'une heure', // TODO: Calculer depuis les vraies données
+    languages: ['Français'], // TODO: Récupérer depuis les préférences utilisateur
+    description: 'Recupérer la description du owner depuis son profil.', // TODO: Récupérer depuis le profil utilisateur
+    propertiesCount: stats?.totalProperties || 0,
+    reviewsCount: 0, // TODO: Calculer depuis les vraies données
+    averageRating: 0 // TODO: Calculer depuis les vraies données
   };
 
   const renderStars = (rating: number) => {
@@ -46,7 +76,7 @@ export const PropertyHost: React.FC<PropertyHostProps> = ({ property }) => {
         <div className="flex items-start space-x-4">
           {/* Avatar et infos de base */}
           <div className="flex-shrink-0">
-            <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center text-2xl">
+            <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-2xl font-semibold text-purple-700">
               {host.avatar}
             </div>
           </div>
@@ -61,15 +91,21 @@ export const PropertyHost: React.FC<PropertyHostProps> = ({ property }) => {
               )}
             </div>
             
-            <div className="flex items-center space-x-1 mb-3">
-              {renderStars(Math.floor(host.averageRating))}
-              <span className="text-sm font-medium text-gray-900 ml-1">
-                {host.averageRating.toFixed(1)}
-              </span>
-              <span className="text-sm text-gray-600">
-                ({host.reviewsCount} avis)
-              </span>
-            </div>
+            {host.reviewsCount > 0 ? (
+              <div className="flex items-center space-x-1 mb-3">
+                {renderStars(Math.floor(host.averageRating))}
+                <span className="text-sm font-medium text-gray-900 ml-1">
+                  {host.averageRating.toFixed(1)}
+                </span>
+                <span className="text-sm text-gray-600">
+                  ({host.reviewsCount} avis)
+                </span>
+              </div>
+            ) : (
+              <div className="mb-3">
+                <span className="text-sm text-gray-600">Niveau d'ancienneté</span>
+              </div>
+            )}
             
             <p className="text-gray-700 mb-4">{host.description}</p>
             
@@ -85,7 +121,7 @@ export const PropertyHost: React.FC<PropertyHostProps> = ({ property }) => {
               </div>
               <div className="text-center">
                 <div className="text-lg font-semibold text-gray-900">{host.propertiesCount}</div>
-                <div className="text-sm text-gray-600">Logements</div>
+                <div className="text-sm text-gray-600">Mes logements</div>
               </div>
               <div className="text-center">
                 <div className="text-lg font-semibold text-gray-900">
