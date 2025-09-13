@@ -9,8 +9,8 @@ import { IContractRepository } from "../repositories/interfaces/IContractReposit
 import { ContractRepository } from "../repositories/implementations/ContractRepository";
 import { IPropertyRepository } from "../repositories/interfaces/IPropertyRepository";
 import { PropertyRepository } from "../repositories/implementations/PropertyRepository";
-import { IAmenityRepository } from "../repositories/AmenityRepository";
-import { AmenityRepository } from "../repositories/AmenityRepository";
+import { IAmenityRepository } from "../repositories/interfaces/IAmenityRepository";
+import { AmenityRepository } from "../repositories/implementations/AmenityRepository";
 
 // Services
 import { IAuthService } from "../services/interfaces/IAuthService";
