@@ -6,8 +6,8 @@ import type { PropertyResponse } from "@/core/types/Property";
 export class DashboardService implements IDashboardService {
   async calculateStats(properties: PropertyResponse[]): Promise<DashboardStats> {
     const totalProperties = properties.length;
-    const awaitingApprovals = properties.filter(p => p.status === "PendingVerification").length;
-    const publishedProperties = properties.filter(p => p.status === "Verified").length;
+    const awaitingApprovals = properties.filter(p => p.status === "PendingValidation").length;
+    const publishedProperties = properties.filter(p => p.status === "Validated").length;
     const rentedProperties = properties.filter(p => p.status === "Rented").length;
     
     // Calculer les revenus basés sur les prix des propriétés

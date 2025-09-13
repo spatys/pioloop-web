@@ -2,31 +2,31 @@ import { User } from "./User";
 import { Money } from "./Money";
 
 export enum PropertyStatus {
-  PendingVerification = "PendingVerification",
-  Verified = "Verified",
+  PendingValidation = "PendingValidation",
+  Validated = "Validated",
   Rented = "Rented",
   Deleted = "Deleted",
 }
 
 // Constantes pour faciliter l'utilisation
 export const PROPERTY_STATUS = {
-  PENDING_VERIFICATION: PropertyStatus.PendingVerification,
-  VERIFIED: PropertyStatus.Verified,
+  PENDING_VALIDATION: PropertyStatus.PendingValidation,
+  VALIDATED: PropertyStatus.Validated,
   RENTED: PropertyStatus.Rented,
   DELETED: PropertyStatus.Deleted,
 } as const;
 
 // Fonction utilitaire pour obtenir le label affiché d'un statut
 export const getPropertyStatusLabel = (status: PropertyStatus | string): string => {
-  if (status === PropertyStatus.PendingVerification) {
-    return "En attente de vérification";
+  if (status === PropertyStatus.PendingValidation) {
+    return "En cours de validation";
   }
   
   switch (status) {
-    case PropertyStatus.PendingVerification:
-      return "En attente de vérification";
-    case PropertyStatus.Verified:
-      return "Vérifié";
+    case PropertyStatus.PendingValidation:
+      return "En cours de validation";
+    case PropertyStatus.Validated:
+      return "Validé";
     case PropertyStatus.Rented:
       return "Loué";
     case PropertyStatus.Deleted:
@@ -38,14 +38,14 @@ export const getPropertyStatusLabel = (status: PropertyStatus | string): string 
 
 // Fonction utilitaire pour obtenir la couleur d'un statut (pour l'UI)
 export const getPropertyStatusColor = (status: PropertyStatus | string): string => {
-  if (status === PropertyStatus.PendingVerification) {
+  if (status === PropertyStatus.PendingValidation) {
     return "warning"; // Orange/Yellow
   }
   
   switch (status) {
-    case PropertyStatus.PendingVerification:
+    case PropertyStatus.PendingValidation:
       return "warning"; // Orange/Yellow
-    case PropertyStatus.Verified:
+    case PropertyStatus.Validated:
       return "success"; // Green
     case PropertyStatus.Rented:
       return "info"; // Blue

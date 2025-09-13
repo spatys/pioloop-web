@@ -20,7 +20,7 @@ export const Properties: Property[] = [
     pricePerNight: 35000,
     cleaningFee: 12000,
     serviceFee: 4000,
-    status: "Verified",
+    status: "Validated",
     ownerId: "046b19c4-ebda-49ef-b698-fbb6b222055d",
     images: [
       {
@@ -56,7 +56,7 @@ export const Properties: Property[] = [
     pricePerNight: 38000,
     cleaningFee: 15000,
     serviceFee: 5000,
-    status: "Verified",
+    status: "Validated",
     ownerId: "3b70139e-3c8f-4408-b7c9-99ce0dc70522",
     images: [
       {
@@ -92,7 +92,7 @@ export const Properties: Property[] = [
     pricePerNight: 18000,
     cleaningFee: 6000,
     serviceFee: 2000,
-    status: "Verified",
+    status: "Validated",
     ownerId: "046b19c4-ebda-49ef-b698-fbb6b222055d",
     images: [
       {
@@ -128,7 +128,7 @@ export const Properties: Property[] = [
     pricePerNight: 45000,
     cleaningFee: 18000,
     serviceFee: 6000,
-    status: "Verified",
+    status: "Validated",
     ownerId: "046b19c4-ebda-49ef-b698-fbb6b222055d",
     images: [
       {
@@ -164,7 +164,7 @@ export const Properties: Property[] = [
     pricePerNight: 32000,
     cleaningFee: 12000,
     serviceFee: 4000,
-    status: "Verified",
+    status: "Validated",
     ownerId: "3b70139e-3c8f-4408-b7c9-99ce0dc70522",
     images: [
       {
@@ -200,7 +200,7 @@ export const Properties: Property[] = [
     pricePerNight: 28000,
     cleaningFee: 10000,
     serviceFee: 3500,
-    status: "Verified",
+    status: "Validated",
     ownerId: "046b19c4-ebda-49ef-b698-fbb6b222055d",
     images: [
       {
@@ -236,7 +236,7 @@ export const Properties: Property[] = [
     pricePerNight: 65000,
     cleaningFee: 25000,
     serviceFee: 8000,
-    status: "Verified",
+    status: "Validated",
     ownerId: "3b70139e-3c8f-4408-b7c9-99ce0dc70522",
     images: [
       {
@@ -272,7 +272,7 @@ export const Properties: Property[] = [
     pricePerNight: 15000,
     cleaningFee: 5000,
     serviceFee: 2000,
-    status: "Verified",
+    status: "Validated",
     ownerId: "046b19c4-ebda-49ef-b698-fbb6b222055d",
     images: [
       {
@@ -308,7 +308,7 @@ export const Properties: Property[] = [
     pricePerNight: 40000,
     cleaningFee: 15000,
     serviceFee: 5000,
-    status: "Verified",
+    status: "Validated",
     ownerId: "3b70139e-3c8f-4408-b7c9-99ce0dc70522",
     images: [
       {
@@ -344,7 +344,7 @@ export const Properties: Property[] = [
     pricePerNight: 55000,
     cleaningFee: 20000,
     serviceFee: 7000,
-    status: "Verified",
+    status: "Validated",
     ownerId: "046b19c4-ebda-49ef-b698-fbb6b222055d",
     images: [
       {

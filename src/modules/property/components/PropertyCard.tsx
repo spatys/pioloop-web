@@ -19,21 +19,21 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, showFavori
   // Fonction pour obtenir l'icône et les styles selon le statut
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'PendingVerification':
+      case 'PendingValidation':
         return {
           icon: Clock,
           bgColor: 'bg-amber-100',
           iconColor: 'text-amber-600',
           borderColor: 'border-amber-200',
-          description: 'En attente de vérification'
+          description: 'En cours de validation'
         };
-      case 'Verified':
+      case 'Validated':
         return {
           icon: CheckCircle,
           bgColor: 'bg-emerald-100',
           iconColor: 'text-emerald-600',
           borderColor: 'border-emerald-200',
-          description: 'Vérifié'
+          description: 'Validé'
         };
       case 'Rented':
         return {

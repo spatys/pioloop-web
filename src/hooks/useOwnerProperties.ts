@@ -134,11 +134,11 @@ export const useOwnerProperties = () => {
   };
 
   const getVerifiedProperties = () => {
-    return getPropertiesByStatus(PropertyStatus.Verified);
+    return getPropertiesByStatus(PropertyStatus.Validated);
   };
 
   const getPendingProperties = () => {
-    return getPropertiesByStatus(PropertyStatus.PendingVerification);
+    return getPropertiesByStatus(PropertyStatus.PendingValidation);
   };
 
   const getRentedProperties = () => {

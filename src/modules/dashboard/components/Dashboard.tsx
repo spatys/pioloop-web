@@ -85,16 +85,16 @@ interface RevenueData {
 
 const getStatusInfo = (status: string) => {
   switch (status) {
-    case PropertyStatus.PendingVerification:
+    case PropertyStatus.PendingValidation:
       return {
         label: getPropertyStatusLabel(status),
         color: "bg-yellow-100 text-yellow-800 border-yellow-200",
         icon: Clock,
         bgColor: "bg-yellow-50"
       };
-    case PropertyStatus.Verified:
+    case PropertyStatus.Validated:
       return {
-        label: getPropertyStatusLabel(PropertyStatus.Verified),
+        label: getPropertyStatusLabel(PropertyStatus.Validated),
         color: "bg-green-100 text-green-800 border-green-200",
         icon: CheckCircle,
         bgColor: "bg-green-50"
@@ -432,8 +432,8 @@ export default function Dashboard({
               className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-purple-500"
             >
               <option value="all">Tous les statuts</option>
-              <option value={PropertyStatus.PendingVerification}>{getPropertyStatusLabel(PropertyStatus.PendingVerification)}</option>
-              <option value={PropertyStatus.Verified}>{getPropertyStatusLabel(PropertyStatus.Verified)}</option>
+              <option value={PropertyStatus.PendingValidation}>{getPropertyStatusLabel(PropertyStatus.PendingValidation)}</option>
+              <option value={PropertyStatus.Validated}>{getPropertyStatusLabel(PropertyStatus.Validated)}</option>
               <option value={PropertyStatus.Rented}>{getPropertyStatusLabel(PropertyStatus.Rented)}</option>
               <option value={PropertyStatus.Deleted}>{getPropertyStatusLabel(PropertyStatus.Deleted)}</option>
             </select>
