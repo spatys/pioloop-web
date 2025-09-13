@@ -64,11 +64,6 @@ export const PropertyAmenitiesAccordion: React.FC<PropertyAmenitiesAccordionProp
     }, {} as Record<string, Amenity[]>);
 
   const categories = Object.keys(allAmenitiesByCategory).sort();
-  
-  // Ouvrir le premier accordéon par défaut
-  if (openAccordions.size === 0 && categories.length > 0) {
-    setOpenAccordions(new Set([categories[0]]));
-  }
 
   const isAmenitySelected = (amenity: Amenity) => {
     return propertyAmenityIds.includes(amenity.id);
@@ -137,39 +132,22 @@ export const PropertyAmenitiesAccordion: React.FC<PropertyAmenitiesAccordionProp
                 {/* Contenu de l'accordéon */}
                 {isOpen && (
                   <div className="border-t border-gray-200 p-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                    <div className="flex flex-wrap gap-2">
                       {categoryAmenities
                         .sort((a, b) => a.name.localeCompare(b.name))
                         .map((amenity) => {
                           const isSelected = isAmenitySelected(amenity);
                           return (
-                            <div
+                            <span
                               key={amenity.id}
-                              className={`relative flex items-center p-3 rounded-lg border-2 ${
+                              className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
                                 isSelected
-                                  ? 'border-purple-500 bg-purple-50 shadow-sm ring-1 ring-purple-200'
-                                  : 'border-gray-200 bg-white'
+                                  ? 'bg-purple-100 text-purple-800 border border-purple-200'
+                                  : 'bg-gray-100 text-gray-600 border border-gray-200'
                               }`}
                             >
-                              <div className={`flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center ${
-                                isSelected 
-                                  ? 'bg-purple-600 border-purple-600' 
-                                  : 'border-gray-300'
-                              }`}>
-                                {isSelected && (
-                                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                  </svg>
-                                )}
-                              </div>
-                              <div className="ml-3 flex-1 min-w-0">
-                                <span className={`text-sm font-medium truncate ${
-                                  isSelected ? 'text-purple-900' : 'text-gray-800'
-                                }`}>
-                                  {amenity.name}
-                                </span>
-                              </div>
-                            </div>
+                              {amenity.name}
+                            </span>
                           );
                         })}
                     </div>

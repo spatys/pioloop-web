@@ -39,11 +39,6 @@ const AmenityAccordions: React.FC<AmenityAccordionsProps> = ({ amenities, formDa
     }, {} as Record<string, Amenity[]>);
 
   const categories = Object.keys(amenitiesByCategory).sort();
-  
-  // Ouvrir le premier accordéon par défaut
-  if (openAccordions.size === 0 && categories.length > 0) {
-    setOpenAccordions(new Set([categories[0]]));
-  }
 
   const handleAmenityToggle = (amenity: Amenity, isChecked: boolean) => {
     const currentAmenityIds = formData.amenityIds || [];
@@ -116,45 +111,24 @@ const AmenityAccordions: React.FC<AmenityAccordionsProps> = ({ amenities, formDa
               {/* Contenu de l'accordéon */}
               {isOpen && (
                 <div className="border-t border-gray-200 p-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                  <div className="flex flex-wrap gap-2">
                     {categoryAmenities
                       .sort((a, b) => a.name.localeCompare(b.name))
                       .map((amenity) => {
                         const isSelected = isAmenitySelected(amenity);
                         return (
-                          <label
+                          <button
                             key={amenity.id}
-                            className={`group relative flex items-center p-3 rounded-lg border-2 cursor-pointer transition-all duration-300 hover:shadow-md ${
+                            type="button"
+                            onClick={() => handleAmenityToggle(amenity, !isSelected)}
+                            className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium cursor-pointer transition-all duration-200 ${
                               isSelected
-                                ? 'border-purple-500 bg-purple-50 shadow-sm ring-1 ring-purple-200'
-                                : 'border-gray-200 bg-white hover:border-purple-300 hover:bg-purple-25'
+                                ? 'bg-purple-100 text-purple-800 border border-purple-200 hover:bg-purple-200'
+                                : 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300'
                             }`}
                           >
-                            <input
-                              type="checkbox"
-                              className="sr-only"
-                              checked={isSelected}
-                              onChange={(e) => handleAmenityToggle(amenity, e.target.checked)}
-                            />
-                            <div className={`flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-200 ${
-                              isSelected 
-                                ? 'bg-purple-600 border-purple-600' 
-                                : 'border-gray-300 group-hover:border-purple-400'
-                            }`}>
-                              {isSelected && (
-                                <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                </svg>
-                              )}
-                            </div>
-                            <div className="ml-3 flex-1 min-w-0">
-                              <span className={`text-sm font-medium transition-colors duration-200 truncate ${
-                                isSelected ? 'text-purple-900' : 'text-gray-800 group-hover:text-purple-800'
-                              }`}>
-                                {amenity.name}
-                              </span>
-                            </div>
-                          </label>
+                            {amenity.name}
+                          </button>
                         );
                       })}
                   </div>
