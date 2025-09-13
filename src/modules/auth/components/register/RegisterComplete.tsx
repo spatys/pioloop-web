@@ -303,7 +303,7 @@ export const RegisterComplete: React.FC = () => {
                   }}
                 />
               ) : (
-                "Finaliser l'inscription"
+                "Valider"
               )}
             </button>
           </form>

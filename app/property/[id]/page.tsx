@@ -39,7 +39,7 @@ export default function PropertyPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="text-gray-400 text-6xl mb-4">🏠</div>
-          <h1 className="text-2xl font-semibold text-gray-900 mb-2">Propriété non trouvée</h1>
+          <h1 className="text-2xl font-normal text-gray-900 mb-2">Propriété non trouvée</h1>
           <p className="text-gray-600 mb-4">Cette propriété n'existe pas ou a été supprimée.</p>
           <button 
             onClick={() => window.history.back()} 

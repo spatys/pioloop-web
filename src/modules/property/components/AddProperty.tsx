@@ -1215,8 +1215,7 @@ export const AddProperty: React.FC = () => {
             Gestion de la disponibilité
           </h3>
           <p className="text-gray-600 mb-6 max-w-md mx-auto">
-            Une fois votre logement créé, vous pourrez accéder à un calendrier complet pour gérer votre disponibilité 
-            et configurer des périodes d'indisponibilité.
+          Une fois votre logement créé, vous aurez accès à un calendrier complet pour configurer et gérer vos périodes d’indisponibilité.
           </p>
         </div>
       </div>
@@ -1382,16 +1381,16 @@ export const AddProperty: React.FC = () => {
             <span className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm mr-3">6</span>
             Disponibilité
           </h3>
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
+                <svg className="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
               <div>
-                <h4 className="text-sm font-medium text-green-900">Disponibilité</h4>
-                <p className="text-sm text-green-700">
+                <h4 className="text-sm font-medium text-amber-900">Disponibilité</h4>
+                <p className="text-sm text-amber-700">
                   Votre logement sera disponible dès validation de nos équipes sous 24heures. 
                   Vous pourrez ensuite configurer des périodes spécifiques depuis votre tableau de bord.
                 </p>
@@ -1401,12 +1400,6 @@ export const AddProperty: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <p className="text-sm text-blue-800">
-          <strong>Vérifiez attentivement</strong> toutes les informations avant de valider l'ajout de votre logement. 
-          Vous pourrez modifier ces informations ultérieurement depuis votre tableau de bord.
-        </p>
-      </div>
     </div>
   );
 
