@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useProperty } from '@/hooks/useProperty';
 import { PropertyDetailView } from '@/modules/property/components/PropertyDetailView';
+import { PropertyDetailSkeleton } from '@/modules/property/components/PropertyDetailSkeleton';
 
 export default function PropertyPage() {
   const params = useParams();
@@ -12,14 +13,7 @@ export default function PropertyPage() {
   const { property, loading, error } = useProperty(propertyId);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Chargement de la propriété...</p>
-        </div>
-      </div>
-    );
+    return <PropertyDetailSkeleton />;
   }
 
   if (error) {

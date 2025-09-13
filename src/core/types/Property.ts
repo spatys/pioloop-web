@@ -160,7 +160,7 @@ export interface CreatePropertyRequest {
   cleaningFee: number;
   serviceFee: number;
   ownerId?: string; // Optionnel, sera récupéré automatiquement depuis le token JWT
-  amenities: PropertyAmenityRequest[];
+  amenityIds: number[]; // Liste des IDs des amenities sélectionnées
   images: PropertyImageRequest[];
 }
 
@@ -201,7 +201,7 @@ export interface UpdatePropertyRequest {
   pricePerNight?: number;
   cleaningFee?: number;
   serviceFee?: number;
-  amenities?: PropertyAmenityRequest[];
+  amenityIds?: number[]; // Liste des IDs des amenities sélectionnées
   images?: PropertyImageRequest[];
 }
 

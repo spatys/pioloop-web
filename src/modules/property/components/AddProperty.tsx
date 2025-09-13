@@ -19,8 +19,8 @@ import { AvailabilityManager } from "@/components/ui/AvailabilityManager";
 // Composant pour les accordéons d'amenities
 interface AmenityAccordionsProps {
   amenities: Amenity[];
-  formData: Partial<CreatePropertyRequest>;
-  onAmenityChange: (field: keyof CreatePropertyRequest, value: any) => void;
+  formData: Partial<CreatePropertyRequest & { amenityIds: number[] }>;
+  onAmenityChange: (field: keyof (CreatePropertyRequest & { amenityIds: number[] }), value: any) => void;
 }
 
 const AmenityAccordions: React.FC<AmenityAccordionsProps> = ({ amenities, formData, onAmenityChange }) => {
@@ -46,29 +46,19 @@ const AmenityAccordions: React.FC<AmenityAccordionsProps> = ({ amenities, formDa
   }
 
   const handleAmenityToggle = (amenity: Amenity, isChecked: boolean) => {
-    const currentAmenities = formData.amenities || [];
+    const currentAmenityIds = formData.amenityIds || [];
     if (isChecked) {
-      const newAmenity: PropertyAmenityRequest = {
-        name: amenity.name,
-        description: amenity.name,
-        type: 1,
-        category: 1,
-        isAvailable: true,
-        isIncludedInRent: true,
-        additionalCost: 0,
-        priority: 1,
-      };
-      onAmenityChange("amenities", [...currentAmenities, newAmenity]);
+      onAmenityChange("amenityIds", [...currentAmenityIds, amenity.id]);
     } else {
       onAmenityChange(
-        "amenities",
-        currentAmenities.filter((a) => a.name !== amenity.name)
+        "amenityIds",
+        currentAmenityIds.filter((id) => id !== amenity.id)
       );
     }
   };
 
   const isAmenitySelected = (amenity: Amenity) => {
-    return formData.amenities?.some(a => a.name === amenity.name) || false;
+    return formData.amenityIds?.includes(amenity.id) || false;
   };
 
   // Fonction pour toggle un accordéon
@@ -176,20 +166,23 @@ const AmenityAccordions: React.FC<AmenityAccordionsProps> = ({ amenities, formDa
       </div>
 
       {/* Résumé des sélections */}
-      {formData.amenities && formData.amenities.length > 0 && (
+      {formData.amenityIds && formData.amenityIds.length > 0 && (
         <div className="mt-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
           <h4 className="text-sm font-medium text-purple-800 mb-2">
-            Équipements sélectionnés ({formData.amenities.length})
+            Équipements sélectionnés ({formData.amenityIds.length})
           </h4>
           <div className="flex flex-wrap gap-2">
-            {formData.amenities.map((amenity, index) => (
-              <span
-                key={index}
-                className="inline-flex items-center space-x-1 px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full"
-              >
-                <span>{amenity.name}</span>
-              </span>
-            ))}
+            {formData.amenityIds.map((amenityId, index) => {
+              const amenity = amenities.find(a => a.id === amenityId);
+              return amenity ? (
+                <span
+                  key={index}
+                  className="inline-flex items-center space-x-1 px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full"
+                >
+                  <span>{amenity.name}</span>
+                </span>
+              ) : null;
+            })}
           </div>
         </div>
       )}
@@ -208,7 +201,7 @@ export const AddProperty: React.FC = () => {
   const { amenities, loading: amenitiesLoading, error: amenitiesError } = useAmenities();
 
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [formData, setFormData] = useState<Partial<CreatePropertyRequest>>({
+  const [formData, setFormData] = useState<Partial<CreatePropertyRequest & { amenityIds: number[] }>>({
     title: "",
     description: "",
     propertyType: "",
@@ -224,7 +217,7 @@ export const AddProperty: React.FC = () => {
     pricePerNight: undefined,
     cleaningFee: undefined,
     serviceFee: undefined,
-    amenities: [],
+    amenityIds: [],
     images: [],
   });
 
@@ -281,7 +274,7 @@ export const AddProperty: React.FC = () => {
   };
 
   const handleInputChange = (
-    field: keyof CreatePropertyRequest,
+    field: keyof (CreatePropertyRequest & { amenityIds: number[] }),
     value: any,
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -316,12 +309,12 @@ export const AddProperty: React.FC = () => {
 
       try {
         // Convertir les fichiers en WebP
-        const webpFiles = await Promise.all(
+        const newWebpFiles = await Promise.all(
           imageFiles.map(file => convertFileToWebP(file))
         );
 
         // Créer les objets PropertyImageRequest avec les fichiers WebP (sans base64)
-        const newImages: PropertyImageRequest[] = webpFiles.map((webpFile, index) => ({
+        const newImages: PropertyImageRequest[] = newWebpFiles.map((webpFile, index) => ({
           imageData: '', // Sera rempli après l'upload
           contentType: webpFile.type || 'image/webp',
           altText: webpFile.name,
@@ -331,7 +324,7 @@ export const AddProperty: React.FC = () => {
 
         // Mettre à jour les états
       const updatedImages = [...(formData.images || []), ...newImages];
-        const updatedWebpFiles = [...webpFiles, ...webpFiles];
+        const updatedWebpFiles = [...webpFiles, ...newWebpFiles];
         
       handleInputChange("images", updatedImages);
         setWebpFiles(updatedWebpFiles);
@@ -364,12 +357,12 @@ export const AddProperty: React.FC = () => {
 
       try {
         // Convertir les fichiers en WebP
-        const webpFiles = await Promise.all(
+        const newWebpFiles = await Promise.all(
           imageFiles.map(file => convertFileToWebP(file))
         );
 
         // Créer les objets PropertyImageRequest avec les fichiers WebP (sans base64)
-        const newImages: PropertyImageRequest[] = webpFiles.map((webpFile, index) => ({
+        const newImages: PropertyImageRequest[] = newWebpFiles.map((webpFile, index) => ({
           imageData: '', // Sera rempli après l'upload
           contentType: webpFile.type || 'image/webp',
           altText: webpFile.name,
@@ -379,7 +372,7 @@ export const AddProperty: React.FC = () => {
 
         // Mettre à jour les états
       const updatedImages = [...(formData.images || []), ...newImages];
-        const updatedWebpFiles = [...webpFiles, ...webpFiles];
+        const updatedWebpFiles = [...webpFiles, ...newWebpFiles];
         
       handleInputChange("images", updatedImages);
         setWebpFiles(updatedWebpFiles);
@@ -539,6 +532,7 @@ export const AddProperty: React.FC = () => {
         pricePerNight: formData.pricePerNight || 0,
         cleaningFee: formData.cleaningFee || 0,
         serviceFee: formData.serviceFee || 0,
+        amenityIds: formData.amenityIds || [],
         images: imagesWithBase64,
       };
 
@@ -612,7 +606,7 @@ export const AddProperty: React.FC = () => {
 
   const renderStep1 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-medium text-gray-900 mb-4">
+      <h2 className="text-xl font-normal text-gray-900 mb-4">
         Informations générales
       </h2>
 
@@ -708,7 +702,7 @@ export const AddProperty: React.FC = () => {
 
   const renderStep2 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-medium text-gray-900 mb-4">
+      <h2 className="text-xl font-normal text-gray-900 mb-4">
         Capacité et équipements
       </h2>
 
@@ -879,8 +873,7 @@ export const AddProperty: React.FC = () => {
 
   const renderStep3 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-medium text-gray-900 mb-4">Localisation</h2>
-
+      <h2 className="text-xl font-normal text-gray-900 mb-4">Localisation</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-normal text-gray-700 mb-2">
@@ -975,7 +968,7 @@ export const AddProperty: React.FC = () => {
 
   const renderStep4 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-medium text-gray-900 mb-4">Tarification</h2>
+      <h2 className="text-xl font-normal text-gray-900 mb-4">Tarification</h2>
       <div>
         <label className="block text-sm font-normal text-gray-700 mb-2">
           Prix par nuit <span className="text-red-500">*</span>
@@ -1051,7 +1044,7 @@ export const AddProperty: React.FC = () => {
 
   const renderStep5 = () => (
     <div className="space-y-6">
-      <h2 className="text-xl font-medium text-gray-900 mb-4">
+      <h2 className="text-xl font-normal text-gray-900 mb-4">
         Images du logement
       </h2>
 
@@ -1226,15 +1219,6 @@ export const AddProperty: React.FC = () => {
 
   const renderStep6 = () => (
     <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-          Configurez votre disponibilité
-        </h2>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          Définissez les dates disponibles pour votre logement. Vous pourrez modifier ces paramètres à tout moment depuis votre tableau de bord.
-        </p>
-      </div>
-
       <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
         <div className="flex items-start space-x-3">
           <div className="flex-shrink-0">
@@ -1245,7 +1229,7 @@ export const AddProperty: React.FC = () => {
           <div>
             <h3 className="text-sm font-medium text-yellow-800">Information importante</h3>
             <p className="text-sm text-yellow-700 mt-1">
-            Votre logement sera mis en ligne sous 24 heures, après validation par nos équipes. Vous pourrez ensuite définir vos périodes de disponibilité directement depuis votre tableau de bord..
+            Votre logement sera publié sous 24 heures, après validation par nos équipes. En attendant, vous pouvez déjà configurer les dates d’indisponibilité depuis votre tableau de bord.
             </p>
           </div>
         </div>
@@ -1253,50 +1237,13 @@ export const AddProperty: React.FC = () => {
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div className="text-center py-12">
-          <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-          </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-xl font-normal text-gray-900 mb-2">
             Gestion de la disponibilité
           </h3>
           <p className="text-gray-600 mb-6 max-w-md mx-auto">
-            Une fois votre logement créé, vous pourrez accéder à un calendrier complet pour gérer votre disponibilité, 
-            définir des prix spéciaux et configurer des périodes d'indisponibilité.
+            Une fois votre logement créé, vous pourrez accéder à un calendrier complet pour gérer votre disponibilité 
+            et configurer des périodes d'indisponibilité.
           </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <h4 className="text-sm font-medium text-gray-900">Disponibilité</h4>
-              <p className="text-xs text-gray-600">Marquez les dates disponibles</p>
-            </div>
-            
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                <svg className="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                </svg>
-              </div>
-              <h4 className="text-sm font-medium text-gray-900">Prix spéciaux</h4>
-              <p className="text-xs text-gray-600">Définissez des tarifs saisonniers</p>
-            </div>
-            
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-              </div>
-              <h4 className="text-sm font-medium text-gray-900">Maintenance</h4>
-              <p className="text-xs text-gray-600">Bloquez des dates si nécessaire</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -1360,15 +1307,18 @@ export const AddProperty: React.FC = () => {
             </div>
           </div>
           
-          {formData.amenities && formData.amenities.length > 0 && (
+          {formData.amenityIds && formData.amenityIds.length > 0 && (
             <div className="mt-4">
               <span className="text-sm font-medium text-gray-600">Équipements</span>
               <div className="flex flex-wrap gap-2 mt-2">
-                {formData.amenities.map((amenity, index) => (
-                  <span key={index} className="bg-purple-100 text-purple-800 px-2 py-1 rounded-md text-sm">
-                    {amenity.name}
-                  </span>
-                ))}
+                {formData.amenityIds.map((amenityId, index) => {
+                  const amenity = amenities.find(a => a.id === amenityId);
+                  return amenity ? (
+                    <span key={index} className="bg-purple-100 text-purple-800 px-2 py-1 rounded-md text-sm">
+                      {amenity.name}
+                    </span>
+                  ) : null;
+                })}
               </div>
             </div>
           )}

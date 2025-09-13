@@ -3,8 +3,11 @@
 import React from "react";
 import { BoutonLink } from "@/components/ui/BoutonLink";
 import { ProtectedBoutonLink } from "@/components/ui/ProtectedBoutonLink";
+import { useRoles } from "@/hooks/useRoles";
 
 export const ContentSections: React.FC = () => {
+  const { isOwner } = useRoles();
+  
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,7 +67,7 @@ export const ContentSections: React.FC = () => {
                   className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
                   fallbackPath="/login"
                 >
-                  Je propose mon bien
+                  {isOwner ? "Ajouter un logement" : "Je propose un logement"}
                 </ProtectedBoutonLink>
                 <ProtectedBoutonLink
                   href="/about"

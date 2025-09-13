@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUser } from "@/hooks/useUser";
 import { useAuth } from "@/hooks/useAuth";
+import { useRoles } from "@/hooks/useRoles";
 import { OwnerOnly } from "@/components/shared/RoleGuard";
 import { languages } from "@/core/data/languages";
 import { devises } from "@/core/data/devises";
@@ -25,6 +26,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const { isOwner } = useRoles();
   const { data, isLoading, error } = useSWR(
     "/api/auth/me",
     async (url: string) => {
@@ -214,7 +216,7 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
               </div>
             </div>
 
-            {/* Je propose mon bien button */}
+            {/* Je propose un logement button */}
             <ProtectedBoutonLink
               href="/property/add"
               variant="default"
@@ -222,7 +224,7 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
               className="hidden sm:inline-flex"
               fallbackPath="/login"
             >
-              Je propose mon bien
+              {isOwner ? "Ajouter un logement" : "Je propose un logement"}
             </ProtectedBoutonLink>
 
             {/* User Profile */}
