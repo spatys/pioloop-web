@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { Logo } from "@/components/ui/Logo";
 import { useAuth } from "@/hooks/useAuth";
 import { useAuth as useAuthContext } from "@/context/AuthContext";
-import { Loader, Mail } from "lucide-react";
+import { Loader } from "lucide-react";
 
 // Schema for code validation
 const schema = yup.object({
@@ -168,9 +168,6 @@ export const RegisterVerifyEmail: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
           {/* En-tête */}
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Mail className="w-8 h-8 text-purple-600" />
-            </div>
             <h1 className="text-2xl font-normal text-gray-700 mb-2">
               Vérifiez votre email
             </h1>

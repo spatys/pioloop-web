@@ -547,14 +547,16 @@ export const AddProperty: React.FC = () => {
       console.log('Property created with images:', propertyResponse);
       
       if (propertyResponse) {
-        setShowPageLoader(false);
-        // Redirection vers le dashboard du propriétaire avec un paramètre pour forcer la revalidation
+        // Afficher un message de succès
+        alert('Propriété créée avec succès ! Redirection vers votre dashboard...');
+        
+        // Redirection immédiate vers le dashboard du propriétaire
         router.push("/dashboard?refresh=true");
+        return; // Sortir de la fonction pour éviter le finally
       }
     } catch (error) {
       console.error('Erreur lors de la création de la propriété:', error);
       alert('Erreur lors de la création de la propriété. Veuillez réessayer.');
-    } finally {
       setShowPageLoader(false);
     }
   };
