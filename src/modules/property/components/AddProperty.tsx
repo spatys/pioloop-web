@@ -484,6 +484,7 @@ export const AddProperty: React.FC = () => {
               const dataUrl = reader.result as string; // data:image/webp;base64,iVBORw0KGgo...
               resolve({
                 imageData: dataUrl, // Data URL prêt pour l'affichage et la transmission
+                fileName: file.name, // Nom du fichier original
                 contentType: file.type || 'image/webp', // MIME type
                 altText: formData.images?.[index]?.altText || file.name,
                 isMainImage: index === 0, // La première image est toujours l'image principale
@@ -511,6 +512,7 @@ export const AddProperty: React.FC = () => {
       };
 
       console.log('Creating property with base64 images...');
+      console.log('Request data:', JSON.stringify(createRequest, null, 2));
       const propertyResponse = await propertyService.createProperty(createRequest);
       console.log('Property created with images:', propertyResponse);
       
