@@ -26,6 +26,7 @@ export class PropertyRepository implements IPropertyRepository {
       neighborhood: property.neighborhood,
       city: property.city,
       postalCode: property.postalCode,
+      country: property.country || 'Cameroun', // Valeur par défaut pour le pays
       latitude: property.latitude,
       longitude: property.longitude,
       pricePerNight: property.pricePerNight,
@@ -34,7 +35,9 @@ export class PropertyRepository implements IPropertyRepository {
       status: property.status,
       ownerId: property.ownerId,
       images: property.images || [],
-      amenities: property.amenities,
+      amenities: property.amenities || [],
+      averageRating: property.averageRating,
+      reviewCount: property.reviewCount,
       createdAt: property.createdAt.toISOString(),
       updatedAt: property.updatedAt.toISOString()
     };
@@ -115,9 +118,12 @@ export class PropertyRepository implements IPropertyRepository {
   }
 
   async getPopularProperties(limit: number): Promise<PropertyResponse[]> {
-    // Simuler la récupération des logements populaires (par nombre de vues, réservations, etc.)
+    // Simuler la récupération des logements populaires (par prix, date de création, etc.)
     const popularProperties = Properties
-      .sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0))
+      .sort((a, b) => {
+        // Trier par prix décroissant comme indicateur de popularité
+        return b.pricePerNight - a.pricePerNight;
+      })
       .slice(0, limit);
 
     return popularProperties.map(property => this.mapPropertyToPropertyResponse(property));
