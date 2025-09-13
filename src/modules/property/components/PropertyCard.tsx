@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Property, getPropertyStatusLabel, getPropertyStatusColor } from "@/core/types/Property";
+import { Clock, CheckCircle, Home, Trash2, AlertCircle } from "lucide-react";
 
 interface PropertyCardProps {
   property: Property;
@@ -14,6 +15,52 @@ interface PropertyCardProps {
 export const PropertyCard: React.FC<PropertyCardProps> = ({ property, showFavorite = true, showActions = false, showStatus = false }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [imageError, setImageError] = useState(false);
+
+  // Fonction pour obtenir l'icône et les styles selon le statut
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'PendingVerification':
+        return {
+          icon: Clock,
+          bgColor: 'bg-amber-100',
+          iconColor: 'text-amber-600',
+          borderColor: 'border-amber-200',
+          description: 'En attente de vérification'
+        };
+      case 'Verified':
+        return {
+          icon: CheckCircle,
+          bgColor: 'bg-emerald-100',
+          iconColor: 'text-emerald-600',
+          borderColor: 'border-emerald-200',
+          description: 'Vérifié'
+        };
+      case 'Rented':
+        return {
+          icon: Home,
+          bgColor: 'bg-blue-100',
+          iconColor: 'text-blue-600',
+          borderColor: 'border-blue-200',
+          description: 'Loué'
+        };
+      case 'Deleted':
+        return {
+          icon: Trash2,
+          bgColor: 'bg-red-100',
+          iconColor: 'text-red-600',
+          borderColor: 'border-red-200',
+          description: 'Supprimé'
+        };
+      default:
+        return {
+          icon: AlertCircle,
+          bgColor: 'bg-gray-100',
+          iconColor: 'text-gray-600',
+          borderColor: 'border-gray-200',
+          description: 'Statut inconnu'
+        };
+    }
+  };
 
   const toggleFavorite = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -47,14 +94,25 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, showFavori
         <img
           src={getImageUrl()}
           alt={property.title}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-transform duration-300 ease-in-out hover:scale-105"
           onError={handleImageError}
         />
-        <div className="absolute top-3 left-3">
-          <span className="bg-purple-600 text-white text-xs font-normal px-2 py-1 rounded-full">
-            {property.propertyType}
-          </span>
-        </div>
+        
+        {/* Badge de statut avec icône en haut à droite */}
+        {showStatus && (() => {
+          const statusInfo = getStatusIcon(property.status);
+          const IconComponent = statusInfo.icon;
+          return (
+            <div 
+              className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center border ${statusInfo.bgColor} ${statusInfo.borderColor}`}
+              title={statusInfo.description}
+            >
+              <IconComponent className={`w-4 h-4 ${statusInfo.iconColor}`} />
+            </div>
+          );
+        })()}
+        
+        {/* Bouton favori en haut à droite (seulement si pas de statut) */}
         {showFavorite && !showStatus && (
           <div className="absolute top-3 right-3">
             <button
@@ -83,22 +141,6 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, showFavori
                 />
               </svg>
             </button>
-          </div>
-        )}
-        
-        {showStatus && (
-          <div className="absolute top-3 right-3">
-            <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-              getPropertyStatusColor(property.status) === "warning" 
-                ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
-                : getPropertyStatusColor(property.status) === "success"
-                ? "bg-green-100 text-green-800 border border-green-200"
-                : getPropertyStatusColor(property.status) === "info"
-                ? "bg-blue-100 text-blue-800 border border-blue-200"
-                : "bg-gray-100 text-gray-800 border border-gray-200"
-            }`}>
-              {getPropertyStatusLabel(property.status)}
-            </span>
           </div>
         )}
       </div>
