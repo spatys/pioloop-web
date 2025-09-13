@@ -11,12 +11,15 @@ export class AmenityRepository implements IAmenityRepository {
   ) {}
 
   async getAllAmenities(): Promise<Amenity[]> {
-    const response = await this.httpClient.get<Amenity[]>('/api/amenity');
+    // Appeler directement le backend Property au lieu de l'API route Next.js
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const response = await fetch(`${apiUrl}/api/amenity`);
     
-    if (response.success && response.data) {
-      return response.data;
+    if (!response.ok) {
+      throw new Error(`Erreur lors de la récupération des équipements: ${response.status}`);
     }
     
-    throw new Error(response.message || 'Erreur lors de la récupération des équipements');
+    const data = await response.json();
+    return data;
   }
 }
