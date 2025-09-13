@@ -16,15 +16,15 @@ import { Dropdown } from "@/components/ui/Dropdown";
 import { PageLoader } from "@/components/ui/PageLoader";
 import { AvailabilityManager } from "@/components/ui/AvailabilityManager";
 
-// Composant pour les onglets d'amenities
-interface AmenityTabsProps {
+// Composant pour les accordéons d'amenities
+interface AmenityAccordionsProps {
   amenities: Amenity[];
   formData: Partial<CreatePropertyRequest>;
   onAmenityChange: (field: keyof CreatePropertyRequest, value: any) => void;
 }
 
-const AmenityTabs: React.FC<AmenityTabsProps> = ({ amenities, formData, onAmenityChange }) => {
-  const [activeTab, setActiveTab] = useState<string>('');
+const AmenityAccordions: React.FC<AmenityAccordionsProps> = ({ amenities, formData, onAmenityChange }) => {
+  const [openAccordions, setOpenAccordions] = useState<Set<string>>(new Set());
 
   // Grouper les amenities par catégorie
   const amenitiesByCategory = amenities
@@ -40,9 +40,9 @@ const AmenityTabs: React.FC<AmenityTabsProps> = ({ amenities, formData, onAmenit
 
   const categories = Object.keys(amenitiesByCategory).sort();
   
-  // Définir la première catégorie comme active par défaut
-  if (!activeTab && categories.length > 0) {
-    setActiveTab(categories[0]);
+  // Ouvrir le premier accordéon par défaut
+  if (openAccordions.size === 0 && categories.length > 0) {
+    setOpenAccordions(new Set([categories[0]]));
   }
 
   const handleAmenityToggle = (amenity: Amenity, isChecked: boolean) => {
@@ -71,85 +71,109 @@ const AmenityTabs: React.FC<AmenityTabsProps> = ({ amenities, formData, onAmenit
     return formData.amenities?.some(a => a.name === amenity.name) || false;
   };
 
+  // Fonction pour toggle un accordéon
+  const toggleAccordion = (category: string) => {
+    const newOpenAccordions = new Set(openAccordions);
+    if (newOpenAccordions.has(category)) {
+      newOpenAccordions.delete(category);
+    } else {
+      newOpenAccordions.add(category);
+    }
+    setOpenAccordions(newOpenAccordions);
+  };
+
   return (
     <div className="space-y-4">
-                  {/* Onglets */}
-                  <div className="border-b border-gray-200 bg-white rounded-t-lg">
-                    <nav className="-mb-px flex space-x-8 overflow-x-auto px-6">
-                      {categories.map((category) => (
-                        <button
-                          key={category}
-                          onClick={() => setActiveTab(category)}
-                          className={`whitespace-nowrap py-4 px-2 border-b-2 font-semibold text-sm transition-all duration-200 ${
-                            activeTab === category
-                              ? 'border-purple-500 text-purple-600 bg-purple-50'
-                              : 'border-transparent text-gray-600 hover:text-purple-600 hover:border-purple-300 hover:bg-purple-25'
-                          }`}
-                        >
-                          {category}
-                        </button>
-                      ))}
-                    </nav>
+      {/* Accordéons */}
+      <div className="space-y-2">
+        {categories.map((category) => {
+          const isOpen = openAccordions.has(category);
+          const categoryAmenities = amenitiesByCategory[category];
+          const selectedCount = categoryAmenities.filter(amenity => isAmenitySelected(amenity)).length;
+          
+          return (
+            <div key={category} className="border border-gray-200 rounded-lg bg-white">
+              {/* En-tête de l'accordéon */}
+              <button
+                onClick={() => toggleAccordion(category)}
+                className="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-200"
+              >
+                <div className="flex items-center space-x-3">
+                  <h3 className="text-sm font-medium text-gray-900">{category}</h3>
+                  {selectedCount > 0 && (
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                      {selectedCount} sélectionné{selectedCount > 1 ? 's' : ''}
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-xs text-gray-500">
+                    {categoryAmenities.length} équipement{categoryAmenities.length > 1 ? 's' : ''}
+                  </span>
+                  <svg
+                    className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                      isOpen ? 'rotate-180' : ''
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </button>
+
+              {/* Contenu de l'accordéon */}
+              {isOpen && (
+                <div className="border-t border-gray-200 p-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                    {categoryAmenities
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map((amenity) => {
+                        const isSelected = isAmenitySelected(amenity);
+                        return (
+                          <label
+                            key={amenity.id}
+                            className={`group relative flex items-center p-3 rounded-lg border-2 cursor-pointer transition-all duration-300 hover:shadow-md ${
+                              isSelected
+                                ? 'border-purple-500 bg-purple-50 shadow-sm ring-1 ring-purple-200'
+                                : 'border-gray-200 bg-white hover:border-purple-300 hover:bg-purple-25'
+                            }`}
+                          >
+                            <input
+                              type="checkbox"
+                              className="sr-only"
+                              checked={isSelected}
+                              onChange={(e) => handleAmenityToggle(amenity, e.target.checked)}
+                            />
+                            <div className={`flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-200 ${
+                              isSelected 
+                                ? 'bg-purple-600 border-purple-600' 
+                                : 'border-gray-300 group-hover:border-purple-400'
+                            }`}>
+                              {isSelected && (
+                                <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                              )}
+                            </div>
+                            <div className="ml-3 flex-1 min-w-0">
+                              <span className={`text-sm font-medium transition-colors duration-200 truncate ${
+                                isSelected ? 'text-purple-900' : 'text-gray-800 group-hover:text-purple-800'
+                              }`}>
+                                {amenity.name}
+                              </span>
+                            </div>
+                          </label>
+                        );
+                      })}
                   </div>
-
-                  {/* Contenu des onglets */}
-                  <div className="min-h-[450px] bg-gray-50 rounded-b-lg p-4">
-                    {activeTab && amenitiesByCategory[activeTab] && (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                        {amenitiesByCategory[activeTab]
-                          .sort((a, b) => a.name.localeCompare(b.name))
-                          .map((amenity) => {
-                            const isSelected = isAmenitySelected(amenity);
-                            return (
-                              <label
-                                key={amenity.id}
-                                className={`group relative flex items-center p-3 rounded-lg border-2 cursor-pointer transition-all duration-300 hover:shadow-lg ${
-                                  isSelected
-                                    ? 'border-purple-500 bg-white shadow-md ring-2 ring-purple-200'
-                                    : 'border-gray-200 bg-white hover:border-purple-300 hover:bg-purple-25'
-                                }`}
-                              >
-                                <input
-                                  type="checkbox"
-                                  className="sr-only"
-                                  checked={isSelected}
-                                  onChange={(e) => handleAmenityToggle(amenity, e.target.checked)}
-                                />
-                                
-                                {/* Checkbox personnalisé */}
-                                <div className={`flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-200 ${
-                                  isSelected 
-                                    ? 'bg-purple-600 border-purple-600' 
-                                    : 'border-gray-300 group-hover:border-purple-400'
-                                }`}>
-                                  {isSelected && (
-                                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                    </svg>
-                                  )}
-                                </div>
-
-                                {/* Nom de l'amenity */}
-                                <div className="ml-3 flex-1 min-w-0">
-                                  <span className={`text-sm font-medium transition-colors duration-200 truncate ${
-                                    isSelected ? 'text-purple-900' : 'text-gray-800 group-hover:text-purple-800'
-                                  }`}>
-                                    {amenity.name}
-                                  </span>
-                                </div>
-
-                                {/* Indicateur de sélection */}
-                                {isSelected && (
-                                  <div className="flex-shrink-0 ml-2">
-                                    <div className="w-1.5 h-1.5 bg-purple-600 rounded-full"></div>
-                                  </div>
-                                )}
-                              </label>
-                            );
-                          })}
-                      </div>
-                    )}
-                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
 
       {/* Résumé des sélections */}
       {formData.amenities && formData.amenities.length > 0 && (
@@ -1192,7 +1216,7 @@ export const AddProperty: React.FC = () => {
             <span className="ml-2 text-gray-600">Chargement des équipements...</span>
           </div>
         ) : (
-          <AmenityTabs amenities={amenities} formData={formData} onAmenityChange={handleInputChange} />
+          <AmenityAccordions amenities={amenities} formData={formData} onAmenityChange={handleInputChange} />
         )}
       </div>
     </div>
