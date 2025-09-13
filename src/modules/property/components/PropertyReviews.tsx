@@ -8,39 +8,10 @@ interface PropertyReviewsProps {
 }
 
 export const PropertyReviews: React.FC<PropertyReviewsProps> = ({ property }) => {
-  // Données d'exemple pour les avis
-  const reviews = [
-    {
-      id: 1,
-      author: 'Marie L.',
-      avatar: '👩',
-      rating: 5,
-      date: '2024-01-15',
-      comment: 'Excellent séjour ! Le logement est exactement comme sur les photos. Très propre et bien équipé. L\'hôte est très réactif et serviable. Je recommande vivement !',
-      verified: true
-    },
-    {
-      id: 2,
-      author: 'Jean P.',
-      avatar: '👨',
-      rating: 4,
-      date: '2024-01-10',
-      comment: 'Très bon logement dans un quartier calme. Proche des transports et des commerces. Petit bémol sur le bruit de la rue mais rien de gênant.',
-      verified: true
-    },
-    {
-      id: 3,
-      author: 'Sophie M.',
-      avatar: '👩',
-      rating: 5,
-      date: '2024-01-05',
-      comment: 'Parfait pour un séjour professionnel. Wi-Fi excellent, espace de travail confortable. L\'hôte a été très arrangeant pour les horaires d\'arrivée.',
-      verified: false
-    }
-  ];
-
-  const averageRating = property.averageRating || 4.8;
-  const reviewCount = property.reviewCount || reviews.length;
+  // Pas de données d'exemple - utiliser les vraies données de la propriété
+  const reviews: any[] = []; // TODO: Récupérer les vrais avis depuis l'API
+  const averageRating = property.averageRating || 0;
+  const reviewCount = property.reviewCount || 0;
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
@@ -60,79 +31,100 @@ export const PropertyReviews: React.FC<PropertyReviewsProps> = ({ property }) =>
       {/* En-tête des avis */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-xl font-semibold text-gray-900">Avis</h3>
-          <div className="flex items-center space-x-2 mt-1">
-            <div className="flex items-center">
-              {renderStars(Math.floor(averageRating))}
+          <h3 className="text-xl font-normal text-gray-900">Avis</h3>
+          {reviewCount > 0 ? (
+            <div className="flex items-center space-x-2 mt-1">
+              <div className="flex items-center">
+                {renderStars(Math.floor(averageRating))}
+              </div>
+              <span className="text-lg font-normal text-gray-900">{averageRating.toFixed(1)}</span>
+              <span className="text-gray-600">({reviewCount} avis)</span>
             </div>
-            <span className="text-lg font-semibold text-gray-900">{averageRating.toFixed(1)}</span>
-            <span className="text-gray-600">({reviewCount} avis)</span>
-          </div>
+          ) : (
+            <div className="mt-1">
+              <span className="text-gray-600">Aucun avis pour le moment</span>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Répartition des notes */}
-      <div className="bg-gray-50 rounded-lg p-4">
-        <h4 className="font-medium text-gray-900 mb-3">Répartition des notes</h4>
-        <div className="space-y-2">
-          {[5, 4, 3, 2, 1].map((rating) => {
-            const count = Math.floor(Math.random() * 10) + 1; // Données d'exemple
-            const percentage = (count / reviewCount) * 100;
-            
-            return (
-              <div key={rating} className="flex items-center space-x-3">
-                <span className="text-sm font-medium text-gray-700 w-8">{rating}</span>
-                <div className="flex-1 bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-yellow-400 h-2 rounded-full" 
-                    style={{ width: `${percentage}%` }}
-                  ></div>
+      {/* Répartition des notes - masquée s'il n'y a pas d'avis */}
+      {reviewCount > 0 && (
+        <div className="bg-gray-50 rounded-lg p-4">
+          <h4 className="font-medium text-gray-900 mb-3">Répartition des notes</h4>
+          <div className="space-y-2">
+            {[5, 4, 3, 2, 1].map((rating) => {
+              // TODO: Récupérer les vraies données de répartition depuis l'API
+              const count = 0;
+              const percentage = 0;
+              
+              return (
+                <div key={rating} className="flex items-center space-x-3">
+                  <span className="text-sm font-medium text-gray-700 w-8">{rating}</span>
+                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-yellow-400 h-2 rounded-full" 
+                      style={{ width: `${percentage}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-sm text-gray-600 w-8">{count}</span>
                 </div>
-                <span className="text-sm text-gray-600 w-8">{count}</span>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Liste des avis */}
-      <div className="space-y-6">
-        {reviews.map((review) => (
-          <div key={review.id} className="border-b border-gray-200 pb-6 last:border-b-0">
-            <div className="flex items-start space-x-3">
-              <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-lg">
-                {review.avatar}
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center space-x-2 mb-1">
-                  <span className="font-medium text-gray-900">{review.author}</span>
-                  {review.verified && (
-                    <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                      ✓ Vérifié
-                    </span>
-                  )}
+      {reviews.length > 0 ? (
+        <div className="space-y-6">
+          {reviews.map((review) => (
+            <div key={review.id} className="border-b border-gray-200 pb-6 last:border-b-0">
+              <div className="flex items-start space-x-3">
+                <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-lg">
+                  {review.avatar}
                 </div>
-                <div className="flex items-center space-x-2 mb-2">
-                  <div className="flex items-center">
-                    {renderStars(review.rating)}
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-1">
+                    <span className="font-medium text-gray-900">{review.author}</span>
+                    {review.verified && (
+                      <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                        ✓ Vérifié
+                      </span>
+                    )}
                   </div>
-                  <span className="text-sm text-gray-600">
-                    {new Date(review.date).toLocaleDateString('fr-FR')}
-                  </span>
+                  <div className="flex items-center space-x-2 mb-2">
+                    <div className="flex items-center">
+                      {renderStars(review.rating)}
+                    </div>
+                    <span className="text-sm text-gray-600">
+                      {new Date(review.date).toLocaleDateString('fr-FR')}
+                    </span>
+                  </div>
+                  <p className="text-gray-700 leading-relaxed">{review.comment}</p>
                 </div>
-                <p className="text-gray-700 leading-relaxed">{review.comment}</p>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-8">
+          <div className="text-gray-400 text-6xl mb-4">💬</div>
+          <h4 className="text-lg font-medium text-gray-900 mb-2">Aucun avis pour le moment</h4>
+          <p className="text-gray-600">
+            Soyez le premier à laisser un avis sur ce logement après votre séjour !
+          </p>
+        </div>
+      )}
 
-      {/* Bouton pour voir plus d'avis */}
-      <div className="text-center">
-        <button className="bg-white border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50 transition-colors">
-          Voir tous les avis
-        </button>
-      </div>
+      {/* Bouton pour voir plus d'avis - masqué s'il n'y a pas d'avis */}
+      {reviews.length > 3 && (
+        <div className="text-center">
+          <button className="bg-white border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+            Voir tous les avis
+          </button>
+        </div>
+      )}
 
       {/* Note sur les avis */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">

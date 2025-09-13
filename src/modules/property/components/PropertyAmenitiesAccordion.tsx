@@ -83,7 +83,7 @@ export const PropertyAmenitiesAccordion: React.FC<PropertyAmenitiesAccordionProp
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">Équipements</h3>
+        <h3 className="text-xl font-normal text-gray-900 mb-2">Équipements</h3>
         <p className="text-gray-600 text-sm">
           Voici tous les équipements disponibles. Les équipements sélectionnés pour ce logement sont mis en évidence.
         </p>

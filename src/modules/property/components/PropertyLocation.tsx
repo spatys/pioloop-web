@@ -28,7 +28,7 @@ export const PropertyLocation: React.FC<PropertyLocationProps> = ({ property }) 
 
   return (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-gray-900">Localisation</h3>
+      <h3 className="text-xl font-normal text-gray-900">Localisation</h3>
       
       {/* Adresse complète */}
       <div className="bg-gray-50 rounded-lg p-4">

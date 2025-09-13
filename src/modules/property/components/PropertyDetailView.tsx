@@ -90,7 +90,7 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({ property
               {activeTab === 'overview' && (
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-4">À propos de ce logement</h3>
+                    <h3 className="text-xl font-normal text-gray-900 mb-4">À propos de ce logement</h3>
                     <p className="text-gray-700 leading-relaxed">{property.description}</p>
                   </div>
                   
